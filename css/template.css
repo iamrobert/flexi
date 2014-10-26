@@ -189,7 +189,7 @@ textarea {
 }
 body {
 	margin: 0;
-	font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, "微軟正黑體","Microsoft JhengHei","Apple LiGothic Medium","儷黑 Pro","LiHei Pro Medium","Arial Unicode MS", sans-serif;
+	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, "微軟正黑體","Microsoft JhengHei","Apple LiGothic Medium","儷黑 Pro","LiHei Pro Medium", "Arial Unicode MS", sans-serif;
 	font-size: 13px;
 	line-height: 18px;
 	color: #333;
@@ -7968,3 +7968,10 @@ a.grid_true {
 	width: 16px;
 	background-image: url('../images/admin/icon-16-allow.png');
 }
+
+/* ---------------------------------------------------------
+.amm_table
+---------------------------------------------------------*/
+.sbox-content .amm_table {
+	background: #ccc;
+	}
