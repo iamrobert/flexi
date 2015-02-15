@@ -1,125 +1,247 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install PUBLIC "-//Joomla! 2.5//DTD template 1.0//EN" "http://www.joomla.org/xml/dtd/2.5/template-install.dtd">
-<extension version="1" type="template" client="administrator">
-	<name>flexi</name>
-	<version>1.0</version>
-	<creationDate>10/12/2014</creationDate>
-	<author>Robert Stark</author>
-	<authorEmail>hello@iamrobert.com</authorEmail>
-	<copyright>Copyright (C) 2014 iamrobert. </copyright>
-	<description>TPL_ISIS_XML_DESCRIPTION</description>
-	<files>
-		<filename>component.php</filename>
-		<filename>cpanel.php</filename>
-		<filename>favicon.ico</filename>
-		<filename>index.php</filename>
-		<filename>login.php</filename>
-		<filename>templateDetails.xml</filename>
-		<filename>template_preview.png</filename>
-		<filename>template_thumbnail.png</filename>
-		<folder>css</folder>
-		<folder>html</folder>
-		<folder>images</folder>
-		<folder>img</folder>
-		<folder>js</folder>
-		<folder>language</folder>
-	<folder>less</folder>
-	</files>
-	<positions>
-		<position>menu</position>
-		<position>submenu</position>
-		<position>toolbar</position>
-		<position>title</position>
-		<position>status</position>
-		<position>icon</position>
-		<position>cp_shell</position>
-		<position>cpanel</position>
-		<position>bottom</position>
-		<position>footer</position>
-		<position>login</position>
-		<position>debug</position>
-	</positions>
-	<languages folder="language">
-		<language tag="en-GB">en-GB/en-GB.tpl_flexi.ini</language>
-		<language tag="en-GB">en-GB/en-GB.tpl_flexi.sys.ini</language>
-	</languages>
-	<config>
-		<fields name="params">
-			<fieldset name="advanced">
-
-				<field name="templateColor" class="" type="color" default="#383a41"
-				validate="color"
-				label="TPL_ISIS_COLOR_LABEL"
-				description="TPL_ISIS_COLOR_DESC" />
-				
-				<field name="headerColor" class="" type="color" default="#184A7D"
-				validate="color"
-				label="TPL_ISIS_COLOR_HEADER_LABEL"
-				description="TPL_ISIS_COLOR_HEADER_DESC" />
-
-				<field name="sidebarColor" class="" type="color" default="#0088CC"
-				validate="color"
-				label="TPL_ISIS_COLOR_SIDEBAR_LABEL"
-				description="TPL_ISIS_COLOR_SIDEBAR_DESC" />
-
-<field name="flexiColor" class="" type="color" default="#0088CC"
-				validate="color"
-				label="FLEXIcontent Main Color"
-				description="FLEXIcontent Link Color" />
-				
-				
-				<field name="logoFile" class="" type="media" default=""
-				label="TPL_ISIS_LOGO_LABEL"
-				description="TPL_ISIS_LOGO_DESC" />
-
-				<field name="admin_menus" type="radio"
-				class="btn-group btn-group-yesno"
-				default="1"
-				label="TPL_ISIS_FIELD_ADMIN_MENUS_LABEL"
-				description="TPL_ISIS_FIELD_ADMIN_MENUS_DESC"
-				filter="integer">
-				<option
-					value="1">JYES</option>
-				<option
-					value="0">JNO</option>
-				</field>
-
-				<field name="displayHeader" type="radio"
-				class="btn-group btn-group-yesno"
-				default="1"
-				label="TPL_ISIS_HEADER_LABEL"
-				description="TPL_ISIS_HEADER_DESC"
-				filter="integer">
-				<option
-					value="1">JYES</option>
-				<option
-					value="0">JNO</option>
-				</field>
-
-				<field name="statusFixed" type="list"
-				default="1"
-				label="TPL_ISIS_STATUS_LABEL"
-				description="TPL_ISIS_STATUS_DESC"
-				filter="integer">
-				<option
-					value="1">TPL_ISIS_STATUS_BOTTOM</option>
-				<option
-					value="0">TPL_ISIS_STATUS_TOP</option>
-				</field>
-
-				<field name="stickyToolbar" type="radio"
-				class="btn-group btn-group-yesno"
-				default="1"
-				label="TPL_ISIS_STICKY_LABEL"
-				description="TPL_ISIS_STICKY_DESC"
-				filter="integer">
-				<option
-					value="1">JYES</option>
-				<option
-					value="0">JNO</option>
-				</field>
-
-			</fieldset>
-		</fields>
-	</config>
-</extension>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install PUBLIC "-//Joomla! 2.5//DTD template 1.0//EN" "http://www.joomla.org/xml/dtd/2.5/template-install.dtd">
+<extension version="1" type="template" client="administrator" method="upgrade">
+	<name>flexi2</name>
+	<version>2.0</version>
+	<creationDate>10/12/2015</creationDate>
+	<author>Robert Stark</author>
+	<authorEmail>hello@iamrobert.com</authorEmail>
+	<copyright>Copyright (C) 2014 iamrobert. </copyright>
+	<description>TPL_ISIS_XML_DESCRIPTION</description>
+	<files>
+		<filename>component.php</filename>
+		<filename>cpanel.php</filename>
+		<filename>favicon.ico</filename>
+		<filename>index.php</filename>
+		<filename>login.php</filename>
+		<filename>templateDetails.xml</filename>
+		<filename>template_preview.png</filename>
+		<filename>template_thumbnail.png</filename>
+		<folder>css</folder>
+		<folder>html</folder>
+		<folder>images</folder>
+		<folder>img</folder>
+		<folder>js</folder>
+		<folder>language</folder>
+	</files>
+	<positions>
+		<position>menu</position>
+		<position>submenu</position>
+		<position>toolbar</position>
+		<position>title</position>
+		<position>status</position>
+		<position>icon</position>
+		<position>cp_shell</position>
+		<position>cpanel</position>
+		<position>bottom</position>
+		<position>footer</position>
+		<position>login</position>
+		<position>debug</position>
+	</positions>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.tpl_flexi2.ini</language>
+		<language tag="en-GB">en-GB/en-GB.tpl_flexi2.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+		
+		
+		<fieldset name="flexicontent">
+		
+		
+		<field name="note1" type="note" class="alert" label="FLEXI ITEMS" />
+		
+					<field name="featuredItems" type="radio"
+				class="btn-group btn-group-yesno"
+				default="1"
+				label="Display Featured Items"
+				description="In item view - hide featured items"
+				filter="integer">
+				<option
+					value="1">JYES</option>
+				<option
+					value="0">JNO</option>
+				</field>
+	
+				<field name="flexiTags" type="radio"
+				class="btn-group btn-group-yesno"
+				default="1"
+				label="Display Tags"
+				description="Show Add Tags"
+				filter="integer">
+				<option
+					value="1">JYES</option>
+				<option
+					value="0">JNO</option>
+				</field>
+				
+				<field name="flexiLang" type="radio"
+				class="btn-group btn-group-yesno"
+				default="1"
+				label="Display Language"
+				description="Show Language Options"
+				filter="integer">
+				<option
+					value="1">JYES</option>
+				<option
+					value="0">JNO</option>
+				</field>
+				
+			<field name="icons" type="radio"
+				class="btn-group btn-group-yesno"
+				default="1"
+				label="FLEXIcontent Icons"
+				description="Hide FLEXicontent Icons"
+				filter="integer">
+				<option
+					value="1">JYES</option>
+				<option
+					value="0">JNO</option>
+				</field>
+				
+					<field name="keywords" type="radio"
+				class="btn-group btn-group-yesno"
+				default="0"
+				label="Keywords"
+				description="Show SEO Keywords in Items"
+				filter="integer">
+				<option
+					value="1">JYES</option>
+				<option
+					value="0">JNO</option>
+				</field>
+				
+				<field name="note2" type="note" class="alert" label="FLEXI ITEM MANAGER" />
+				
+				<field name="flexiOrder" type="radio"
+				class="btn-group btn-group-yesno"
+				default="0"
+				label="Display Order"
+				description="Show FLEXIcontent or Joomla Order in Item View"
+				filter="integer">
+				<option
+					value="1">JYES</option>
+				<option
+					value="0">JNO</option>
+				</field>
+				
+				<field name="flexiID" type="radio"
+				class="btn-group btn-group-yesno"
+				default="0"
+				label="Display ID"
+				description="Show FLEXIcontent ID in Item View"
+				filter="integer">
+				<option
+					value="1">JYES</option>
+				<option
+					value="0">JNO</option>
+				</field>
+				
+				
+			
+				
+				
+		
+				
+			</fieldset>
+				
+			<fieldset name="advanced">
+
+
+
+
+				<field name="templateColor" class="" type="color" default="#383a41"
+				validate="color"
+				label="TPL_ISIS_COLOR_LABEL"
+				description="TPL_ISIS_COLOR_DESC" />
+				
+				<field name="headerColor" class="" type="color" default="#184A7D"
+				validate="color"
+				label="TPL_ISIS_COLOR_HEADER_LABEL"
+				description="TPL_ISIS_COLOR_HEADER_DESC" />
+
+				<field name="sidebarColor" class="" type="color" default="#0088CC"
+				validate="color"
+				label="TPL_ISIS_COLOR_SIDEBAR_LABEL"
+				description="TPL_ISIS_COLOR_SIDEBAR_DESC" />
+
+<field name="flexiColor" class="" type="color" default="#7761a7"
+				validate="color"
+				label="FLEXIcontent Main Color"
+				description="FLEXIcontent Color" />
+				
+<field name="linkColor" class="" type="color" default="#0088cc"
+				validate="color"
+				label="Link Color"
+				description="The hyperlink Color" />
+					
+<field name="hoverColor" class="" type="color" default="#005580"
+				validate="color"
+				label="Link Hover Color"
+				description="Link Hover &amp; Active Color" />
+				
+<field name="buttonColor" class="" type="color" default="#1d6cb0"
+				validate="color"
+				label="Primary Button Color"
+				description="The Primary Button Color" />
+					
+<field name="buttonhoverColor" class="" type="color" default="#113c66"
+				validate="color"
+				label="Primary Button Hover Color"
+				description="Primary Button Color on Hover" />
+							
+				<field name="logoFile" class="" type="media" default=""
+				label="TPL_ISIS_LOGO_LABEL"
+				description="TPL_ISIS_LOGO_DESC" />
+
+				<field name="admin_menus" type="radio"
+				class="btn-group btn-group-yesno"
+				default="1"
+				label="TPL_ISIS_FIELD_ADMIN_MENUS_LABEL"
+				description="TPL_ISIS_FIELD_ADMIN_MENUS_DESC"
+				filter="integer">
+				<option
+					value="1">JYES</option>
+				<option
+					value="0">JNO</option>
+				</field>
+
+				<field name="displayHeader" type="radio"
+				class="btn-group btn-group-yesno"
+				default="1"
+				label="TPL_ISIS_HEADER_LABEL"
+				description="TPL_ISIS_HEADER_DESC"
+				filter="integer">
+				<option
+					value="1">JYES</option>
+				<option
+					value="0">JNO</option>
+				</field>
+
+				<field name="statusFixed" type="list"
+				default="1"
+				label="TPL_ISIS_STATUS_LABEL"
+				description="TPL_ISIS_STATUS_DESC"
+				filter="integer">
+				<option
+					value="1">TPL_ISIS_STATUS_BOTTOM</option>
+				<option
+					value="0">TPL_ISIS_STATUS_TOP</option>
+				</field>
+
+				<field name="stickyToolbar" type="radio"
+				class="btn-group btn-group-yesno"
+				default="1"
+				label="TPL_ISIS_STICKY_LABEL"
+				description="TPL_ISIS_STICKY_DESC"
+				filter="integer">
+				<option
+					value="1">JYES</option>
+				<option
+					value="0">JNO</option>
+				</field>
+
+			</fieldset>
+		</fields>
+	</config>
+</extension>

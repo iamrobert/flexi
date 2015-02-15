@@ -26,14 +26,14 @@ $close_popup_js = FLEXI_J16GE ? "window.parent.SqueezeBox.close();" : "window.pa
 			e = new Event(e).stop();
 			var url = "index.php?option=com_flexicontent&controller=items&task=import&<?php echo (FLEXI_J30GE ? JSession::getFormToken() : JUtility::getToken());?>=1&<?php echo FLEXI_J16GE ? 'format=raw' : 'tmpl=component';?>";
 			if (MooTools.version>="1.2.4") {
-				$('import-log').set('html','<img src="templates/flexi/images/flexi/ajax-loader.gif" class="center">');
+				$('import-log').set('html','<img src="components/com_flexicontent/assets/images/ajax-loader.gif" align="center">');
 				new Request.HTML({
 					url: url,
 					method: 'get',
 					update: $('import-log')
 				}).send();
 			} else {
-				$('import-log').setHTML('<p class="centerimg"><img src="templates/flexi/images/flexi/ajax-loader.gif" class="center"></p>');
+				$('import-log').setHTML('<p class="centerimg"><img src="components/com_flexicontent/assets/images/ajax-loader.gif" align="center"></p>');
 				var ajax = new Ajax(url, {
 					method: 'get',
 					update: $('import-log')
