@@ -61,7 +61,7 @@ $itemid   = $input->get('Itemid', '');
 $sitename = htmlspecialchars($app->get('sitename', ''), ENT_QUOTES, 'UTF-8');
 $cpanel   = ($option === 'com_cpanel');
 
-
+$hidden = JFactory::getApplication()->input->get('hidemainmenu');
 $showSubmenu          = false;
 $this->submenumodules = JModuleHelper::getModules('submenu');
 
@@ -104,6 +104,7 @@ $flexiAuthor= $this->params->get('flexiAuthor', '1');
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <?php /*?><link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,700,800' rel='stylesheet' type='text/css'><?php */?>
+
 <jdoc:include type="head" />
 
 
