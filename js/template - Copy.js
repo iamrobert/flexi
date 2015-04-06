@@ -1,21 +1,27 @@
 /**
  * @package     Joomla.Administrator
  * @subpackage  Templates.isis
- * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @since       3.0
  */
 
+
+
 (function($)
-
-
-
 {
 	$(document).ready(function()
 	{
-		
-		// IAMROBERT TEMPLATE
+		//iamrobert
 		$("body").removeClass("animated");
+		
+	/*	$('#j-main-container > .span10').wrapInner( "<div class='shift-right'></div>" );
+		$('#j-main-container.span12').wrapInner( "<div class='m20'></div>" );
+		$('#j-main-container.span10').wrapInner( "<div class='m20'></div>" );
+		$('#content > .row12 > .span10').wrapInner( "<div class='shift-right'></div>" );
+		$('#application-form > div > div.span10').wrapInner( "<div class='shift-right'></div>" );
+		$('#component-form > div.row-fluid > div.span10').wrapInner( "<div class='shift-right'></div>" ); */
+		
 		$('.fcsep_level0').parents('.controls').removeClass('controls');
 		$('.fcsep_level1').parents('.controls').removeClass('controls');
 		$('.fcsep_level2').parents('.controls').removeClass('controls');
@@ -24,8 +30,12 @@
 		// BLOCKFLAT
 		$( ".com_templates .span12 table" ).wrap( "<div class=\"block-flat\"></div>" );
 		$( ".com_menus .span12 table" ).wrap( "<div class=\"block-flat\"></div>" );
+	
+	//hide search	
+// $("#select2Id").select2('container').find('.select2-search').addClass('hidden');
+
+		//
 		
-		// TEMPLATE
 		$('*[rel=tooltip]').tooltip();
 
 		// Turn radios into btn-group
@@ -45,7 +55,6 @@
 					label.addClass('active btn-success');
 				}
 				input.prop('checked', true);
-				input.trigger('change');
 			}
 		});
 		$('.btn-group input[checked=checked]').each(function()
@@ -70,115 +79,14 @@
 			});
 
 		});
-
-		/**
-		 * USED IN: All list views to hide/show the sidebar
-		 */
-		window.toggleSidebar = function(force)
-		{
-			var context = 'jsidebar';
-
-			var $visible = $('#j-toggle-sidebar').is(":visible");
-
-			var $sidebar = $('#j-sidebar-container');
-
-			var open_icon = 'icon-cancel';
-			var closed_icon = 'icon-arrow-right-2';
-
-			if (jQuery(document.querySelector("html")).attr('dir') == 'rtl')
-			{
-				open_icon = 'icon-cancel';
-				closed_icon = 'icon-arrow-left-2';
-			}
-
-			var main_height = $('#j-main-container').outerHeight()+30;
-			var sidebar_height = $('#j-sidebar-container').outerHeight();
-
-			var body_width = $('body').outerWidth();
-			var sidebar_width = $sidebar.outerWidth();
-			var content_width = $('#content').outerWidth();
-			var isComponent = $('body').hasClass('component');
-			var this_content = content_width / body_width * 100;
-			var this_main = (content_width - sidebar_width) / body_width * 100;
-
-			$('#j-sidebar-container').removeClass('span2').addClass('j-sidebar-container');
-			$('#system-message-container').addClass('j-toggle-main');
-			$('#j-main-container').addClass('j-toggle-main');
-			if (!isComponent) {
-				$('#system-debug').addClass('j-toggle-main');
-			}
-
-			if (force)
-			{
-				// Load the value from localStorage
-				if (typeof(Storage) !== "undefined")
-				{
-					var $visible = localStorage.getItem(context);
-				}
-
-				// Need to convert the value to a boolean
-				$visible = ($visible == 'true') ? true : false;
-			}
-			else
-			{
-				$('#system-message-container').addClass('j-toggle-transition');
-				$('#j-sidebar-container').addClass('j-toggle-transition');
-				$('#j-toggle-button-wrapper').addClass('j-toggle-transition');
-				$('#j-main-container').addClass('j-toggle-transition');
-				if (!isComponent) {
-					$('#system-debug').addClass('j-toggle-transition');
-				}
-			}
-
-			if ($visible)
-			{
-				$('#j-toggle-sidebar').hide();
-				$('#j-sidebar-container').removeClass('j-sidebar-visible').addClass('j-sidebar-hidden');
-				$('#j-toggle-button-wrapper').removeClass('j-toggle-visible').addClass('j-toggle-hidden');
-				$('#j-toggle-sidebar-icon').removeClass('j-toggle-visible').addClass('j-toggle-hidden');
-				$('#system-message-container').removeClass('span10').addClass('span12');
-				$('#j-main-container').removeClass('span10').addClass('span12 expanded');
-				$('#j-toggle-sidebar-icon').removeClass(open_icon).addClass(closed_icon);
-				$('#j-toggle-sidebar-button').attr('data-original-title', Joomla.JText._('JTOGGLE_SHOW_SIDEBAR'));
-				if (!isComponent) {
-					$('#system-debug').css('width', this_content + '%');
-				}
-
-				if (typeof(Storage) !== "undefined")
-				{
-					// Set the last selection in localStorage
-					localStorage.setItem(context, true);
-				}
-			}
-			else
-			{
-				$('#j-toggle-sidebar').show();
-				$('#j-sidebar-container').removeClass('j-sidebar-hidden').addClass('j-sidebar-visible');
-				$('#j-toggle-button-wrapper').removeClass('j-toggle-hidden').addClass('j-toggle-visible');
-				$('#j-toggle-sidebar-icon').removeClass('j-toggle-hidden').addClass('j-toggle-visible');
-				$('#system-message-container').removeClass('span12').addClass('span10');
-				$('#j-main-container').removeClass('span12 expanded').addClass('span10');
-				$('#j-toggle-sidebar-icon').removeClass(closed_icon).addClass(open_icon);
-				$('#j-toggle-sidebar-button').attr('data-original-title', Joomla.JText._('JTOGGLE_HIDE_SIDEBAR'));
-
-				if (!isComponent && body_width > 768 && main_height < sidebar_height)
-				{
-					$('#system-debug').css('width', this_main+'%');
-				}
-				else if (!isComponent)
-				{
-					$('#system-debug').css('width', this_content+'%');
-				}
-
-				if (typeof(Storage) !== "undefined")
-				{
-					// Set the last selection in localStorage
-					localStorage.setItem(context, false);
-				}
-			}
-		}
 	});
 })(jQuery);
+
+
+/*///////////////////////////
+:: EQUAL HEIGHT COLUMNS
+//////////////////////////*/
+
 
 
 
@@ -292,3 +200,5 @@ $(window).resize(function () {
   });
  
 })( jQuery );
+
+
