@@ -1,27 +1,18 @@
 /**
  * @package     Joomla.Administrator
  * @subpackage  Templates.isis
- * @copyright   Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @since       3.0
  */
+/** ----------------------------
++ iamrobert add /remove classes
+----------------------------**/
+(function( $ ){
+ 
+  $(document).ready(function(){
 
-
-
-(function($)
-{
-	$(document).ready(function()
-	{
-		//iamrobert
-		$("body").removeClass("animated");
-		
-	/*	$('#j-main-container > .span10').wrapInner( "<div class='shift-right'></div>" );
-		$('#j-main-container.span12').wrapInner( "<div class='m20'></div>" );
-		$('#j-main-container.span10').wrapInner( "<div class='m20'></div>" );
-		$('#content > .row12 > .span10').wrapInner( "<div class='shift-right'></div>" );
-		$('#application-form > div > div.span10').wrapInner( "<div class='shift-right'></div>" );
-		$('#component-form > div.row-fluid > div.span10').wrapInner( "<div class='shift-right'></div>" ); */
-		
+		// IAMROBERT TEMPLATE
 		$('.fcsep_level0').parents('.controls').removeClass('controls');
 		$('.fcsep_level1').parents('.controls').removeClass('controls');
 		$('.fcsep_level2').parents('.controls').removeClass('controls');
@@ -30,12 +21,23 @@
 		// BLOCKFLAT
 		$( ".com_templates .span12 table" ).wrap( "<div class=\"block-flat\"></div>" );
 		$( ".com_menus .span12 table" ).wrap( "<div class=\"block-flat\"></div>" );
-	
-	//hide search	
-// $("#select2Id").select2('container').find('.select2-search').addClass('hidden');
+			  
+	  // 
+	  // FILTER BAR - clearfix
+	  $( "div#filter-bar" ).addClass( "clearfix" );
+	  });  
+	  })( jQuery );
 
-		//
-		
+
+/** ----------------------------
++ Joomla Default
+----------------------------**/
+
+
+(function($)
+{
+	$(document).ready(function()
+	{
 		$('*[rel=tooltip]').tooltip();
 
 		// Turn radios into btn-group
@@ -55,6 +57,7 @@
 					label.addClass('active btn-success');
 				}
 				input.prop('checked', true);
+				input.trigger('change');
 			}
 		});
 		$('.btn-group input[checked=checked]').each(function()
@@ -79,15 +82,135 @@
 			});
 
 		});
+
+		/**
+		 * USED IN: All list views to hide/show the sidebar
+		 */
+		window.toggleSidebar = function(force)
+		{
+			var context = 'jsidebar';
+
+			var $sidebar = $('#j-sidebar-container'),
+				$main = $('#j-main-container'),
+				$message = $('#system-message-container'),
+				$debug = $('#system-debug'),
+				$toggleSidebarIcon = $('#j-toggle-sidebar-icon'),
+				$toggleButtonWrapper = $('#j-toggle-button-wrapper'),
+				$toggleButton = $('#j-toggle-sidebar-button'),
+				$sidebarToggle = $('#j-toggle-sidebar');
+
+			var openIcon = 'icon-arrow-left-2',
+				closedIcon = 'icon-arrow-right-2';
+
+			var $visible = $sidebarToggle.is(":visible");
+
+			if (jQuery(document.querySelector("html")).attr('dir') == 'rtl')
+			{
+				openIcon = 'icon-arrow-right-2';
+				closedIcon = 'icon-arrow-left-2';
+			}
+
+			var isComponent = $('body').hasClass('component');
+
+			$sidebar.removeClass('span2').addClass('j-sidebar-container');
+			$message.addClass('j-toggle-main');
+			$main.addClass('j-toggle-main');
+			if (!isComponent) {
+				$debug.addClass('j-toggle-main');
+			}
+
+			var mainHeight = $main.outerHeight()+30,
+				sidebarHeight = $sidebar.outerHeight(),
+				bodyWidth = $('body').outerWidth(),
+				sidebarWidth = $sidebar.outerWidth(),
+				contentWidth = $('#content').outerWidth(),
+				contentWidthRelative = contentWidth / bodyWidth * 100,
+				mainWidthRelative = (contentWidth - sidebarWidth) / bodyWidth * 100;
+
+			if (force)
+			{
+				// Load the value from localStorage
+				if (typeof(Storage) !== "undefined")
+				{
+					$visible = localStorage.getItem(context);
+				}
+
+				// Need to convert the value to a boolean
+				$visible = ($visible == 'true');
+			}
+			else
+			{
+				$message.addClass('j-toggle-transition');
+				$sidebar.addClass('j-toggle-transition');
+				$toggleButtonWrapper.addClass('j-toggle-transition');
+				$main.addClass('j-toggle-transition');
+				if (!isComponent) {
+					$debug.addClass('j-toggle-transition');
+				}
+			}
+
+			if ($visible)
+			{
+				$sidebarToggle.hide();
+				$sidebar.removeClass('j-sidebar-visible').addClass('j-sidebar-hidden');
+				$toggleButtonWrapper.removeClass('j-toggle-visible').addClass('j-toggle-hidden');
+				$toggleSidebarIcon.removeClass('j-toggle-visible').addClass('j-toggle-hidden');
+				$message.removeClass('span10').addClass('span12');
+				$main.removeClass('span10').addClass('span12 expanded');
+				$toggleSidebarIcon.removeClass(openIcon).addClass(closedIcon);
+				$toggleButton.attr( 'data-original-title', Joomla.JText._('JTOGGLE_SHOW_SIDEBAR') );
+				$sidebar.attr('aria-hidden', true);
+				$sidebar.find('a').attr('tabindex', '-1');
+				$sidebar.find(':input').attr('tabindex', '-1');
+
+				if (!isComponent) {
+					$debug.css( 'width', contentWidthRelative + '%' );
+				}
+
+				if (typeof(Storage) !== "undefined")
+				{
+					// Set the last selection in localStorage
+					localStorage.setItem(context, true);
+				}
+			}
+			else
+			{
+				$sidebarToggle.show();
+				$sidebar.removeClass('j-sidebar-hidden').addClass('j-sidebar-visible');
+				$toggleButtonWrapper.removeClass('j-toggle-hidden').addClass('j-toggle-visible');
+				$toggleSidebarIcon.removeClass('j-toggle-hidden').addClass('j-toggle-visible');
+				$message.removeClass('span12').addClass('span10');
+				$main.removeClass('span12 expanded').addClass('span10');
+				$toggleSidebarIcon.removeClass(closedIcon).addClass(openIcon);
+				$toggleButton.attr( 'data-original-title', Joomla.JText._('JTOGGLE_HIDE_SIDEBAR') );
+				$sidebar.removeAttr('aria-hidden');
+				$sidebar.find('a').removeAttr('tabindex');
+				$sidebar.find(':input').removeAttr('tabindex');
+
+				if (!isComponent && bodyWidth > 768 && mainHeight < sidebarHeight)
+				{
+					$debug.css( 'width', mainWidthRelative + '%' );
+				}
+				else if (!isComponent)
+				{
+					$debug.css( 'width', contentWidthRelative + '%' );
+				}
+
+				if (typeof(Storage) !== "undefined")
+				{
+					// Set the last selection in localStorage
+					localStorage.setItem( context, false );
+				}
+			}
+		}
 	});
 })(jQuery);
 
 
-/*///////////////////////////
+
+/*--------------------------------------------
 :: EQUAL HEIGHT COLUMNS
-//////////////////////////*/
-
-
+--------------------------------------------*/
 
 
 (function($)
@@ -128,21 +251,19 @@
 	
 
 
-$(window).load(function() {
-	   
-        $('.smaller-div').css('height', $('.navbar-inner').css('height'));
-	
+ // HIGHER DIV LOWER
+    $(document).ready(function() {
+        $('.subhead').css('top', $('nav.navbar').css('height'));
     });
 
-$(window).resize(function () {
-
-        $('.smaller-div').css('height', $('.navbar-inner').css('height'));
-		
+    $(window).resize(function() {
+        $('.subhead').css('top', $('nav.navbar').css('height'));
     });
 	
 
 
-	
+
+
 	
 	
 	// FILters equal height
@@ -168,9 +289,18 @@ $(window).resize(function () {
 
     }); 
 
-    //
+ 
+   // HIGHER DIV LOWER
+    $(document).ready(function() {
+        $('.xspace').css('margin-top', $('nav.navbar').css('height'));
+    });
+
+    $(window).resize(function() {
+        $('.xspace').css('margin-top', $('nav.navbar').css('height'));
+    });   //
 	})(jQuery);
 //
+
 
 
 (function( $ ){
@@ -202,3 +332,49 @@ $(window).resize(function () {
 })( jQuery );
 
 
+jQuery(function($) {
+  var json, tabsState;
+  $('a[data-toggle="pill"], a[data-toggle="tab"]').on('shown', function(e) {
+    var href, json, parentId, tabsState;
+
+    tabsState = localStorage.getItem("tabs-state");
+    json = JSON.parse(tabsState || "{}");
+    parentId = $(e.target).parents("ul.nav.nav-pills, ul.nav.nav-tabs").attr("id");
+    href = $(e.target).attr('href');
+    json[parentId] = href;
+
+    return localStorage.setItem("tabs-state", JSON.stringify(json));
+  });
+
+  tabsState = localStorage.getItem("tabs-state");
+  json = JSON.parse(tabsState || "{}");
+
+  $.each(json, function(containerId, href) {
+    return $("#" + containerId + " a[href=" + href + "]").tab('show');
+  });
+
+  $("ul.nav.nav-pills, ul.nav.nav-tabs").each(function() {
+    var $this = $(this);
+    if (!json[$this.attr("id")]) {
+      return $this.find("a[data-toggle=tab]:first, a[data-toggle=pill]:first").tab("show");
+    }
+  });
+});
+
+jQuery(function(){
+	/*jQuery("#qtc_item_state1").attr("checked","checked");
+	
+	jQuery("#qtc_item_state1").parents(".control-group").css({"display":"none"});
+	jQuery("#USD").parents(".control-group").css({"display":"none"}); */
+	jQuery("#USD").attr('value','0');
+	jQuery("#jform_price_USD").attr('value','0');
+	jQuery("#item_slab").attr('value','1');
+	jQuery("#min_item").attr('value','1');
+	jQuery("#max_item").attr('value','1000');
+	jQuery("#qtc_price_currencey_textbox").css("display","none");
+	jQuery("#item_slab").parent(".controls").parent(".control-group").css("display","none");
+	jQuery("#min_item").parent(".controls").parent(".control-group").css("display","none");
+	jQuery("#max_item").parent(".controls").parent(".control-group").css("display","none");
+	jQuery("#item_attris").parent(".q2c-wrapper").parent("div").css("display","none");
+	jQuery("#mediafile").parent("div").css("display","none");
+});

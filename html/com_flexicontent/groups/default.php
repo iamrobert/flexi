@@ -1,13 +1,32 @@
 <?php
 /**
- * @package		Joomla.Administrator
- * @subpackage	com_flexicontent
- * @copyright	Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
- * @license		GNU General Public License version 2 or later; see LICENSE.txt
+ * @version 1.5 stable $Id$
+ * @package Joomla
+ * @subpackage FLEXIcontent
+ * @copyright (C) 2009 Emmanuel Danan - www.vistamedia.fr
+ * @license GNU/GPL v2
+ * 
+ * FLEXIcontent is a derivative work of the excellent QuickFAQ component
+ * @copyright (C) 2008 Christoph Lukes
+ * see www.schlu.net for more information
+ *
+ * FLEXIcontent is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  */
 
-// No direct access.
-defined('_JEXEC') or die;
+defined('_JEXEC') or die('Restricted access');
+
+$tip_class = FLEXI_J30GE ? ' hasTooltip' : ' hasTip';
+$btn_class = FLEXI_J30GE ? 'btn' : 'fc_button fcsimple';
+
+$start_text = '<span class="label">'.JText::_('FLEXI_COLUMNS', true).'</span>';
+$end_text = '<div class="icon-arrow-up-2" title="'.JText::_('FLEXI_HIDE').'" style="cursor: pointer;" onclick="fc_toggle_box_via_btn(\\\'mainChooseColBox\\\', document.getElementById(\\\'fc_mainChooseColBox_btn\\\'), \\\'btn-primary\\\');"></div>';
+flexicontent_html::jscode_to_showhide_table('mainChooseColBox', 'adminListTableFCgroups', $start_text, $end_text);
+
+$edit_entry = JText::_('FLEXI_EDIT', true);
+$view_entry = JText::_('FLEXI_VIEW', true);
 
 // Include the component HTML helpers.
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
@@ -16,9 +35,10 @@ JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.multiselect');
 
-$user		= JFactory::getUser();
+$user    = JFactory::getUser();
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
+$list_total_cols = 5;
 
 JText::script('COM_USERS_GROUPS_CONFIRM_DELETE');
 ?>
@@ -46,7 +66,8 @@ JText::script('COM_USERS_GROUPS_CONFIRM_DELETE');
 </script>
 
 <div class="flexicontent">
-<form action="index.php?option=com_flexicontent" method="post" name="adminForm" id="adminForm">
+
+<form action="index.php?option=<?php echo $this->option; ?>&view=<?php echo $this->view; ?>" method="post" name="adminForm" id="adminForm" class="form-horizontal">
 
 <?php if (!empty( $this->sidebar)) : ?>
 	<div id="j-sidebar-container" class="span2">
@@ -57,79 +78,58 @@ JText::script('COM_USERS_GROUPS_CONFIRM_DELETE');
 	<div id="j-main-container">
 <?php endif;?>
 
-  <?php /*?>    <!--CAT BOX -->
-      <div class="row-fluid">
-        <div class="span12">
-          <div class="block-flat"> 
-            
-            <!--FILTER-->
-            <div id="fc-filters-header">
-              <div class="btn-wrapper input-append leftfloat">
-                <input type="text" name="filter_search" id="filter_search" placeholder="<?php echo JText::_( 'FLEXI_SEARCH' ); ?>" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_USERS_SEARCH_IN_GROUPS'); ?>" class="inputbox" />
-                <button type="submit" class="btn hasTooltip" title="" data-original-title="<?php echo JText::_( 'FLEXI_SEARCH' ); ?>" onclick="this.form.submit();"><i class="icon-search"></i> </button>
-                <button type="button" class="btn hasTooltip" onclick="this.form.getElementById('search').value='';this.form.submit();" value="Clear"  data-original-title="Clear All"> <i class="icon-delete"></i></button>
-              </div><div class="clear"></div>
-              <!--/FILTER-->
-              
-              </div>
-              </div>
-              </div>
-               <!--/CAT BOX --><?php */?>
-               
-               
-     <!--LIMIT-->
-      <div class="row-fluid">
-        <div class="span6 limit text-right">
-          <label class="label"> <?php echo JText::_(FLEXI_J16GE ? 'JGLOBAL_DISPLAY_NUM' : 'DISPLAY NUM'); ?> </label>
-          <?php
-					$pagination_footer = $this->pagination->getListFooter();
-					if (strpos($pagination_footer, '"limit"') === false) echo $this->pagination->getLimitBox();
-					?>
-          <span class="fc_item_total_data fc_nice_box"> <?php echo @$this->resultsCounter ? $this->resultsCounter : $this->pagination->getResultsCounter(); // custom Results Counter ?> </span>
-          <?php if (($getPagesCounter = $this->pagination->getPagesCounter())): ?>
-          <span class="fc_pages_counter"> <?php echo $this->pagination->getPagesCounter(); ?> </span>
-          <?php endif; ?>
+	<div id="fc-filters-header"> <?php /*?><span class="btn-wrapper input-append fc-filter"><span class="filter-search btn-group">
+        <input type="text" name="search" id="search" placeholder="<?php echo JText::_( 'FLEXI_SEARCH' ); ?>" value="<?php echo htmlspecialchars($this->lists['search'], ENT_QUOTES, 'UTF-8'); ?>" class="inputbox" />
+        </span> <span class="btn-group hidden-phone">
+        <button title="<?php echo JText::_( 'FLEXI_SEARCH' ); ?>" class="<?php echo $btn_class; ?> <?php echo $tip_class; ?>" onclick="document.adminForm.limitstart.value=0; Joomla.submitform();"  data-original-title="<?php echo JText::_( 'FLEXI_SEARCH' ); ?>"><?php echo FLEXI_J30GE ? '<i class="icon-search"></i>' : JText::_('FLEXI_GO'); ?></button>
+        <button title="<?php echo JText::_('FLEXI_RESET_FILTERS'); ?>" class="<?php echo $btn_class; ?> hidden-phone" onclick="document.adminForm.limitstart.value=0; delAllFilters(); Joomla.submitform();"><?php echo FLEXI_J30GE ? '<i class="icon-remove"></i>' : JText::_('FLEXI_CLEAR'); ?></button>
+        </span></span><?php */?>
+        <?php $_class = FLEXI_J30GE ? ' btn' : ' fc_button fcsimple fcsmall'; ?>
+        <div class="btn-wrapper btn-group hidden-phone">
+          <?php /*?><input type="button" id="fc_filters_box_btn" class="<?php echo $_class.($this->count_filters ? ' btn-primary' : ''); ?>" onclick="fc_toggle_box_via_btn('fc-filters-box', this, 'btn-primary');" value="<?php echo JText::_( 'FLEXI_FILTERS' ); ?>" /><?php */?>
+          <input type="button" id="fc_mainChooseColBox_btn" class="<?php echo $_class; ?>" onclick="fc_toggle_box_via_btn('mainChooseColBox', this, 'btn-primary');" value="<?php echo JText::_( 'FLEXI_COLUMNS' ); ?>" />
         </div>
-      </div>
-      <!--/LIMIT--> 
-      
-      <div class="row-fluid">
-<div class="span12">
+        <span class="limit btn-group pull-right hidden-phone">
+        <?php
+				$pagination_footer = $this->pagination->getListFooter();
+				if (strpos($pagination_footer, '"limit"') === false) echo $this->pagination->getLimitBox();
+				?>
+        <?php if (($getPagesCounter = $this->pagination->getPagesCounter())): ?>
+        <?php echo $getPagesCounter; ?>
+        <?php endif; ?>
+        </span></div>
+	
+    	<?php /*?><div id="fc-filters-box" <?php if (!$this->count_filters) echo 'style="display:none;"'; ?> class="">
+		<!--<span class="label"><?php echo JText::_( 'FLEXI_FILTERS' ); ?></span>-->
+		
+		<div class="icon-arrow-up-2" title="<?php echo JText::_('FLEXI_HIDE'); ?>" style="cursor: pointer;" onclick="fc_toggle_box_via_btn('fc-filters-box', document.getElementById('fc_filters_box_btn'), 'btn-primary');"></div>
+	</div><?php */?>
+	
+	<div id="mainChooseColBox" class="well well-small" style="display:none;"></div>
+	
+	<div class="fcclear"></div>
 
 <div class="block-flat">
-<div class="table-responsive">  
-
-	<table class="adminlist" cellspacing="1">
+	<table id="adminListTableFCgroups" class="adminlist fcmanlist table no-border hover">
 	<thead>
-		<tr>
-        
-        
-        	<table class="users table no-border hover">
-		<thead class="no-border">
-			<tr class="header">
-				<th class="center w30px">
+          <tr class="header">
+			<th class="center">
 				<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
 			</th>
-			<th>
+			<th class="hideOnDemandClass left">
 				<?php echo JText::_('COM_USERS_HEADING_GROUP_TITLE'); ?>
 			</th>
-			<th class="center">
+			<th class="hideOnDemandClass text-left" colspan="2">
 				<?php echo JText::_('COM_USERS_HEADING_USERS_IN_GROUP'); ?>
 			</th>
-			<th class="center w30px">
+			<th class="hideOnDemandClass center hidden-tablet hidden-phone col_id">
 				<?php echo JText::_('JGRID_HEADING_ID'); ?>
 			</th>
 		</tr>
 		
 	</thead>
 
-	<tfoot>
-		<tr>
-			<td colspan="4">
-				<?php echo $pagination_footer; ?>
-			</td>
-		</tr>
-	</tfoot>
+
 	<tbody>
 	<?php foreach ($this->items as $i => $item) :
 		$canCreate	= $user->authorise('core.create',		'com_users');
@@ -141,7 +141,7 @@ JText::script('COM_USERS_GROUPS_CONFIRM_DELETE');
 		$canChange	= $user->authorise('core.edit.state',	'com_users');
 	?>
 		<tr class="row<?php echo $i % 2; ?>">
-			<td class="center w30px">
+			<td class="center">
 				<?php if ($canEdit) : ?>
 					<?php echo JHtml::_('grid.id', $i, $item->id); ?>
 				<?php endif; ?>
@@ -159,10 +159,20 @@ JText::script('COM_USERS_GROUPS_CONFIRM_DELETE');
 					<?php echo JText::_('COM_USERS_DEBUG_GROUP');?></a></div></div></div>
 				<?php endif; ?>
 			</td>
-			<td class="center">
-				<?php echo $item->user_count ? $item->user_count : ''; ?>
+			<td class="text-right">
+				<?php echo '<span class="badge badge-info">'.$item->user_count.'</span>'; ?>
 			</td>
-			<td class="center w30px">
+			<td class="left">
+				<?php
+				if ($item->user_count) {
+					echo '
+					<a onclick="delAllFilters();"  href="index.php?option=com_flexicontent&amp;view=users&amp;filter_usergrp='.$item->id.'">
+					['.$view_entry.']
+					</a>';
+				}
+				?>
+			</td>
+			<td class="center hidden-tablet hidden-phone col_id">
 				<?php echo (int) $item->id; ?>
 			</td>
 		</tr>
@@ -170,11 +180,9 @@ JText::script('COM_USERS_GROUPS_CONFIRM_DELETE');
 	</tbody>
 
 	</table>
+</div>
 
-</div>
-</div>
-</div>
-</div>
+<p><?php echo $pagination_footer; ?></p>
 	<input type="hidden" name="boxchecked" value="0" />
 	<input type="hidden" name="task" value="" />
 	<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />

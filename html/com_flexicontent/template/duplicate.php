@@ -43,7 +43,7 @@ window.addEvent('domready', function(){
 }); 
 </script>
 
-<form action="index.php?option=com_flexicontent&".$ctrl_task."duplicate&layout=duplicate&<?php echo FLEXI_J16GE ? 'format=raw' : 'tmpl=component';?>" method="post" name="adminForm" id="adminForm">
+<form action="index.php?option=com_flexicontent&".$ctrl_task."duplicate&layout=duplicate&<?php echo FLEXI_J16GE ? 'format=raw' : 'tmpl=component';?>" method="post" name="adminForm" id="adminForm" class="form-horizontal">
 
 	<fieldset>
 		<legend>

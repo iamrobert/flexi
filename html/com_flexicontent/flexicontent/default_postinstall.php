@@ -273,22 +273,22 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 		}
 	});
 <?php endif; ?>
-<?php if (!$this->oldbetafiles) : ?>
-$('oldbetafiles').addEvent('click', function(e) {
+<?php if (!$this->deprecatedfiles) : ?>
+$('deprecatedfiles').addEvent('click', function(e) {
 		//e = new Event(e).stop();
-		var url = "index.php?option=com_flexicontent&task=deleteoldfiles&format=raw&<?php echo (FLEXI_J30GE ? JSession::getFormToken() : JUtility::getToken());?>=1&tmpl=component";
+		var url = "index.php?option=com_flexicontent&task=deletedeprecatedfiles&format=raw&<?php echo (FLEXI_J30GE ? JSession::getFormToken() : JUtility::getToken());?>=1&tmpl=component";
 		if(MooTools.version>="1.2.4") {
-			$('oldbetafiles-log').set('html', ajaxloader);
+			$('deprecatedfiles-log').set('html', ajaxloader);
 			new Request.HTML({
 				url: url,
 				method: 'get',
-				update: $('oldbetafiles-log')
+				update: $('deprecatedfiles-log')
 			}).send();
 		}else{
-			$('oldbetafiles-log').set('html',ajaxloader);
+			$('deprecatedfiles-log').set('html',ajaxloader);
 			var ajax = new Ajax(url, {
 				method: 'get',
-				update: $('oldbetafiles-log')
+				update: $('deprecatedfiles-log')
 			});
 			ajax.request.delay(500, ajax);
 		}
@@ -413,7 +413,7 @@ $('missingversion').addEvent('click', function(e) {
 			<?php echo JText::_( 'FLEXI_CREATE_DB_INDEXES' ); ?>
 			<?php
 				if (!$this->existdbindexes) {
-					echo "<br/><span class='fc-mssg-inline fc-mssg fc-note'>this may take a long time on big web-sites, if it timeouts (or takes >5 min) then please refresh, and click to create remaining indexes</span>";
+					echo "<br/><span class='fc-mssg-inline fc-mssg fc-note'>this may take a long time on big web-sites, if it timeouts (or takes >2 min) then please refresh, and click to create remaining indexes</span>";
 					echo "<br># tables: ". count($this->missingindexes) ." : ";
 					foreach($this->missingindexes as $tblname => $indexes) {
 						if ( isset($indexes['__indexing_started__']) ) {
@@ -473,8 +473,8 @@ $('missingversion').addEvent('click', function(e) {
 		<td class="key">
 			<?php echo JText::_( 'FLEXI_CLEANUP_TEMPLATE_FILES' ); ?>
 		</td>
-		<td id="oldbetafiles-log">
-			<?php echo $this->oldbetafiles ? '<span class="install-ok"></span>' : '<span class="install-notok"></span><span class="button-add"><a id="oldbetafiles" href="#">'.JText::_( 'FLEXI_UPDATE' ).'</a></span>'; ?>
+		<td id="deprecatedfiles-log">
+			<?php echo $this->deprecatedfiles ? '<span class="install-ok"></span>' : '<span class="install-notok"></span><span class="button-add"><a id="deprecatedfiles" href="#">'.JText::_( 'FLEXI_UPDATE' ).'</a></span>'; ?>
 		</td>
 	</tr>
 	<tr>

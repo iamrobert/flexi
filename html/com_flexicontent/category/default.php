@@ -18,6 +18,13 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+
+// For tabsets/tabs ids (focusing, etc)
+$tabSetCnt = -1;
+$tabSetMax = -1;
+$tabCnt = array();
+$tabSetStack = array();
+
 /*
 $layouts = array();
 foreach ($this->tmpls as $tmpl) {
@@ -34,274 +41,396 @@ dump($this->row);
 */
 ?>
 
-<!--<style>
+<?php
+$useAssocs = flexicontent_db::useAssociations();
+
+// Load JS tabber lib
+$this->document->addScript(JURI::root(true).'/components/com_flexicontent/assets/js/tabber-minimized.js');
+$this->document->addStyleSheet(JURI::root(true).'/components/com_flexicontent/assets/css/tabber.css');
+$this->document->addScriptDeclaration(' document.write(\'<style type="text/css">.fctabber{display:none;}<\/style>\'); ');  // temporarily hide the tabbers until javascript runs
+$js = "
+	jQuery(document).ready(function(){
+		fc_bind_form_togglers('#flexicontent', 0, '');
+	});
+";
+?>
+
+<style>
 .current:after{
 	clear: both;
 	content: "";
 	display: block;
 }
-</style>-->
-<?php 
-// TITLE RENAME FROM EDIT ITEM
-if ($this->form->getValue('title')!="") :?>
-<script>
+</style>
 
-jQuery( 'h1.content-title' ).replaceWith( '<h1 class="content-title"><?php echo $this->form->getValue('title');?></h1>' );
+<div id="flexicontent" class="flexicontent">
+<form action="index.php" method="post" name="adminForm" id="adminForm" class="form-horizontal">
 
-	</script>
-  <?php endif; ?>  
-<div id="flexicontent" class="flexicontent cat">
-  <div class="m20x">
-    <form action="index.php" method="post" name="adminForm" id="adminForm">
-      <div class="row-fluid">
+
+<!-- ##################
++ TITLE
+####################### -->
+    <div class="row-fluid">
+      <div class="span12">
+        <h1 class="contentx">
+          <?php if ($this->form->getValue('title') == '') {
+echo 'New Category';}
+else {
+	echo $this->form->getValue('title');
+};?>
+        </h1>
+      </div>
+    </div>
+    
+	
+    
+     <div class="row-fluid">
         <div class="span12">
           <div class="block-flat">
-            <div class="form-horizontal"> 
-              <!--START--> 
-              <!--TITLE-->
-              <div class="form-inline">
-                <div class="control-group">
+          <!--CONTENT-->
+          
+           <div class="control-group">
                   <label class="control-label required" for="jform_title"><?php echo jtext::_("FLEXI_TITLE"); ?></label>
                   <div class="controls"> <?php echo $this->form->getInput('title'); ?> </div>
                 </div>
-              </div>
-              <!--/TITLE--> 
-              
-              <!--ALIAS-->
-              <div class="form-inline">
+                <!--CONTENT-->
+                
+                 <!--ALIAS-->
+         
                 <div class="control-group">
                   <label class="control-label" for="jform_alias"><?php echo jtext::_("FLEXI_ALIAS"); ?></label>
                   <div class="controls"> <?php echo $this->form->getInput('alias'); ?> </div>
                 </div>
-              </div>
-              <!--/ALIAS-->
-
-              
-              <!--PUBLISHED-->
-              <div class="form-inline">
+                         <!--/ALIAS-->
+                         
+                         
+                         <!--PUBLISHED-->
+          
                 <div class="control-group"> <?php echo $this->form->getLabel('published'); ?>
                   <div class="controls"> <?php echo $this->form->getInput('published'); ?><i class="icon-calendar m3l"></i> </div>
                 </div>
-              </div>
+            
               <!--/PUBLISHED--> 
               
-              <!--CAT-->
-              <div class="form-inline">
+              
+                            <!--CAT-->
+            
                 <div class="control-group"> <?php echo $this->form->getLabel('parent_id'); ?>
                   <div class="controls"> <?php echo $this->Lists['parent_id']; ?><i class="icon-folder m3l"></i> </div>
                 </div>
-              </div>
+             
               <!--/CAT-->
               <!--LANGUAGE-->
-              <div class="form-inline hlang">
+              <div class="hlang">
                 <div class="control-group"> <?php echo $this->form->getLabel('language'); ?>
                   <div class="controls"> <?php echo $this->form->getInput('language'); ?><i class="icon-comments-2 m3l movel"></i> </div>
                 </div>
               </div>
               <!--END--> 
-            </div>
           </div>
-        </div>
-      </div>
-      <?php
-echo JHtml::_('tabs.start','core-tabs-'.$this->form->getValue("id"), array('useCookie'=>1));
-$title = JText::_( 'FLEXI_DESCRIPTION' ) ;
-				echo JHtml::_('tabs.panel', $title, 'cat-description');
-				?>
-      <div class="flexi_params">
-        <?php
-						// parameters : areaname, content, hidden field, width, height, rows, cols
-						echo $this->editor->display( FLEXI_J16GE ? 'jform[description]' : 'description',  $this->row->description, '100%', '350px', '75', '20', array('pagebreak', 'readmore') ) ;
-						//echo $this->form->getInput('description');  // does not use default user editor, but instead the one specified in XML file or the Globally configured one
-					?>
-      </div>
-      <?php echo JHtml::_('tabs.panel',JText::_('FLEXI_IMAGE'), 'cat-image'); ?>
-      <?php
-				$fieldSets = $this->form->getFieldsets('params');
-				foreach ($fieldSets as $name => $fieldSet) :
-					if ($name != 'cat_basic' ) continue;
-					$label = !empty($fieldSet->label) ? $fieldSet->label : 'FLEXI_PARAMS_'.$name;
-					if (isset($fieldSet->description) && trim($fieldSet->description)) :
-						echo '<p class="tip">'.$this->escape(JText::_($fieldSet->description)).'</p>';
-					endif;
-					?>
-      <fieldset class="panelform">
-        <div class="form-horizontal">
-          <?php foreach ($this->form->getFieldset($name) as $field) : ?>
-          <div class="form-inline">
-            <div class="control-group"> <?php echo $field->label; ?>
-              <div class="controls"> <?php echo $field->input; ?> </div>
-            </div>
           </div>
-          <?php endforeach; ?>
-        </div>
-      </fieldset>
-      <?php endforeach;
-				?>
-      <?php echo JHtml::_('tabs.panel',JText::_('FLEXI_PUBLISHING'), 'publishing-details'); ?>
-      <fieldset class="panelform">
-        <!--<ul class="nav nav-tabs">-->
-        <div class="form-horizontal">
-          <div class="form-inline">
-            <div class="control-group"> <?php echo $this->form->getLabel('created_user_id'); ?>
-              <div class="controls"> <?php echo $this->form->getInput('created_user_id'); ?></div>
-            </div>
-          </div>
-          <?php if (intval($this->form->getValue('created_time'))) : ?>
-          <div class="form-inline">
-            <div class="control-group"><?php echo $this->form->getLabel('created_time'); ?>
-              <div class="controls"> <?php echo $this->form->getInput('created_time'); ?></div>
-            </div>
-          </div>
-          <?php endif; ?>
-          <?php if ($this->form->getValue('modified_user_id')) : ?>
-          <div class="form-inline">
-            <div class="control-group"><?php echo $this->form->getLabel('modified_user_id'); ?>
-              <div class="controls"> <?php echo $this->form->getInput('modified_user_id'); ?></div>
-            </div>
-          </div>
-          <div class="form-inline">
-            <div class="control-group"><?php echo $this->form->getLabel('modified_time'); ?>
-              <div class="controls"> <?php echo $this->form->getInput('modified_time'); ?></div>
-            </div>
-          </div>
-          <?php endif; ?>
-        
-        <div class="form-inline">
-            <div class="control-group">
-        <?php echo $this->form->getLabel('access'); ?> 
-		<div class="controls"><?php echo $this->form->getInput('access'); ?></div>
-            </div>
           </div>
           
-          </div>
-      </fieldset>
-      <?php echo JHtml::_('tabs.panel',JText::_('FLEXI_META_SEO'), 'meta-options'); ?>
-      <fieldset class="panelform desc">
-        <div class="form-horizontal">
-          <div class="form-inline">
-            <div class="control-group"><?php echo $this->form->getLabel('metadesc'); ?>
-              <div class="controls"><?php echo $this->form->getInput('metadesc'); ?></div>
-            </div>
-          </div>
-          <div class="form-inline metakey">
-            <div class="control-group"><?php echo $this->form->getLabel('metakey'); ?>
-              <div class="controls"><?php echo $this->form->getInput('metakey'); ?></div>
-            </div>
-          </div>
-          <?php foreach($this->form->getGroup('metadata') as $field): ?>
-          <?php if ($field->hidden): ?>
-          <div class="form-inline">
-            <div class="control-group">
-              <div class="controls"><?php echo $field->input; ?></div>
-            </div>
-          </div>
-          <?php else: ?>
-          <div class="form-inline">
-            <div class="control-group"><?php echo $field->label; ?>
-              <div class="controls"><?php echo $field->input; ?></div>
-            </div>
-          </div>
-          <?php endif; ?>
-          <?php endforeach; ?>
-        </div>
-      </fieldset>
-      <?php
-				$title = JText::_( 'FLEXI_PARAMETERS_HANDLING' ) ;
-				echo JHtml::_('tabs.panel', $title, 'cat-params-handling');
-				?>
-      <fieldset class="flexi_params panelform">
-      <div class="form-horizontal">
+
+<?php
+// *****************
+// MAIN TABSET START
+// *****************
+global $tabSetCnt;
+array_push($tabSetStack, $tabSetCnt);
+$tabSetCnt = ++$tabSetMax;
+$tabCnt[$tabSetCnt] = 0;
+?>
+
+<script>
+/* tab memory */
+jQuery(function($) {
+  var json, tabsState;
+  $('a[data-toggle="pill"], a[data-toggle="tab"]').on('shown', function(e) {
+    var href, json, parentId, tabsState;
+
+    tabsState = localStorage.getItem("tabs-state");
+    json = JSON.parse(tabsState || "{}");
+    parentId = $(e.target).parents("ul.nav.nav-pills, ul.nav.nav-tabs").attr("id");
+    href = $(e.target).attr('href');
+    json[parentId] = href;
+
+    return localStorage.setItem("tabs-state", JSON.stringify(json));
+  });
+
+  tabsState = localStorage.getItem("tabs-state");
+  json = JSON.parse(tabsState || "{}");
+
+  $.each(json, function(containerId, href) {
+    return $("#" + containerId + " a[href=" + href + "]").tab('show');
+  });
+
+  $("ul.nav.nav-pills, ul.nav.nav-tabs").each(function() {
+    var $this = $(this);
+    if (!json[$this.attr("id")]) {
+      return $this.find("a[data-toggle=tab]:first, a[data-toggle=pill]:first").tab("show");
+    }
+  });
+});
+</script>
+
+      <?php 
+$options = array('active' => 'tab'.$tabCnt[$tabSetCnt].'');
+echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-'.$tabSetCnt.'', $options, array('useCookie'=>1));?>
       
-        <div class="form-inline">
-            <div class="control-group"> <?php echo $this->form->getLabel('copycid'); ?>
-          <div class="controls"> <?php echo $this->Lists['copycid']; ?> </div>
-        </div>
-        </div>
-        <hr>
-        <?php foreach($this->form->getGroup('special') as $field): ?>
-        <div class="form-inline">
-            <div class="control-group"><?php echo $field->label; ?>
-          <div class="controls"> <?php echo $this->Lists[$field->fieldname]; ?> </div>
-        </div></div>
+      <!--FLEXI_BASIC TAB1 --> 
+      <?php echo JHtml::_('bootstrap.addTab', 'ID-Tabs-'.$tabSetCnt.'', 'tab'.$tabCnt[$tabSetCnt]++.'', 
+	  JText::_( '<i class="icon-file-2"></i> '.JText::_('FLEXI_DESCRIPTION'))); ?> 
+
+<div class="flexi_params" style="margin:0px 24px; width: 99% !important;">
+				<?php
+					// parameters : areaname, content, hidden field, width, height, rows, cols
+					echo $this->editor->display( FLEXI_J16GE ? 'jform[description]' : 'description',  $this->row->description, '100%', '350px', '75', '20', array('pagebreak', 'readmore') ) ;
+					//echo $this->form->getInput('description');  // does not use default user editor, but instead the one specified in XML file or the Globally configured one
+				?>
+						
+		</div>
+		
+			        <?php echo JHtml::_('bootstrap.endTab');?> 
+        <!--/FLEXI_DISPLAY TAB1 --> 
         
-        <?php endforeach; ?>
-         <hr>
-        </div>
-      </fieldset>
-     
-      <span class="fc-note fc-mssg hidden-phone hidden-tablet"> <?php echo JText::_('FLEXI_CAT_PARAM_OVERRIDE_ORDER_DETAILS_INHERIT'); ?> </span>
-      <?php
-				$title = JText::_( 'FLEXI_PARAMETERS' ) ;
-				echo JHtml::_('tabs.panel', $title, 'cat-params-common');
+        <!--TAB2-->
+         <?php echo JHtml::_('bootstrap.addTab', 'ID-Tabs-'.$tabSetCnt.'', 'tab'.$tabCnt[$tabSetCnt]++.'', 
+	  JText::_( '<i class="icon-image"></i>'.JText::_('FLEXI_IMAGE'))); ?> 
+      
+
+			
+			<?php
+			$fieldSets = $this->form->getFieldsets('params');
+			foreach ($fieldSets as $name => $fieldSet) :
+				if ($name != 'cat_basic' ) continue;
+				$label = !empty($fieldSet->label) ? $fieldSet->label : 'FLEXI_PARAMS_'.$name;
+				if (isset($fieldSet->description) && trim($fieldSet->description)) :
+					echo '<p class="tip">'.$this->escape(JText::_($fieldSet->description)).'</p>';
+				endif;
+				?>
+				<fieldset>
+					<?php foreach ($this->form->getFieldset($name) as $field) : ?>
+                    <div class="control-group">
+						<div class="control-label"><?php echo $field->label; ?></div>
+						<div class="controls"><?php echo $field->input; ?></div>
+                     </div>
+					<?php endforeach; ?>
+				</fieldset>
+			<?php endforeach; ?>
+            
+	        <?php echo JHtml::_('bootstrap.endTab');?> 
+        <!--/TAB2 --> 
+        <!--TAB3-->
+<?php echo JHtml::_('bootstrap.addTab', 'ID-Tabs-'.$tabSetCnt.'', 'tab'.$tabCnt[$tabSetCnt]++.'', 
+	  JText::_( '<i class="icon-calendar"></i>'.JText::_('FLEXI_PUBLISHING'))); ?> 
+      
+
+<fieldset>
+  <div class="control-group">
+    <div class="control-label"><?php echo $this->form->getLabel('created_user_id'); ?></div>
+    <div class="controls"><?php echo $this->form->getInput('created_user_id'); ?></div>
+  </div>
+  <?php if (intval($this->form->getValue('created_time'))) : ?>
+  <div class="control-group">
+    <div class="control-label"><?php echo $this->form->getLabel('created_time'); ?></div>
+    <div class="controls"><?php echo $this->form->getInput('created_time'); ?></div>
+  </div>
+  <?php endif; ?>
+  <?php if ($this->form->getValue('modified_user_id')) : ?>
+  <div class="control-group">
+    <div class="control-label"><?php echo $this->form->getLabel('modified_user_id'); ?></div>
+    <div class="controls"><?php echo $this->form->getInput('modified_user_id'); ?></div>
+  </div>
+  <div class="control-group">
+    <div class="control-label"><?php echo $this->form->getLabel('modified_time'); ?></div>
+    <div class="controls"><?php echo $this->form->getInput('modified_time'); ?>
+      <?php endif; ?>
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="control-label"><?php echo $this->form->getLabel('access'); ?></div>
+    <div class="controls"><?php echo $this->form->getInput('access'); ?></div>
+  </div>
+</fieldset>
+
+            
+      <?php echo JHtml::_('bootstrap.endTab');?> 
+      <!--/TAB3-->
+      
+      
+              <!--TAB4-->
+<?php echo JHtml::_('bootstrap.addTab', 'ID-Tabs-'.$tabSetCnt.'', 'tab'.$tabCnt[$tabSetCnt]++.'', 
+	  JText::_( '<i class="icon-bookmark"></i>'.JText::_('FLEXI_META_SEO'))); ?> 
+      
+      
+<fieldset>
+				  <div class="control-group">
+    <div class="control-label"><?php echo $this->form->getLabel('metadesc'); ?></div>
+    <div class="controls">
+				<?php echo $this->form->getInput('metadesc'); ?></div>
+  </div>
+	
+				  <div class="control-group">
+    <div class="control-label"><?php echo $this->form->getLabel('metakey'); ?></div>
+    <div class="controls">
+				<?php echo $this->form->getInput('metakey'); ?></div>
+  </div>
+	
+				<?php foreach($this->form->getGroup('metadata') as $field): ?>
+					<?php if ($field->hidden): ?>
+						<?php echo $field->input; ?>
+					<?php else: ?>
+						  <div class="control-group">
+    <div class="control-label"><?php echo $field->label; ?></div>
+    <div class="controls">
+						<?php echo $field->input; ?></div>
+  </div>
+					<?php endif; ?>
+				<?php endforeach; ?>
+			</fieldset>
+            
+            <?php echo JHtml::_('bootstrap.endTab');?> 
+      <!--/TAB4-->
+      
+                    <!--TAB5-->
+<?php echo JHtml::_('bootstrap.addTab', 'ID-Tabs-'.$tabSetCnt.'', 'tab'.$tabCnt[$tabSetCnt]++.'', 
+	  JText::_( '<i class="icon-wrench"></i>'.JText::_('FLEXI_PARAMETERS_HANDLING'))); ?> 
+      
+      
+      <?php foreach($this->form->getGroup('special') as $field): ?>
+					<fieldset>
+						<div class="control-group">
+    <div class="control-label"><?php echo $field->label; ?></div>
+    <div class="controls"><?php echo $this->Lists[$field->fieldname]; ?></div>
+  </div>
+					</fieldset>
+				<?php endforeach; ?>
 				
-				//echo '<h3 class="themes-title">' . JText::_( 'FLEXI_PARAMETERS' ) . '</h3>';
-				echo JHtml::_('tabs.start','basic-sliders-'.$this->form->getValue("id"), array('useCookie'=>1));
+				<div class="alert alert-success alert-white-alt rounded">
+                <div class="icon"><i class="icon-checkmark-2"></i></div>
+					<?php echo JText::_('FLEXI_CAT_PARAM_OVERRIDE_ORDER_DETAILS_INHERIT'); ?>
+				</div>
 				
+				
+				<fieldset>
+					<div class="control-group">
+    <div class="control-label">
+	<?php echo $this->form->getLabel('copycid'); ?></div>
+    <div class="controls">
+						<?php echo $this->Lists['copycid']; ?>
+					</div></div>
+				</fieldset>
+				
+                
+            
+                             
+				<div class="alert alert-warning alert-white-alt rounded">
+                <div class="icon"><i class="icon-notification"></i></div>
+					<?php echo JText::_('FLEXI_COPY_PARAMETERS_DESC'); ?>
+				</div>
+                
+      <?php echo JHtml::_('bootstrap.endTab');?> 
+      <!--/TAB5-->
+      
+      
+                          <!--TAB6-->
+<?php echo JHtml::_('bootstrap.addTab', 'ID-Tabs-'.$tabSetCnt.'', 'tab'.$tabCnt[$tabSetCnt]++.'', 
+	  JText::_( '<i class="icon-eye-open"></i>'.JText::_('FLEXI_PARAMETERS'))); ?> 
+      
+      
+   
+
+
+
+<!--TAB6 interior-->
+                    
+<?php 
+$options = array('active '    => 'tab'.$tabCnt[$tabSetCnt].'');
+echo JHtml::_('bootstrap.startTabSet', 'basic-sliders-'.$tabSetCnt.'', $options, array('useCookie'=>1));?>
+
+<?php
 				$fieldSets = $this->form->getFieldsets('params');
 				foreach ($fieldSets as $name => $fieldSet) :
 					if ($name == 'cat_basic' ) continue;
 					if ($name == 'cat_notifications_conf' && ( !$this->cparams->get('enable_notifications', 0) || !$this->cparams->get('nf_allow_cat_specific', 0) ) ) continue;
 					$label = !empty($fieldSet->label) ? $fieldSet->label : 'FLEXI_PARAMS_'.$name;
-					echo JHtml::_('tabs.panel',JText::_($label), $name.'-options');
-					if (isset($fieldSet->description) && trim($fieldSet->description)) :
-						echo '<p class="tip">'.$this->escape(JText::_($fieldSet->description)).'</p>';
-					endif;
-					?>
-      <fieldset class="panelform">
-      <div class="form-horizontal">
-      
-        <?php foreach ($this->form->getFieldset($name) as $field) : ?>
-        <div class="form-inline">
-            <div class="control-group"><?php echo $field->label; ?>
-			<div class="controls"><?php echo $field->input; ?></div>
-            </div></div>
-        <?php endforeach; ?>
-        </div>
-      </fieldset>
-      <?php endforeach;
-				echo JHtml::_('tabs.end');
-				?>
-      <?php
+echo JHtml::_('bootstrap.addTab', 'basic-sliders-'.$tabSetCnt.'', $name.'-options', JText::_($label)); ?> 
 
-				$title = JText::_( 'FLEXI_TEMPLATE' ) ;
-				echo JHtml::_('tabs.panel', $title, 'cat-params-template');
-				echo '<span class="fc-note fc-mssg-inline" style="margin: 8px 0px!important;">' . JText::_( 'FLEXI_PARAMETERS_LAYOUT_EXPLANATION' ) ;
+
+<fieldset>
+						<?php foreach ($this->form->getFieldset($name) as $field) : ?>
+							<div class="control-group">
+    <div class="control-label"><?php echo $field->label; ?></div>
+    <div class="controls"><?php echo $field->input; ?></div>
+                            </div>
+						<?php endforeach; ?>
+					</fieldset>
+                    <?php echo JHtml::_('bootstrap.endTab');?> 
+				<?php endforeach; ?>
+  <!--/TAB6 interior-->              
+ 
+ 
+ 
+ <?php echo JHtml::_('bootstrap.endTabSet');?>
+      
+      
+    
+       <?php echo JHtml::_('bootstrap.endTab');?> 
+      <!--/TAB6-->
+      
+      
+      <!--TAB7-->
+<?php echo JHtml::_('bootstrap.addTab', 'ID-Tabs-'.$tabSetCnt.'', 'tab'.$tabCnt[$tabSetCnt]++.'', 
+	  JText::_( '<i class="icon-palette"></i>'.JText::_('FLEXI_TEMPLATE'))); ?> 
+      
+      <div class="alert alert-info alert-white-alt rounded">
+      <div class="icon"><i class="icon-info"></i></div>
+      <?php echo JText::_( 'FLEXI_PARAMETERS_LAYOUT_EXPLANATION' ); ?>
+      
+   
+			<br/><br/>
+			<ol>
+				<li> Select TEMPLATE layout </li>
+				<li> Open slider with TEMPLATE (layout) PARAMETERS </li>
+			</ol>
+			<br/>
+			<strong>NOTE:</strong> Common method for -displaying- fields is by <strong>editing the template layout</strong> in template manager and placing the fields into <strong>template positions</strong>
+			</div>
+			
+			<fieldset>
+				<?php
+				$_p = & $this->row->params;
+				foreach($this->form->getGroup('templates') as $field):
+					$_name  = $field->fieldname;
+					$_value = isset($_p[$_name])  ?  $_p[$_name]  :  null;
+					
+					if ($field->hidden):
+						echo $field->input;
+					else:
+						// setValue(), is ok if input property, has not been already created
+						// otherwise we need to re-initialize (which clears input)
+						//$field->setup($field->element, $_value, $field->group);
+						
+						$field->setValue($_value);
+						echo '<div class="control-group"><div class="control-label">';
+						echo $field->label;
+						echo '</div><div class="controls">';
+						echo $field->input;
+						echo '</div></div>';
+						
+						
+	
+					endif;
+				endforeach;
 				?>
-      <br/>
-      <br/>
-      <ol class="nomargin">
-        <li> Select TEMPLATE layout </li>
-        <li> Open slider with TEMPLATE (layout) PARAMETERS </li>
-      </ol>
-      <br/>
-      <b>NOTE:</b> Common method for -displaying- fields is by <b>editing the template layout</b> in template manager and placing the fields into <b>template positions</b> </span>
-      <fieldset class="panelform">
-      <div class="form-horizontal">
-        <?php foreach($this->form->getGroup('templates') as $field): ?>
-        <?php if ($field->hidden): ?>
-        <?php echo $field->input; ?>
-        <?php else: ?>
-         <div class="form-inline">
-                    <div class="control-group">
-        <?php 
-							echo $field->label;
-							if (method_exists ( $field , 'set' )) {
-								$field->set('input', null);
-								$field->set('value', @$this->row->params[$field->fieldname]);
-							}
-							echo '<div class="controls">'.$field->input.'</div>';
-							?>
-                            </div></div>
-        <?php endif; ?>
-        <div class="clear"></div>
-        <?php endforeach; ?>
-        </div>
-      </fieldset>
-      <?php
-				echo JHtml::_('sliders.start','theme-sliders-'.$this->form->getValue("id"), array('useCookie'=>1));
-				$groupname = 'attribs';  // Field Group name this is for name of <fields name="..." >
+			</fieldset>
+			
+ 
+<?php echo JHtml::_('sliders.start','theme-sliders-'.$this->form->getValue("id"), array('useCookie'=>1,'show'=>1)); ?>
 				
+				<?php
+				$groupname = 'attribs';  // Field Group name this is for name of <fields name="..." >
 				foreach ($this->tmpls as $tmpl) :
 					$fieldSets = $tmpl->params->getFieldsets($groupname);
 					foreach ($fieldSets as $fsname => $fieldSet) :
@@ -311,66 +440,75 @@ $title = JText::_( 'FLEXI_DESCRIPTION' ) ;
 							echo '<p class="tip">'.$this->escape(JText::_($fieldSet->description)).'</p>';
 						endif;
 						?>
-      <fieldset class="panelform">
-               <div class="form-horizontal">   
-        <?php foreach ($tmpl->params->getFieldset($fsname) as $field) :
-		echo '<div class="form-inline">
-                    <div class="control-group">';
-								$fieldname =  $field->__get('fieldname');
+						<fieldset class="m20">
+							<?php foreach ($tmpl->params->getFieldset($fsname) as $field) :
+								echo '<div class="control-group">';
+								$fieldname =  $field->fieldname;
 								$value = $tmpl->params->getValue($fieldname, $groupname, @$this->row->params[$fieldname]);
-								echo $tmpl->params->getLabel($fieldname, $groupname);
+								echo str_replace('jform_attribs_', 'jform_layouts_'.$tmpl->name.'_',
+									'<div class="control-label">'.$tmpl->params->getLabel($fieldname, $groupname)).'</div>';
 								echo
 									str_replace('jform_attribs_', 'jform_layouts_'.$tmpl->name.'_', 
 										str_replace('[attribs]', '[layouts]['.$tmpl->name.']',
 											'<div class="controls">'.$tmpl->params->getInput($fieldname, $groupname, $value).'</div>'
 										)
 									);
-					echo '</div>
-                            </div>';
+					echo '</div>';
+							
 							endforeach; ?>
+						</fieldset>
+					<?php endforeach; ?>
+				<?php endforeach; ?>
+				
+				<?php echo JHtml::_('sliders.end'); ?>
+      
+      <br class="clear">
+             <?php echo JHtml::_('bootstrap.endTab');?> 
+      <!--/TAB7-->
+      
+      <?php if ($useAssocs) : ?>
+		<!-- Associations tab -->
+       <?php echo JHtml::_('bootstrap.addTab', 'ID-Tabs-'.$tabSetCnt.'', 'tab'.$tabCnt[$tabSetCnt]++.'', JText::_( '<i class="icon-flag"></i>'.JText::_('FLEXI_ASSOCIATIONS'))); ?> 
+      	<?php echo $this->loadTemplate('associations'); ?>
+		<?php echo JHtml::_('bootstrap.endTab');?> 
+		<?php endif; ?>
+
+
+		<?php if ( $this->perms->CanRights ) : ?>
+		<!-- Permissions tab -->
+        
+        <?php echo JHtml::_('bootstrap.addTab', 'ID-Tabs-'.$tabSetCnt.'', 'tab'.$tabCnt[$tabSetCnt]++.'', JText::_( '<i class="icon-power-cord"></i>'.JText::_('FLEXI_PERMISSIONS'))); ?>
+	
+			<div class="fc_tabset_inner">
+				<div id="access"><?php echo $this->form->getInput('rules'); ?></div>
+			</div>
+			
+<?php echo JHtml::_('bootstrap.endTab');?> 
+		<?php endif; ?>
+        
+        <!-- / TABS --> 
+        <?php echo JHtml::_('bootstrap.endTabSet');?> </div>
+        
+
+
+
+
+
+		
+		
+	
+	
+	
+	<?php echo JHTML::_( 'form.token' ); ?>
+	<input type="hidden" name="option" value="com_flexicontent" />
+	<input type="hidden" name="id" value="<?php echo $this->form->getValue('id'); ?>" />
+	<input type="hidden" name="controller" value="category" />
+	<input type="hidden" name="view" value="category" />
+	<input type="hidden" name="task" value="" />
+	<?php echo $this->form->getInput('extension'); ?>
+</form>
 </div>
-      </fieldset>
-      <?php endforeach; ?>
-      <?php endforeach; ?>
-      <?php echo JHtml::_('sliders.end'); ?> <?php echo JHtml::_('tabs.end'); ?>
-      <?php
-				if ($this->perms->CanConfig) :
-				$this->document->addScriptDeclaration("
-					window.addEvent('domready', function() {
-						var slideaccess = new Fx.Slide('tabacces');
-						var slidenoaccess = new Fx.Slide('notabacces');
-						slideaccess.hide();
-						$$('fieldset.flexiaccess legend').addEvent('click', function(ev) {
-							slideaccess.toggle();
-							slidenoaccess.toggle();
-						});
-					});
-				");
-				?>
-      <div class="form-horizontal">
-        <div class="block-flat">
-          <fieldset class="flexiaccess">
-            <legend><?php echo JText::_( 'FLEXI_RIGHTS_MANAGEMENT' ); ?></legend>
-            <table id="tabacces" class="admintable" width="100%">
-              <tr>
-                <td><div id="access"><?php echo $this->form->getInput('rules'); ?></div></td>
-              </tr>
-            </table>
-            <div id="notabacces"> <?php echo JText::_( 'FLEXI_RIGHTS_MANAGEMENT_DESC' ); ?> </div>
-          </fieldset>
-        </div>
-      </div>
-      <?php endif; ?>
-      <?php echo JHTML::_( 'form.token' ); ?>
-      <input type="hidden" name="option" value="com_flexicontent" />
-      <input type="hidden" name="id" value="<?php echo $this->form->getValue('id'); ?>" />
-      <input type="hidden" name="controller" value="category" />
-      <input type="hidden" name="view" value="category" />
-      <input type="hidden" name="task" value="" />
-      <?php echo $this->form->getInput('extension'); ?>
-    </form>
-  </div>
-</div>
+
 <?php
 //keep session alive while editing
 JHTML::_('behavior.keepalive');
