@@ -18,6 +18,9 @@
 
 defined('_JEXEC') or die('Restricted access');
 
+$tip_class = FLEXI_J30GE ? ' hasTooltip' : ' hasTip';
+$commentimage = JHTML::image ( 'administrator/components/com_flexicontent/assets/images/comment.png', JText::_( 'FLEXI_COMMENT' ), ' class="fc-man-icon-s" style="vertical-align:top;" ');
+
 $basetemplates = array('default', 'blog', 'faq', 'items-tabbed', 'presentation');
 $ctrl_task = FLEXI_J16GE ? 'task=templates.' : 'controller=templates&task=';
 $form_token = FLEXI_J30GE ? JSession::getFormToken() : JUtility::getToken();
@@ -42,10 +45,19 @@ jQuery(document).ready(function() {
 });
 ";
 JFactory::getDocument()->addScriptDeclaration($js);
+
+$editSingle   = JHTML::image ( 'components/com_flexicontent/assets/images/page_single_edit.png', JText::_( 'FLEXI_EDIT_LAYOUT' ), ' style="min-width:22px;" ' );
+$editMultiple = JHTML::image ( 'components/com_flexicontent/assets/images/page_multiple_edit.png', JText::_( 'FLEXI_EDIT_LAYOUT' ), ' style="min-width:22px;" '  );
+$editlayout = JHTML::image ( 'administrator/components/com_flexicontent/assets/images/layout_edit.png', JText::_( 'FLEXI_EDIT_LAYOUT' ), ' style="min-width:16px;" '  );
+$noeditlayout = JHTML::image ( 'administrator/components/com_flexicontent/assets/images/layout_link.png', JText::_( 'FLEXI_NOEDIT_LAYOUT' ), ' style="min-width:16px;" '  );
+$copytmpl = JHTML::image ( 'administrator/components/com_flexicontent/assets/images/layout_add.png', JText::_( 'FLEXI_DUPLICATE' ), ' style="min-width:16px;" '  );
+$deltmpl = JHTML::image ( 'administrator/components/com_flexicontent/assets/images/layout_delete.png', JText::_( 'FLEXI_REMOVE' ), ' style="min-width:16px;" '  );
+
+$list_total_cols = 8;
 ?>
 
-<div class="flexicontent">
-<form action="index.php" method="post" name="adminForm" id="adminForm">
+<div id="flexicontent" class="flexicontent">
+<form action="index.php" method="post" name="adminForm" id="adminForm" class="form-horizontal">
 
 <?php if (!empty( $this->sidebar)) : ?>
 	<div id="j-sidebar-container" class="span2">
@@ -55,41 +67,58 @@ JFactory::getDocument()->addScriptDeclaration($js);
 <?php else : ?>
 	<div id="j-main-container">
 <?php endif;?>
-<div class="flexicontent m20">
-<form action="index.php" method="post" name="adminForm" id="adminForm">
 
-<!--MAIN TABLE-->    
-<div class="row-fluid">
-<div class="span12">
+
+<div id="howto_box" class="alert alert-info">
+				<h4 class="alert-heading">Configure display of your fields <span class="badge">item</span> view and <span class="badge">multi-item</span> views</h4>
+															<p class="alert-message"><span class="badge badge-warning">ITEM Layout</span> Select this in configuration of <span class="badge">types</span> and (optionally) in  <span class="badge">items</span></p>
+                                                            <p><span class="badge badge-warning">CATEGORY Layout</span> Select this in configuration of <span class="badge">categories / content lists</span> except for <strong>search view</strong></p>
+												</div>
+                                 
+
+	
 <div class="block-flat">
-<div class="table-responsive">               
-	<table class="table no-border no-border-x hover">
+	
+	<table class="adminlist no-border no-border-x hover">
+	
 	<thead class="no-border">
 		<tr class="header">
-			<th width="5"><?php echo JText::_( 'FLEXI_NUM' ); ?></th>
-			<th width="42"></th>
-			<th class="title" align="left"><?php echo JText::_( 'FLEXI_TEMPLATE_NAME' ); ?></th>
-			<th class="center"><?php echo JText::_( 'FLEXI_TEMPLATE_ITEM' ); ?></th>
-			<th class="center"><?php echo JText::_( 'FLEXI_TEMPLATE_CAT' ); ?></th>
+			<th class="center hidden-tablet hidden-phone"><?php echo JText::_( 'FLEXI_NUM' ); ?></th>
+			<th></th>
+			<th class="title"><?php echo JText::_( 'FLEXI_TEMPLATE_NAME' ); ?></th>
+			<th colspan="2">
+				<?php echo JText::_( 'FLEXI_SINGLE_CONTENT' ); ?><br/>
+				<span class="badge badge-warning">ITEM Layout</span>
+			</th>
+			<th colspan="2">
+				<?php echo JText::_( 'FLEXI_CONTENT_LISTS' ); ?><br/>
+				<span class="badge badge-warning">CATEGORY Layout</span>
+			</th>
 		</tr>
 	</thead>
 
+
+
+
+	
 	<tbody>
 		<?php
-		$editlayout = JHTML::image ( 'administrator/templates/'.$template.'/images/flexi/layout_edit.png', JText::_( 'FLEXI_EDIT_LAYOUT' ) );
-		$noeditlayout = JHTML::image ( 'administrator/templates/'.$template.'/images/flexi/layout_link.png', JText::_( 'FLEXI_NOEDIT_LAYOUT' ) );
-		$copytmpl = JHTML::image ( 'administrator/templates/'.$template.'/images/flexi/layout_add.png', JText::_( 'FLEXI_DUPLICATE' ) );
-		$deltmpl = JHTML::image ( 'administrator/templates/'.$template.'/images/flexi/layout_delete.png', JText::_( 'FLEXI_REMOVE' ) );
 		$k = 0;
 		$i = 1;
 		foreach ($this->rows as $row) :
 			$copylink 	= 'index.php?option=com_flexicontent&amp;view=templates&amp;layout=duplicate&amp;tmpl=component&amp;source='. $row->name;
 			$itemlink	= 'index.php?option=com_flexicontent&amp;view=template&amp;type=items&amp;folder='.$row->name;
 			$catlink	= 'index.php?option=com_flexicontent&amp;view=template&amp;type=category&amp;folder='.$row->name;
+			
+			$defaulttitle_item = !empty($row->items)    ? @ $row->items->defaulttitle    : '';
+			$defaulttitle_cat  = !empty($row->category) ? @ $row->category->defaulttitle : '';
+			
+			$description_item = !empty($row->items)    ? @ $row->items->description    : '';
+			$description_cat  = !empty($row->category) ? @ $row->category->description : '';
 			?>
 		<tr class="<?php echo "row$k"; ?>" id="<?php echo 'up-'.$row->name ?>">
-			<td><?php echo $i; ?></td>
-			<td align="right">
+			<td class="center hidden-tablet hidden-phone"><?php echo $i; ?></td>
+			<td class="center">
 				<?php if (!in_array($row->name, $basetemplates)) :?>
 					<a style="margin-right: 5px" id="<?php echo 'del-' . $row->name ?>" class="deletable-template" href="javascript:;">
 						<?php echo $deltmpl; ?>
@@ -97,9 +126,34 @@ JFactory::getDocument()->addScriptDeclaration($js);
 			 	<?php endif; ?>
 				<a class="modal" rel="{handler: 'iframe', size: {x: 390, y: 210}}" href="<?php echo $copylink; ?>">  <?php echo $copytmpl; ?> </a>
 			</td>
-			<td align="left"><?php echo htmlspecialchars($row->name, ENT_QUOTES, 'UTF-8'); ?></td>
-			<td class="center"><?php echo @$row->items ? ((isset($row->items->positions)) ? '<a href="'.$itemlink.'">'.$editlayout.'</a>' : $noeditlayout) : ''; ?></td>
-			<td class="center"><?php echo @$row->category ? ((isset($row->category->positions)) ? '<a href="'.$catlink.'">'.$editlayout.'</a>' : $noeditlayout) : ''; ?></td>
+			<td>
+				<?php echo htmlspecialchars($row->name, ENT_QUOTES, 'UTF-8'); ?>
+				<?php if (in_array($row->name, $basetemplates)) :?>
+					<!--<span class="icon-lock"></span>-->
+				<?php else: ?>
+					<span class="icon-user"></span><span class="badge"><?php echo JText::_('FLEXI_USER').' - '.JText::_('FLEXI_CREATED'); ?></span>
+				<?php endif; ?>
+			</td>
+			<td>
+				<?php echo @$row->items ? (isset($row->items->positions) ? '<a href="'.$itemlink.'">'.$editSingle.'</a>' : $noeditlayout) : ''; ?>
+			</td>
+			<td>
+				<?php if ($defaulttitle_item): ?>
+					<span data-placement="top" class="<?php echo $tip_class; ?>" title="<?php echo flexicontent_html::getToolTip('', $description_item, 1, 1); ?>" >
+						<?php echo JText::_($defaulttitle_item); ?>
+					</span>
+				<?php endif; ?>
+			</td>
+			<td>
+				<?php echo @$row->category ? (isset($row->category->positions) ? '<a href="'.$catlink.'">'.$editMultiple.'</a>' : $noeditlayout) : ''; ?>
+			</td>
+			<td>
+				<?php if ($defaulttitle_cat): ?>
+					<span data-placement="top" class="<?php echo $tip_class; ?>" title="<?php echo flexicontent_html::getToolTip('', $description_cat, 1, 1); ?>" >
+						<?php echo JText::_($defaulttitle_cat); ?>
+					</span>
+				<?php endif; ?>
+			</td>
 		</tr>
 		<?php
 		$k = 1 - $k;
@@ -109,49 +163,31 @@ JFactory::getDocument()->addScriptDeclaration($js);
 	</tbody>
 
 	</table>
-	
+
+
+           
+</div>	
+
+<div class="block-flat m20 hidden-phone">
+   <div class="row-fluid">
+              <div class="span6">
+              <p><?php echo $copytmpl; ?> <?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE' ); ?></p>
+              <p><?php echo $editlayout; ?> <?php echo JText::_( 'FLEXI_EDIT_LAYOUT' ); ?></p>
+           </div>   
+           <div class="span6">
+           <p><?php echo $deltmpl; ?> <?php echo JText::_( 'FLEXI_REMOVE_TEMPLATE' ); ?></p>
+           <p><?php echo $noeditlayout; ?>	<?php echo JText::_( 'FLEXI_NOEDIT_LAYOUT' ); ?></p>
+           </div>   
+           </div>
+ </div>
 	<div class="clear"></div>
 	
-	<table class="borderfree no-strip nohover white hidden-tablet hidden-phone">
-    <tbody>
-		<tr>
-			<td>
-			<?php echo $copytmpl; ?>
-			</td>
-			<td>
-			<?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE' ); ?>
-			</td>
-			<td>
-			<?php echo $editlayout; ?>
-			</td>
-			<td>
-			<?php echo JText::_( 'FLEXI_EDIT_LAYOUT' ); ?>
-			</td>
-		</tr>
-		<tr>
-			<td>
-			<?php echo $deltmpl; ?>
-			</td>
-			<td>
-			<?php echo JText::_( 'FLEXI_REMOVE_TEMPLATE' ); ?>
-			</td>
-			<td>
-			<?php echo $noeditlayout; ?>
-			</td>
-			<td>
-			<?php echo JText::_( 'FLEXI_NOEDIT_LAYOUT' ); ?>
-			</td>
-		</tr>
-        </tbody>
-	</table>
-</div>
-</div>
-</div>
-</div>
 	<input type="hidden" name="option" value="com_flexicontent" />
 	<input type="hidden" name="controller" value="templates" />
 	<input type="hidden" name="view" value="templates" />
 	<input type="hidden" name="task" value="" />
 	<?php echo JHTML::_( 'form.token' ); ?>
+	
+	</div>
 </form>
 </div>

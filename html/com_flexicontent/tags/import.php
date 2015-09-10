@@ -45,21 +45,18 @@ window.addEvent('domready', function(){
 </script>
 <div class="row-fluid">
 <div class="span-12">
-<form action="index.php?option=com_flexicontent&".$ctrl_task."import&layout=import&<?php echo FLEXI_J16GE ? 'format=raw' : 'tmpl=component';?>" method="post" name="adminForm" id="adminForm">
+<form action="index.php?option=com_flexicontent&".$ctrl_task."import&layout=import&<?php echo FLEXI_J16GE ? 'format=raw' : 'tmpl=component';?>" method="post" name="adminForm" id="adminForm" class="form-horizontal">
 
 <div class="control-group">
 <div class="controls">
-
 	<fieldset>
-		
-			<h3 class="purple"><?php echo JText::_( 'FLEXI_IMPORT_TAGS' ); ?> <i class="icon-info hasTip purple hasTip tags" title="<?php echo JText::_( 'FLEXI_IMPORT_TAGS_DESC' ); ?>"></i></h3>
-		
-		<textarea id="taglist" name="taglist" rows="20" cols="51"></textarea>
+		<h3 class="purple"><i class="icon-info purple hasTooltip" data-placement="bottom" title="<?php echo JText::_( 'FLEXI_IMPORT_TAGS_DESC' ); ?>"></i> <?php echo JText::_( 'FLEXI_IMPORT_TAGS' ); ?> </h3>
+		<textarea id="taglist" name="taglist" rows="15" cols="40"></textarea>
 	</fieldset>
-</div>
+    
+    </div>
 </div>
 <br>
-
 <div class="form-inline">
 <div class="control-group">
 <div class="controls">
@@ -87,4 +84,6 @@ window.addEvent('domready', function(){
 	<input type="hidden" name="tmpl" value="component" />
 <?php endif; ?>
 
-</form></div></div>
+</form>
+</div>
+</div>

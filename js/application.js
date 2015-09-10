@@ -1,5 +1,3 @@
-
-
 $('.dropdown-toggle').dropdown()
 $('.collapse').collapse('show')
 $('#myModal').modal('hide')

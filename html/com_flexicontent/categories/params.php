@@ -35,7 +35,7 @@ window.addEvent('domready', function(){
 }); 
 </script>
 
-<form action="index.php?option=com_flexicontent&task=categories.params&layout=params&format=raw" method="post" name="adminForm" id="adminForm">
+<form action="index.php?option=com_flexicontent&task=categories.params&layout=params&format=raw" method="post" name="adminForm" id="adminForm" class="form-horizontal">
 
 	<fieldset>
 		<legend><?php echo JText::_( 'FLEXI_COPY_PARAMETERS_SOURCE' ).':'; ?></legend>

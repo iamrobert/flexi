@@ -48,46 +48,42 @@ fieldset {
 }
 </style>
 <div class="row-fluid">
-<div class="span-12">
-<form action="index.php?option=com_flexicontent&<?php echo $ctrl_task; ?>duplicate&layout=duplicate&<?php echo FLEXI_J16GE ? 'format=raw' : 'tmpl=component';?>" method="post" name="adminForm" id="adminForm" class="form-horizontal">
-
-	<fieldset>
-		<h3 color="purple">
-			<?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE' ); ?> 
-			<i class="icon-info hasTip purple hasTip tags" title="<?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE_DESC' ); ?>"></i>
-		</h3>
+  <div class="span-12">
+    <form action="index.php?option=com_flexicontent&<?php echo $ctrl_task; ?>duplicate&layout=duplicate&<?php echo FLEXI_J16GE ? 'format=raw' : 'tmpl=component';?>" method="post" name="adminForm" id="adminForm" class="form-horizontal">
+      <fieldset>
+        <h3 color="purple"> <?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE' ); ?> <i class="icon-info hasTooltip purple tags" data-placement="bottom" title="<?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE_DESC' ); ?>"></i> </h3>
         <hr>
-<div class="form-inline">
-<div class="control-group">
-<div class="controls">
-<div class="center">
-		<p><input type="text" id="dest" name="dest" value="<?php echo $this->dest; ?>" class="input_box" />
-		<input type="hidden" id="source" name="source" value="<?php echo $this->source; ?>" /></p>
         
-        
-        <button id="import" type="submit" class="fc_button btn btn-primary" value="<?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE_BUTTON' ); ?>" />
-        <?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE_BUTTON' ); ?></button>
-        <button type="button" class="fc_button btn btn-primary" onclick="window.parent.document.adminForm.submit();<?php echo $close_popup_js;?>" value="<?php echo JText::_( 'FLEXI_CLOSE_IMPORT_TAGS' ); ?>" /><?php echo JText::_( 'FLEXI_CLOSE_IMPORT_TAGS' ); ?></button>
-        </div></div>
-        </div>
-        </div>
-	</fieldset>
-  
-
-	<div id="log-bind"></div>
-
-	<?php echo JHTML::_( 'form.token' ); ?>
-	<input type="hidden" name="option" value="com_flexicontent" />
-
-<?php if (FLEXI_J16GE) : ?>
-	<input type="hidden" name="task" value="templates.duplicate" />
-	<input type="hidden" name="layout" value="templates.duplicate" />
-	<input type="hidden" name="format" value="raw" />
-<?php else : ?>
-	<input type="hidden" name="task" value="duplicate" />
-	<input type="hidden" name="controller" value="templates" />
-	<input type="hidden" name="view" value="templates" />
-	<input type="hidden" name="tmpl" value="component" />
-<?php endif; ?>
-</form></div>
+          <div class="control-group">
+            <div class="controls">
+              <div class="center">
+                <p>
+                  <input type="text" id="dest" name="dest" value="<?php echo $this->dest; ?>" class="input_box" />
+                  <input type="hidden" id="source" name="source" value="<?php echo $this->source; ?>" />
+                </p>
+                <button id="import" type="submit" class="fc_button btn btn-primary" value="<?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE_BUTTON' ); ?>" />
+                <?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE_BUTTON' ); ?>
+                </button>
+                <button type="button" class="fc_button btn" onclick="window.parent.document.adminForm.submit();<?php echo $close_popup_js;?>" value="<?php echo JText::_( 'FLEXI_CLOSE_IMPORT_TAGS' ); ?>" />
+                <?php echo JText::_( 'FLEXI_CLOSE_IMPORT_TAGS' ); ?>
+                </button>
+              </div>
+            </div>
+          </div>
+      </fieldset>
+      <div id="log-bind"></div>
+      <?php echo JHTML::_( 'form.token' ); ?>
+      <input type="hidden" name="option" value="com_flexicontent" />
+      <?php if (FLEXI_J16GE) : ?>
+      <input type="hidden" name="task" value="templates.duplicate" />
+      <input type="hidden" name="layout" value="templates.duplicate" />
+      <input type="hidden" name="format" value="raw" />
+      <?php else : ?>
+      <input type="hidden" name="task" value="duplicate" />
+      <input type="hidden" name="controller" value="templates" />
+      <input type="hidden" name="view" value="templates" />
+      <input type="hidden" name="tmpl" value="component" />
+      <?php endif; ?>
+    </form>
+  </div>
 </div>
