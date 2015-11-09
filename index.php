@@ -161,8 +161,6 @@ function colorIsLight($color)
  background: <?php echo $this->params->get('flexiColor');?>;
 }
 
-.pane-sliders .pane-toggler.title:hover a {
-	color: #fff;}
 
 .pane-sliders .panel h3, .pane-sliders .panel h3 a, h3.tabberheading, .nav-tabs>li>a:hover, #flexicontent ul.tabbernav li a:hover, .flexicontent .accordion.accordion-semi .panel-heading a.collapsed:hover, #status a:hover, #status a:focus, dl.tabs dt.open span, dl.tabs dt.open h3 a, .flexicontent .nav-tabs > li > a:hover, .flexicontent .nav-tabs > li > a:active, .show-all, .show-all a, .com_flexicontent .accordion .panel-heading a, .accordion .panel-heading h4 a  {
  color: <?php echo $this->params->get('flexiColor');?>;
@@ -290,7 +288,7 @@ ul.amm_menu_disabled li.amm_li_disabled a, ul.amm_menu_disabled li.amm_li_disabl
 	<![endif]-->
 </head>
 
-<body class="admin <?php echo $option . ' view-' . $view . ' layout-' . $layout . ' task-' . $task . ' itemid-' . $itemid; ?><?php if ($this->params->get('amm_used') != '0') : ?><?php echo ' amm';?><?php endif; ?> ">
+<body class="admin <?php echo $option . ' view-' . $view . ' layout-' . $layout . ' task-' . $task . ' itemid-' . $itemid; ?><?php if ($this->params->get('amm_used') != '0') : ?><?php echo ' amm';?><?php endif; ?>">
 <!-- Top Navigation -->
 
 <nav class="navbar<?php echo $template_is_light ? '' : ' navbar-inverse'; ?> navbar-fixed-top">
@@ -306,7 +304,7 @@ ul.amm_menu_disabled li.amm_li_disabled a, ul.amm_menu_disabled li.amm_li_disabl
     
     
         <!--NAVIGATION--> 
-    <div class="span10 bgcolor eq-height outvc preloadz"> 
+    <div class="span10 bgcolor eq-height outvc"> 
     
 <div class="vc"> 
         <?php if ($this->params->get('admin_menus') != '0') : ?>
@@ -403,8 +401,8 @@ ul.amm_menu_disabled li.amm_li_disabled a, ul.amm_menu_disabled li.amm_li_disabl
    
    <?php if ($cpanel) : ?>    
        <div class="row-fluid version">
-     
-       <div class="span12">
+       <div class="span3"></div>
+       <div class="span9">
          <hr>
      
             <p class="text-right grey"><small><?php

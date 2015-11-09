@@ -52,24 +52,11 @@ TABLE OF CONTENTS
 + NAV
 ==================================================
 */
-
-/*
-=======================================================================
-	+ Preloadz
-=======================================================================
- */
-
-
-
 /*
 --------------------------------------------------
 + CSS RULES
 ==================================================
 */
-:focus, .btn:focus, .btn:active:focus,.btn.active:focus, .btn.focus, .btn:active.focus, .btn.active.focus, input:focus, input.active:focus {
-    outline: none;
-}
-
 .clear, .clr, .fcclear {
 	clear: both;
 }
@@ -460,8 +447,6 @@ body {
 	color: #555;
 	background-color: #f0f0f0;
 }
-
-
 p {
 	margin: 0 0 10.5px;
 }
@@ -471,7 +456,7 @@ p {
 	font-weight: 200;
 	line-height: 27px;
 }
-small, .small {
+small {
 	font-size: 85%;
 }
 strong {
@@ -2216,11 +2201,6 @@ table.no-border tr:last-child td {
 	-moz-box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.04);
 	box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.04);
 }
-
-.contentpane .well {
-	padding: 10px;
-	margin-bottom: 10px;
-	}
 .well blockquote {
 	border-color: #e2e2e2;
 	border-color: rgba(0,0,0,0.15);
@@ -2802,8 +2782,6 @@ body.component {
 	-webkit-transition: padding 500ms;
 }
 
-body.com_akeeba.view- #cpanel .span8 {padding-left: 0; padding-right: 0; border: none;}
-
 .block-flat .table.adminlist.fcmanlist {margin: 0;}
 #fc-filters-header {display: block;}
 
@@ -2902,8 +2880,6 @@ body.com_akeeba.view- #cpanel .span8 {padding-left: 0; padding-right: 0; border:
 .alert .close:hover, .alert .close:active {
 	color: rgba(0, 0, 0, 0.75);
 }
-
-.alert h4 {margin-bottom: 5px;}
 .alert-primary {
 	background-color: #7761a7;
 	border-color: #6d579d;
@@ -2913,19 +2889,7 @@ body.com_akeeba.view- #cpanel .span8 {padding-left: 0; padding-right: 0; border:
 	background-color: #19b698;
 	border-color: #0fac8e;
 	color: #fff;
-	padding-left: 51px;
-	position: relative;
 }
-
-.alert-success:before {
-	content: "\47";
-    font-family: 'IcoMoon';
-    font-style: normal;
-    position: absolute;
-	left: 10px;
-	top: 40%;
-	}
-
 .alert-success .alert-heading, .alert.alert-success .close, .alert-danger .close, .alert-error .close {
 	color: rgba(0, 0, 0, 0.5);
 }
@@ -4989,13 +4953,6 @@ body {
 .thumbnails > li {
 	float: none;
 	margin-left: 0;
-}
-
-
-.manager.thumbnails > li {
-	float: left;
-	margin-bottom: 18px;
-	margin-left: 20px;
 }
 [class*="span"], .uneditable-input[class*="span"], .row-fluid [class*="span"] {
 	float: none;
@@ -8106,8 +8063,6 @@ body.modal-open {
 	width: 60%;
 	float: left;
 }
-
-.hide-eq-height {height: auto !important;}
 }
 /* -------------------
 + Site Logo
@@ -8147,7 +8102,7 @@ body.modal-open {
 	padding: 5px 25px;
 	border-bottom: 1px solid #E0E4E8;
 	position: relative;
-	/*margin-top: 20px;*/
+	margin-top: 20px;
 }
 
 .amm .subhead {margin-top: 0 !important;}
@@ -8275,31 +8230,3 @@ padding: 10px 15px; line-height: 1;}
 
 
 input#jform_title {width: 100%;}
-
-/* calendar */
-.calendar, .calendar table {
-	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;}
-	
-.calendar thead td {
--webkit-font-smoothing: antialiased;
-border-collapse: collapse;
-cursor: default;
-display: table-cell;
-font-family: arial, verdana, sans-serif;
-font-size: 11px;
-height: 18px;
-padding: 2px;
-text-align: center;
-vertical-align: middle;
-background: none;
-border: none;
-}
-
-.calendar thead .title {
-    font-weight: bold;
-    text-align: center;
-    background: #333333;
-    color: #ffffff;
-    padding: 2px;
-}
-

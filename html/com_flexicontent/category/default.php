@@ -18,13 +18,6 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-
-// For tabsets/tabs ids (focusing, etc)
-$tabSetCnt = -1;
-$tabSetMax = -1;
-$tabCnt = array();
-$tabSetStack = array();
-
 /*
 $layouts = array();
 foreach ($this->tmpls as $tmpl) {
@@ -136,7 +129,6 @@ else {
 // *****************
 // MAIN TABSET START
 // *****************
-global $tabSetCnt;
 array_push($tabSetStack, $tabSetCnt);
 $tabSetCnt = ++$tabSetMax;
 $tabCnt[$tabSetCnt] = 0;

@@ -34,21 +34,6 @@ if (is_file($file))
 	$doc->addStyleSheet($file);
 }
 
-// LOGO
-
-if ($this->params->get('loginLogoFile') != "")
-{
-	$logo = JUri::root() . $this->params->get('loginLogoFile');
-}
-elseif ($this->params->get('logoFile'))
-{
-	$logo = JUri::root() . $this->params->get('logoFile');
-}
-else
-{
-	$logo = $this->baseurl . '/templates/' . $this->template . '/images/joomla.png';
-}
-
 // Detecting Active Variables
 $option   = $app->input->getCmd('option', '');
 $view     = $app->input->getCmd('view', '');
@@ -69,7 +54,7 @@ function colorIsLight($color)
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
-	<head>
+<head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<jdoc:include type="head" />
@@ -79,83 +64,68 @@ function colorIsLight($color)
         });
 	</script>
 	<style type="text/css">
-/* Template color */
-		
-.view-login {
-	background: #f0f0f0;
-}
-.logox {
-	background: #001e08;
-	border: 1px solid #e2e2e2;
-	border-bottom: none;
-	padding: 5px 0;
-}
-.well {
-	background: #fff;
-	border-top: 0;
-}
-
-/* Responsive Styles */
-@media (max-width: 480px) {
-.view-login .container {
-	margin-top: -170px;
-}
-.btn {
-	font-size: 13px;
-	padding: 4px 10px 4px;
-}
-}
- <?php // Check if debug is on ?>  <?php if ($app->get('debug_lang', 1) || $app->get('debug', 1)) : ?>  .view-login .container {
- position: static;
- margin-top: 20px;
- margin-left: auto;
- margin-right: auto;
-}
-.view-login .navbar-fixed-bottom {
-	display: none;
-}
- <?php endif;
-?>  <?php if ($this->params->get('flexiColor')) : ?>  .loginform .btn-primary {
- background-color: <?php echo $this->params->get('flexiColor');
-?>;
- border: 1px solid <?php echo $this->params->get('flexiColor');
-?>;
-}
-<?php endif;
-?>  .loginform .btn-primary:hover, .loginform .btn-primary:active {
- background-color:#004b23;
- border: 1px solid #004b23;
-}
-.view-login .navbar-fixed-bottom, .view-login .navbar-fixed-bottom a {
-	color: #ccc;
-}
-</style>
-
+		/* Template color */
+		<?php if ($this->params->get('templateColor')) : ?>
+		.view-login {
+			background: <?php echo $this->params->get('templateColor'); ?>;
+		}
+		<?php endif; ?>
+		/* Responsive Styles */
+		@media (max-width: 480px) {
+			.view-login .container {
+				margin-top: -170px;
+			}
+			.btn {
+				font-size: 13px;
+				padding: 4px 10px 4px;
+			}
+		}
+		<?php // Check if debug is on ?>
+		<?php if ($app->get('debug_lang', 1) || $app->get('debug', 1)) : ?>
+		.view-login .container {
+			position: static;
+			margin-top: 20px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		.view-login .navbar-fixed-bottom {
+			display: none;
+		}
+		<?php endif; ?>
+	</style>
 	<!--[if lt IE 9]>
 		<script src="<?php echo JUri::root(true); ?>/media/jui/js/html5.js"></script>
 	<![endif]-->
-	</head>
+</head>
 
-	<body class="site <?php echo $option . " view-" . $view . " layout-" . $layout . " task-" . $task . " itemid-" . $itemid . " "; ?>">
-<!-- Container -->
-<div class="container">
-      <div id="content"> 
-    <!-- Begin Content -->
-    
-    <div class="logox center"> <img src="<?php echo $logo; ?>" class="logo" alt="<?php echo $sitename;?>" /> </div>
-    <div id="element-box" class="login well">
-          <jdoc:include type="message" />
-          <jdoc:include type="component" />
-        </div>
-    <noscript>
-        <?php echo JText::_('JGLOBAL_WARNJAVASCRIPT'); ?>
-        </noscript>
-    <!-- End Content --> 
-  </div>
-    </div>
-<div class="navbar<?php echo $template_is_light ? ' navbar-inverse' : ''; ?> navbar-fixed-bottom hidden-phone">
-      <p class="pull-right"> &copy; <?php echo date('Y'); ?> <?php echo $sitename; ?> </p>
-      <a class="login-joomla hasTooltip" href="http://www.joomla.org" target="_blank" title="<?php echo JHtml::tooltipText('TPL_ISIS_ISFREESOFTWARE'); ?>"><span class="icon-joomla"></span></a> <a href="<?php echo JUri::root(); ?>" target="_blank" class="pull-left"><span class="icon-out-2"></span> <?php echo JText::_('COM_LOGIN_RETURN_TO_SITE_HOME_PAGE'); ?></a> </div>
-<jdoc:include type="modules" name="debug" style="none" />
+<body class="site <?php echo $option . " view-" . $view . " layout-" . $layout . " task-" . $task . " itemid-" . $itemid . " "; ?>">
+	<!-- Container -->
+	<div class="container">
+		<div id="content">
+			<!-- Begin Content -->
+			<div id="element-box" class="login well">
+				<?php if ($loginLogoFile = $this->params->get('loginLogoFile')) : ?>
+					<img src="<?php echo JUri::root() . $loginLogoFile; ?>" alt="<?php echo $sitename; ?>" />
+				<?php else: ?>
+					<img src="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/images/joomla.png" alt="<?php echo $sitename; ?>" />
+				<?php endif; ?>
+				<hr />
+				<jdoc:include type="message" />
+				<jdoc:include type="component" />
+			</div>
+			<noscript>
+				<?php echo JText::_('JGLOBAL_WARNJAVASCRIPT'); ?>
+			</noscript>
+			<!-- End Content -->
+		</div>
+	</div>
+	<div class="navbar<?php echo $template_is_light ? ' navbar-inverse' : ''; ?> navbar-fixed-bottom hidden-phone">
+		<p class="pull-right">
+			&copy; <?php echo date('Y'); ?> <?php echo $sitename; ?>
+		</p>
+		<a class="login-joomla hasTooltip" href="http://www.joomla.org" target="_blank" title="<?php echo JHtml::tooltipText('TPL_ISIS_ISFREESOFTWARE'); ?>"><span class="icon-joomla"></span></a>
+		<a href="<?php echo JUri::root(); ?>" target="_blank" class="pull-left"><span class="icon-out-2"></span> <?php echo JText::_('COM_LOGIN_RETURN_TO_SITE_HOME_PAGE'); ?></a>
+	</div>
+	<jdoc:include type="modules" name="debug" style="none" />
 </body>
 </html>

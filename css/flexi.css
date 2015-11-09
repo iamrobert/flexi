@@ -1628,13 +1628,6 @@ text-align: left;
 background: #fff;
 
 }
-
-.shrink {
-	font-size: 85%;}
-.shrink label.label {
-	font-size: 11px;
-}
-
 table.fc-form-tbl.fcinner td.key label.label {
 	padding: 2px;
 }
