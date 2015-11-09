@@ -1,33 +1,9 @@
-#displayfversion {width: 100%;}
-
-/* FLEXI inline overrides */
-div.control-group div.control-label label.hasTooltip,
-		div.current ul.config-option-list li label.hasTooltip,
-		div.current ul.config-option-list li label.hasTip {
-
-padding: 0 !important;
-border: none !important;
-background: transparent !important;
-color: #555 !important;
-cursor: pointer;
-display: inline-block;
-font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-font-size: 14px !important;
-font-weight: bold !important;
-line-height: 18px;
-margin: 0 0 5px 0 !important;
-white-space: normal;
-}
-
-.form-vertical div.control-group div.control-label label.hasTooltip {text-align: left; background: none !important; width: auto; border: none !important; font-size: 13px !important; margin: 0  !important; padding: 0 !important;}
-
-
 /*
 --------------------------------------------------
 + iamrobert
 ==================================================
 */
-.form-horizontal .control-group, fieldset.panelform {
+.form-horizontal .control-group {
 	margin-bottom: 18px;
 	border-bottom: 1px solid #efefef;
 	padding-bottom: 13px;
@@ -44,7 +20,7 @@ white-space: normal;
 	text-align: right;
 }*/
 
-.form-horizontal .control-label, .form-horizontal .control-group > label,  #flexicontent .h-14 .flexi_label, #flexicontent fieldset.panelform .label-fcouter {
+.form-horizontal .control-label, .form-horizontal .control-group > label,  #flexicontent .h-14 .flexi_label {
 	float: left;
 	padding-top: 5px;
 	text-align: right;
@@ -52,26 +28,20 @@ white-space: normal;
 	max-width: 250px;
 	vertical-align: middle;
 }
-.form-horizontal .control-group > label, .form-horizontal .control-label, #flexicontent fieldset.panelform .label-fcouter {
+.form-horizontal .control-group > label, .form-horizontal .control-label {
 	margin-bottom: 0;
 	padding-top: 5px;
 	font-weight: bold;
 	color: #555;
-	border: none !important;
+	border-bottom: none;
+	border-right: none;
 	font-size: 13px;
 	white-space: inherit;
 	margin-right: 3%;
-	background: transparent !important;
+	background: transparent;
 	border: none;
 	float: left;
-	
 }
-
-
-#flexicontent .label-fcouter {
-	padding-top: 5px !important;
-	margin: 0 3% 0 0 !important;
-	}
 .form-horizontal .control-group > label small {
 	font-weight: normal;
 }
@@ -79,7 +49,7 @@ white-space: normal;
 .form-horizontal .control-group > label.invalid, .form-horizontal .control-label.invalid, label.invalid {color: #da5a47;}
 
 @media (max-width: 767px) {
-.form-horizontal .control-label, #flexicontent .params_set label.hasTooltip, #flexicontent .pane-sliders label.hasTip, #flexicontent .pane-sliders label.hasTooltip, #flexicontent .params_set label.hasTip, #flexicontent .params_set label.hasTooltip, #flexicontent .flexi_params label.hasTip, #flexicontent .flexi_params label.hasTooltip, #flexicontent label.fckey, #flexicontent .flexi_label, .com_flexicontent #content label, fieldset.panelform .label-fcouter {
+.form-horizontal .control-label, #flexicontent .params_set label.hasTooltip, #flexicontent .pane-sliders label.hasTip, #flexicontent .pane-sliders label.hasTooltip, #flexicontent .params_set label.hasTip, #flexicontent .params_set label.hasTooltip, #flexicontent .flexi_params label.hasTip, #flexicontent .flexi_params label.hasTooltip, #flexicontent label.fckey, #flexicontent .flexi_label, .com_flexicontent #content label {
 	width: auto;
 	text-align: left;
 	margin-right: 0px;
@@ -115,7 +85,7 @@ label#jform_params_default_searchphrase-lbl {
 }
 #jform_params_comments label, #jform_params_show_icons label, #jform_params_cat_image_source label, #jform_params_show_itemcount label, #jform_params_show_subcatcount label, #jform_params_subcat_image_source label, #jform_params_show_subcategories label, #jform_params_filter_instructions label, #jform_params_filter_placement label, #jform_params_show_search_label label, #jform_params_show_label_subcats label, #jform_params_show_empty_cats label, #jform_params_show_description_image_subcat label, #jform_params_default_searchphrase label, #jform_params_search_autocomplete label, #jform_params_filters_order label, #jform_params_show_filter_labels label, #jform_metadata_robots label {
 	display: block;
-	max-width: 100%;
+	max-width: 250px;
 	border-radius: 4px;
 }
 }
@@ -134,25 +104,23 @@ label#jform_params_show_filter_labels-lbl {
 	text-align: left;
 }
 }
-.form-horizontal .controls, fieldset.panelform .container_fcfield {
+.form-horizontal .controls {
 	float: left;
 	margin-left: 0px;
 	width: 70%;
 	max-width: 1000px;
 }
 
-fieldset.panelform .container_fcfield {width: 70% !important;}
+
 
 .form-horizontal .control-group + .controls {
 	width: 100%;
 	border: 10px solid #000;}
 	
 @media (max-width: 767px) {
-.form-horizontal .controls, fieldset.panelform .container_fcfield {
+.form-horizontal .controls {
 	width: 100%;
 }	
-
-fieldset.panelform .container_fcfield {width: 100% !important;}
 }
 
 .form-horizontal .span3 .controls {
@@ -169,46 +137,8 @@ div.akeeba-bootstrap .form-horizontal .controls {float: none;}
 	text-align: center;
 }
 
-/* selects + yes and noes shouldn't go together */
-.flexicontent select {
-    font-size: 14px;
-    display: inline-block;
-    border-radius: 0px;
-    height: auto;
-}
-
-/*
-.inputbox {width: 100%; max-width: 500px;}
-*/
-textarea#jform_attribs_custommask{width: 100%; height: auto;}
-
-.fcfieldval_container_outer {}
 
 
-#flexicontent ul.fcfield-sortables.fcfield-group > li.fcfieldval_container.valuebox .flexi.label.sub_label {
-box-sizing: border-box;
-cursor: default;
-display: inline-block;
-font-family: 'Open Sans', sans-serif;
-font-size: 13px;
-font-weight: 600;
-height: 21px;
-line-height: 21px;
-margin-bottom: 7px;
-max-width: 100%;
-padding-left: 0;
-	}
-	
-/*
---------------------------------------------------
-+ uploadform
-==================================================
-*/	
-@media (min-width: 767px) { 
-.form-horizontal .uploadform .control-group > label {text-align: left; max-width: 180px; margin-right: 0;}
-
-.form-horizontal .uploadform .form-actions .btn {margin-left: 9px;}
-}
 /*
 --------------------------------------------------
 + LOGIN BOX
@@ -257,109 +187,7 @@ div fieldset td input[type=radio] {min-width: 30px;}
 
 body #sbox-content table.amm_table  {background: #ccc;}
 
-@media (max-width: 767px) {
-.adminmenum_line_separator {display: none !important;}
-.nav-collapse.in.collapse {height: auto !important;}
-}
 
-/* 
- --------------------------------------------------
- + CONTROL PANEL
- ==================================================
- */
- 
-.container-fluid.container-main.cpanel {margin: 20px 0;}
- 
- @media (min-width: 767px) {
- .wrap20.cpanel {margin-top: 40px;}
- }
- /* mod quick icons */
- .span9 .module-title.nav-header {display: none;}
- 
- .side-r {margin-top: 40px; float: right;}
- 
-.com_cpanel h3 {
-	 color: #555;
-text-shadow: none;
-font-weight: bold;
-font-size: 20px;
-line-height: 36px;
-margin-top: 0;
-border-bottom: none;
-}
-
-.side-r .ak-icon-item .span6 {width: 100%;}
-
-
-div.com_cpanel .side-r span {
-display: inline-block;
-text-align: center;
-}
-
-
-.com_cpanel .well.well-small.span9  {background: none; padding: 0; box-shadow: none;}
-
-/* right column */
-.com_cpanel .well.well-small.span3 {margin-left: 0;   float: right;} 
-
-.aqi-module {margin-bottom: 40px;}
-.aqi-module .tab-content {
-background: #fff;
-padding: 0px;
-border: none;
-box-shadow: none;
-margin-bottom: 00px;
-}
-.cpanel .icon {
-float: left;
-padding: 5px 10px 5px 0px;
-margin: 0;
-text-align: center;
-}
-
-.cpanel .icon a {
-	background-color: #Fafafa;
-	background-position: 0;
-	display: block;
-	float: left;
-	height: 107px;
-	width: 107px;
-	padding: 7px;
-	vertical-align: middle;
-	text-decoration: none;
-	border: 1px solid #CCC;
-	-webkit-border-radius: 0px;
-	-moz-border-radius: 0px;
-	border-radius: 0px;
-	-webkit-transition-property: all;
-	-moz-transition-property: all;
-	-webkit-transition-duration: 0.15s;
-	transition-duration: 0.15s;
-}
-
-.cpanel .well.well-small.span9 {border: none;}
-
-#cpanel div.icon a:hover, #cpanel div.icon a:focus, #cpanel div.icon a:active, .cpanel div.icon a:hover, .cpanel div.icon a:focus, .cpanel div.icon a:active {
-	background-position: 0;
-	background-color: #f9f9f9;
-	box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
-	position: relative;
-	z-index: 10;
-	-webkit-border-radius: 0px;
-	-moz-border-radius: 0px;
-	border-radius: 0px;
-	border: 1px solid #08c;
-}
-
-
-div#cpanel a:hover img, div.cpanel a:hover img{
-	opacity: 0.8;
-}
-
-.well.well-small.span3 {background: #fff;}
-#cpanel span, .cpanel span {display: inline-block;}
-
-.cpanel .well .module-title.nav-header {    padding: 0px 0px 5px;}
 /*
 --------------------------------------------------
 + HUGE GALLERY PLUGIN
@@ -479,7 +307,3 @@ li.hugegallery {
 	display: table-cell !important;
 	float: none !important;
 }
-
-/* */
-
-.youritems h3 {width: 90%;}
