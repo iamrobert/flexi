@@ -16,7 +16,7 @@
  * GNU General Public License for more details.
  */
 
-defined('_JEXEC') or die('Restricted access');
+defined( '_JEXEC' ) or die( 'Restricted access' );
 
 $task_items = 'task=items.';
 $ctrl_items = 'items.';
@@ -35,7 +35,7 @@ $close_btn = FLEXI_J30GE ? '<a class="close" data-dismiss="alert">&#215;</a>' : 
 $alert_box = FLEXI_J30GE ? '<div %s class="alert alert-%s %s">'.$close_btn.'%s</div>' : '<div %s class="fc-mssg fc-%s %s">'.$close_btn.'%s</div>';
 $btn_class = FLEXI_J30GE ? 'btn' : 'fc_button';
 $tip_class = FLEXI_J30GE ? ' hasTooltip' : ' hasTip';
-$noplugin = '<div class="fc-mssg fc-warning">'. JText::_( 'FLEXI_PLEASE_PUBLISH_PLUGIN' ) .'</div>';
+$noplugin = '<div class="fc-mssg-inline fc-warning" style="margin:0 4px 6px 4px; max-width: unset;">'.JText::_( 'FLEXI_PLEASE_PUBLISH_THIS_PLUGIN' ).'</div>';
 
 // add extra css/js for the edit form
 if ($this->params->get('form_extra_css'))    $this->document->addStyleDeclaration($this->params->get('form_extra_css'));
@@ -44,82 +44,157 @@ if ($this->params->get('form_extra_js'))     $this->document->addScriptDeclarati
 if ($this->params->get('form_extra_js_be'))  $this->document->addScriptDeclaration($this->params->get('form_extra_js_be'));
 
 // Load JS tabber lib
-$this->document->addScript(JURI::root(true).'/components/com_flexicontent/assets/js/tabber-minimized.js');
-$this->document->addStyleSheet(JURI::root(true).'/components/com_flexicontent/assets/css/tabber.css');
+$this->document->addScriptVersion(JURI::root(true).'/components/com_flexicontent/assets/js/tabber-minimized.js', FLEXI_VHASH);
+$this->document->addStyleSheetVersion(JURI::root(true).'/components/com_flexicontent/assets/css/tabber.css', FLEXI_VHASH);
 $this->document->addScriptDeclaration(' document.write(\'<style type="text/css">.fctabber{display:none;}<\/style>\'); ');  // temporarily hide the tabbers until javascript runs
 
 if ($this->perms['cantags'] || $this->perms['canversion']) {
-	$this->document->addScript(JURI::root(true).'/components/com_flexicontent/librairies/jquery-autocomplete/jquery.bgiframe.min.js');
-	$this->document->addScript(JURI::root(true).'/components/com_flexicontent/librairies/jquery-autocomplete/jquery.ajaxQueue.js');
-	$this->document->addScript(JURI::root(true).'/components/com_flexicontent/librairies/jquery-autocomplete/jquery.autocomplete.min.js');
-	$this->document->addScript(JURI::root(true).'/components/com_flexicontent/assets/js/jquery.pager.js');     // e.g. pagination for item versions
-	$this->document->addScript(JURI::root(true).'/components/com_flexicontent/assets/js/jquery.autogrow.js');  // e.g. autogrow version comment textarea
+	//$this->document->addScriptVersion(JURI::root(true).'/components/com_flexicontent/librairies/jquery-autocomplete/jquery.bgiframe.min.js', FLEXI_VHASH);
+	//$this->document->addScriptVersion(JURI::root(true).'/components/com_flexicontent/librairies/jquery-autocomplete/jquery.ajaxQueue.js', FLEXI_VHASH);
+	//$this->document->addScriptVersion(JURI::root(true).'/components/com_flexicontent/librairies/jquery-autocomplete/jquery.autocomplete.min.js', FLEXI_VHASH);
+	$this->document->addScriptVersion(JURI::root(true).'/components/com_flexicontent/assets/js/jquery.pager.js', FLEXI_VHASH);     // e.g. pagination for item versions
+	$this->document->addScriptVersion(JURI::root(true).'/components/com_flexicontent/assets/js/jquery.autogrow.js', FLEXI_VHASH);  // e.g. autogrow version comment textarea
 
-	$this->document->addStyleSheet(JURI::root(true).'/components/com_flexicontent/librairies/jquery-autocomplete/jquery.autocomplete.css');
+	//$this->document->addStyleSheetVersion(JURI::root(true).'/components/com_flexicontent/librairies/jquery-autocomplete/jquery.autocomplete.css', FLEXI_VHASH);
 	$this->document->addScriptDeclaration("
-		jQuery(document).ready(function () {
-			jQuery('#input-tags').autocomplete('".JURI::base(true)."/index.php?option=com_flexicontent&".$task_items."viewtags&format=raw&".(FLEXI_J30GE ? JSession::getFormToken() : JUtility::getToken())."=1', {
-				width: 260,
-				max: 100,
-				matchContains: false,
-				mustMatch: false,
-				selectFirst: false,
-				dataType: 'json',
-				parse: function(data) {
-					return jQuery.map(data, function(row) {
-						return {
-							data: row,
-							value: row.name,
-							result: row.name
-						};
+		jQuery(document).ready(function(){
+			
+			jQuery('.deletetag').click(function(e){
+				jQuery(this).parent().remove();
+				return false;
+			});
+			
+			var tagInput = jQuery('#input-tags');
+			
+			tagInput.keydown(function(event){
+				if( (event.keyCode==13) )
+				{
+					var el = jQuery(event.target);
+					if (el.val()=='') return false; // No tag to assign / create
+					
+					var selection_isactive = jQuery('.ui-autocomplete .ui-state-focus').length != 0;
+					if (selection_isactive) return false; // Enter pressed, while autocomplete item is focused, autocomplete \'select\' event handler will handle this
+					
+					var data_id   = el.data('tagid');
+					var data_name = el.data('tagname');
+					//window.console.log( 'User input: '+el.val() + ' data-tagid: ' + data_id + ' data-tagname: \"'+ data_name + '\"');
+					
+					if (el.val() == data_name && data_id!='' && data_id!='0') {
+						//window.console.log( 'Assigning found tag: (' + data_id + ', \"' + data_name + '\")');
+						addToList(data_id, data_name);
+						el.autocomplete('close');
+					}
+					else {
+						//window.console.log( 'Retrieving (create-if-missing) tag: \"' + el.val() + '\"');
+						addtag(0, el.val());
+						el.autocomplete('close');
+					}
+					
+					el.val('');  //clear existing value
+					return false;
+				}
+			});
+			
+			jQuery.ui.autocomplete( {
+				source: function( request, response ) {
+					var el   = jQuery(this.element);
+					var term = request.term;
+					//window.console.log( 'Getting tags for \"' + term + '\" ...');
+					jQuery.ajax({
+						url: '".JURI::base(true)."/index.php?option=com_flexicontent&".$task_items."viewtags&format=raw&".JSession::getFormToken()."=1',
+						dataType: 'json',
+						data: {
+							q: request.term
+						},
+						success: function( data ) {
+							//window.console.log( '... received tags for \"' + term + '\"');
+							response( jQuery.map( data, function( item ) {
+								if (el.val()==item.name) {
+									//window.console.log( 'Found exact TAG match, (' + item.id + ', \"' + item.name + '\")');
+									el.data('tagid',   item.id);
+									el.data('tagname', item.name);
+								}
+								return { label: item.name, value: item.id };
+							}));
+						}
 					});
 				},
-				formatItem: function(row) {
-					return row.name;
-				}
-			}).result(function(e, row) {
-				jQuery('#input-tags').attr('data-tagid',row.id);
-				jQuery('#input-tags').attr('data-tagname',row.name);
-				addToList(row.id, row.name);
-			}).keydown(function(event) {
-				if((event.keyCode==13)&&(jQuery('#input-tags').attr('data-tagid')=='0') ) {//press enter button
-					addtag(0, jQuery('#input-tags').attr('value'));
-					resetField();
-					return false;
-				}else if(event.keyCode==13) {
-					resetField();
-					return false;
-				}
-			});
-			function resetField() {
-				jQuery('#input-tags').attr('data-tagid',0);
-				jQuery('#input-tags').attr('data-tagname','');
-				jQuery('#input-tags').attr('value','');
-			}
+				delay: 200,
+				minLength: 1,
+				focus: function ( event, ui ) {
+					//window.console.log( (ui.item  ?  'current ID: ' + ui.item.value + 'current Label: ' + ui.item.label :  'Nothing selected') );
+					
+					var el = jQuery(event.target);
+					if (ui.item.value!='' && ui.item.value!='0')
+					{
+						el.val(ui.item.label);
+					}
+					el.data('tagid',   ui.item.value);
+					el.data('tagname', ui.item.label);
+					
+					event.preventDefault();  // Prevent default behaviour of setting 'ui.item.value' into the input
+				},
+				select: function( event, ui ) {
+					//window.console.log( 'Selected: ' + ui.item.label + ', input was \'' + this.value + '\'');
+					
+					var el = jQuery(event.target);
+					if (ui.item.value!='' && ui.item.value!='0') {
+						addToList(ui.item.value, ui.item.label);
+						el.val('');  //clear existing value
+					}
+					
+					event.preventDefault();  // Prevent default behaviour of setting 'ui.item.value' into the input and triggering change event
+				},
+				//change: function( event, ui ) { window.console.log( 'autocomplete change()' ); },
+				//open: function() { window.console.log( 'autocomplete open()' ); },
+				//close: function() { window.console.log( 'autocomplete close()' ); },
+				//search: function() { window.console.log( 'autocomplete search()' ); }
+			}, tagInput.get(0) );
+			
 		});
 		
-		jQuery(document).ready(function() {
-			// For the initially displayed versions page:  Add onclick event that opens compare in popup 
-			jQuery('a.modal-versions').each(function(index, value) {
-				jQuery(this).on('click', function() {
-					// Load given URL in an popup dialog
-					var url = jQuery(this).attr('href');
-					fc_showDialog(url, 'fc_modal_popup_container');
-					return false;
-				});
-			});
-			// Attach pagination for versions listing
-			jQuery('#fc_pager').pager({ pagenumber: ".$this->current_page.", pagecount: ".$this->pagecount.", buttonClickCallback: PageClick });
-		});
+		
+		function addToList(id, name)
+		{
+			var obj = jQuery('#ultagbox');
+			if (obj.find('input[value=\"'+id+'\"]').length > 0) return;
+			obj.append('<li class=\"tagitem\"><span>'+name+'</span><input type=\"hidden\" name=\"jform[tag][]\" value=\"'+id+'\" /><a href=\"javascript:;\" class=\"deletetag\" onclick=\"javascript:deleteTag(this);\" title=\"".JText::_('FLEXI_DELETE_TAG',true)."\"></a></li>');
+		}
+		
+		function addtag(id, tagname)
+		{
+			if (id==null) id = 0;
+		
+			/*".( !$this->perms['cancreatetags'] ? '
+				alert("'.JText::_( 'FLEXI_NO_AUTH_CREATE_NEW_TAGS', true).'");
+				return;
+			' : ''
+			)."*/
+			if (tagname == '') {
+				alert('".JText::_( 'FLEXI_ENTER_TAG', true)."');
+				return;
+			}
+			
+			var tag = new itemscreen();
+			tag.addtag( id, tagname, 'index.php?option=com_flexicontent&".$tags_task."addtag&format=raw&".JSession::getFormToken()."=1');
+		}
+		
+		function deleteTag(obj)
+		{
+			var parent = obj.parentNode;
+			parent.innerHTML = '';
+			parent.parentNode.removeChild(parent);
+		}
+		
 		
 		PageClick = function(pageclickednumber) {
-			jQuery.ajax({ url: 'index.php?option=com_flexicontent&".$task_items."getversionlist&id=".$this->row->id."&active=".$this->row->version."&".(FLEXI_J30GE ? JSession::getFormToken() : JUtility::getToken())."=1&format=raw&page='+pageclickednumber, context: jQuery('#version_tbl'), success: function(str){
+			jQuery.ajax({ url: 'index.php?option=com_flexicontent&".$task_items."getversionlist&id=".$this->row->id."&active=".$this->row->version."&".JSession::getFormToken()."=1&format=raw&page='+pageclickednumber, context: jQuery('#version_tbl'), success: function(str){
 				jQuery(this).html(\"\\
 				<table class='fc-table-list fc-tbl-short' style='margin:10px;'>\\
 				\"+str+\"\\
 				</table>\\
 				\");
-				var JTooltips = new Tips($$('table.versionlist tr td a.hasTip'), { maxTitleChars: 50, fixed: false});
+				jQuery('.hasTooltip').tooltip({'html': true,'container': jQuery('#version_tbl')});
 				
 				// Attach click event to version compare links of the newly created page
 				jQuery(this).find('a.modal-versions').each(function(index, value) {
@@ -137,63 +212,54 @@ if ($this->perms['cantags'] || $this->perms['canversion']) {
 		}
 		
 		jQuery(document).ready(function(){
+			
+			// For the initially displayed versions page:  Add onclick event that opens compare in popup 
+			jQuery('a.modal-versions').each(function(index, value) {
+				jQuery(this).on('click', function() {
+					// Load given URL in an popup dialog
+					var url = jQuery(this).attr('href');
+					fc_showDialog(url, 'fc_modal_popup_container');
+					return false;
+				});
+			});
+			// Attach pagination for versions listing
+			jQuery('#fc_pager').pager({ pagenumber: ".$this->current_page.", pagecount: ".$this->pagecount.", buttonClickCallback: PageClick });
+			
 			jQuery('#versioncomment').autogrow({
 				minHeight: 26,
 				maxHeight: 250,
 				lineHeight: 12
 			});
+			
 		})
 		
 	");
 }
 
 // version variables
-$tags_fieldname = 'jform[tag][]';
-
 $this->document->addScriptDeclaration("
 	jQuery(document).ready(function(){
 		var hits = new itemscreen('hits', {id:".($this->row->id ? $this->row->id : 0).", task:'".$ctrl_items."gethits'});
-		hits.fetchscreen();
+		//hits.fetchscreen();
 	
 		var votes = new itemscreen('votes', {id:".($this->row->id ? $this->row->id : 0).", task:'".$ctrl_items."getvotes'});
-		votes.fetchscreen();
+		//votes.fetchscreen();
 	});
-
-	function addToList(id, name) {
-		obj = jQuery('#ultagbox');
-		obj.append(\"<li class='tagitem'><span>\"+name+\"</span><input type='hidden' name='".$tags_fieldname."' value='\"+id+\"' /><a href='javascript:;' class='deletetag' onclick='javascript:deleteTag(this);' title='". JText::_( 'FLEXI_DELETE_TAG',true ) ."'></a></li>\");
-	}
-	function addtag(id, tagname) {
-		if (id==null) id = 0;
 	
-		if(tagname == '') {
-			alert('".JText::_( 'FLEXI_ENTER_TAG', true)."');
-			return;
-		}
-	
-		var tag = new itemscreen();
-		tag.addtag( id, tagname, 'index.php?option=com_flexicontent&".$tags_task."addtag&format=raw&".(FLEXI_J30GE ? JSession::getFormToken() : JUtility::getToken())."=1');
-	}
-
 	function reseter(task, id, div){
 		var res = new itemscreen();
 		task = '".$ctrl_items."' + task;
 		res.reseter( task, id, div, 'index.php?option=com_flexicontent&controller=items' );
 	}
+	
 	function clickRestore(link) {
 		if(confirm('".JText::_( 'FLEXI_CONFIRM_VERSION_RESTORE',true )."')) {
 			location.href=link;
 		}
 		return false;
 	}
-	function deleteTag(obj) {
-		var parent = obj.parentNode;
-		parent.innerHTML = '';
-		parent.parentNode.removeChild(parent);
-	}
+	
 ");
-
-
 
 
 // Create info images
@@ -201,11 +267,11 @@ $infoimage    = JHTML::image ( 'administrator/templates/'.$template.'/images/fle
 $revertimage  = JHTML::image ( 'administrator/templates/'.$template.'/images/flexi/arrow_rotate_anticlockwise.png', JText::_( 'FLEXI_REVERT' ) );
 $viewimage    = JHTML::image ( 'administrator/templates/'.$template.'/images/flexi/magnifier.png', JText::_( 'FLEXI_VIEW' ) );
 $commentimage = JHTML::image ( 'administrator/templates/'.$template.'/images/flexi/comment.png', JText::_( 'FLEXI_COMMENT' ) );
-
 // Create some variables
 $itemlang = substr($this->row->language ,0,2);
 if (isset($this->row->item_translations)) foreach ($this->row->item_translations as $t) if ($t->shortcode==$itemlang) {$itemlangname = $t->name; break;}
 ?>
+
 <?php /* echo "Version: ". $this->row->version."<br/>\n"; */?>
 <?php /* echo "id: ". $this->row->id."<br/>\n"; */?>
 <?php /* echo "type_id: ". @$this->row->type_id."<br/>\n"; */?>
@@ -701,7 +767,7 @@ if ($this->row->type_id) {
 				});
 			");
 		?>
-          <div class="inner">
+          <div class="innerx">
             <?php
 			$hide_ifempty_fields = array('fcloadmodule', 'fcpagenav', 'toolbar');
 			$row_k = 0;
@@ -996,6 +1062,73 @@ if ($this->row->type_id) {
 				
 		<?php endforeach; ?>
         
+        
+       <!--TEMPLATE--> 
+        <h3 class="ruler"> <?php echo JText::_('FLEXI_TEMPLATE'); ?> </h3>
+        		<?php foreach($this->form->getFieldset('themes') as $field): ?>
+				<div class="fcclear"></div>
+				<?php if ($field->hidden): ?>
+					<span style="display:none !important;">
+						<?php echo $field->input; ?>
+					</span>
+				<?php elseif ($field->input): ?>
+					<fieldset class="panelform">
+						<span class="label-fcouter"><?php echo str_replace('class="', 'class="label label-fcinner ', $field->label); ?></span>
+						<div class="container_fcfield">
+							<?php echo $field->input;?>
+						</div>
+					</fieldset>
+				<?php endif; ?>
+			<?php endforeach; ?>
+          
+          <div class="fcclear"></div>
+			<?php $type_default_layout = $this->tparams->get('ilayout'); ?>
+			<span class="fc-success fc-nobgimage fc-mssg-inline" id="__content_type_default_layout__">
+				<?php echo JText::sprintf( 'FLEXI_USING_CONTENT_TYPE_LAYOUT', $type_default_layout ); ?>
+				<?php echo "<br/><br/>". JText::_( 'FLEXI_RECOMMEND_CONTENT_TYPE_LAYOUT' ); ?>
+			</span>
+			
+			<div class="fcclear"></div>
+			
+			<div style="max-width:1200px; padding-top: 24px;">
+					<?php
+				echo JHtml::_('sliders.start','theme-sliders-'.$this->form->getValue("id"), array('useCookie'=>1));
+				$groupname = 'attribs';  // Field Group name this is for name of <fields name="..." >
+				
+				foreach ($this->tmpls as $tmplname => $tmpl) :
+					$fieldSets = $tmpl->params->getFieldsets($groupname);
+					foreach ($fieldSets as $fsname => $fieldSet) :
+						$label = !empty($fieldSet->label) ? $fieldSet->label : JText::_( 'FLEXI_PARAMETERS_THEMES_SPECIFIC' ) . ' : ' . $tmpl->name;
+						echo JHtml::_('sliders.panel',JText::_($label), $tmpl->name.'-'.$fsname.'-options');
+						if (isset($fieldSet->description) && trim($fieldSet->description)) :
+							echo '<p class="tip">'.$this->escape(JText::_($fieldSet->description)).'</p>';
+						endif;
+						?>
+						<fieldset class="panelform">
+							<?php foreach ($tmpl->params->getFieldset($fsname) as $field) :
+								if ($field->getAttribute('not_inherited')) continue;
+								if ($field->getAttribute('cssprep')) continue;
+								$fieldname =  $field->fieldname;
+								$value = $tmpl->params->getValue($fieldname, $groupname, $this->row->itemparams->get($fieldname));
+								echo str_replace('jform_attribs_', 'jform_layouts_'.$tmpl->name.'_',
+									'<div class="control-group"><div class="control-label">'.$tmpl->params->getLabel($fieldname, $groupname)).'</div>'; ?>
+								<div class="controls">
+								<?php echo
+									str_replace('jform_attribs_', 'jform_layouts_'.$tmpl->name.'_', 
+										str_replace('[attribs]', '[layouts]['.$tmpl->name.']',
+											$tmpl->params->getInput($fieldname, $groupname, $value)
+										)
+									); ?>
+								</div></div>
+							<?php endforeach; ?>
+						</fieldset>
+					<?php endforeach; //fieldSets ?>
+				<?php endforeach; //tmpls ?>
+				
+				<?php echo JHtml::_('sliders.end'); ?>
+                </div>
+         
+          <!--/TEMPLATES-->  
         <?php echo JHtml::_('bootstrap.endTab');?> 
         <!--/FLEXI_DISPLAY TAB4 --> 
         

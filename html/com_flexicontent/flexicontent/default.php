@@ -52,9 +52,10 @@ $hide_fc_license_credits = $this->params->get('dashboard_hide_fc_license_credits
 $php_lims = flexicontent_html::checkPHPLimits();
 
 $ssliders = array_flip($dashboard_sliders_disable);
-$skip_sliders = isset($sbtns['pending']) && isset($sbtns['revised']) && isset($sbtns['inprogress']) && isset($sbtns['draft']) && isset($sbtns['version'])
-&& isset($sbtns['updatecheck']);
+$skip_sliders = isset($sbtns['pending']) && isset($sbtns['revised']) && isset($sbtns['inprogress']) && isset($sbtns['draft']) && isset($sbtns['version']);
+
 $skip_sliders = $skip_sliders && $this->dopostinstall && $this->allplgpublish && !$hide_fc_license_credits && !isset($php_lims['warning']);
+
 
 // ensures the PHP version is correct
 if (version_compare(PHP_VERSION, FLEXI_PHP_NEEDED, '<'))
@@ -107,30 +108,30 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 		}
 		
 		if ( isset($php_lims['warning']) ) {
-			$_title .= ' <span class="badge badge-important">Warning</span>';
+			$_title .= ' - <span class="badge badge-important">Warning</span>';
 		} else if ( isset($php_lims['notice']) ) {
-			$_title .= ' <span class="badge badge-warning">Notice</span>';
+			$_title .= ' - <span class="badge badge-warning">Notice</span>';
 		} else {
-			$_title .= ' <span class="badge badge-success">OK</span>';
+			$_title .= ' - <span class="badge badge-success">OK</span>';
 		}
 		?>
       <div class="row-fluid">
         <div class="span7 wid100">
           <div id="fc-dash-boardbtns">
-            <?php
-		$config_not_saved =
-			(!FLEXI_J16GE && !$this->params->get('flexi_section')) ||
-			(FLEXI_J16GE && !$this->params->get('flexi_cat_extension'));
+           <?php
+		$config_saved = $this->params->get('flexi_cat_extension');
+
+
 		if (!$this->dopostinstall)
 		{
 			echo '<div class="fc-mssg fc-warning">';
 			echo JText::_( 'FLEXI_DO_POSTINSTALL' );
 			echo '</div>';
 		}
-		else if ( !$this->existmenu || !$this->existcat || $config_not_saved )
+		else if ( !$this->existmenu || !$this->existcat || !$config_saved )
 		{
 			echo '<div class="fc-mssg fc-warning">';
-			if ( $config_not_saved )
+			if ( !$config_saved )
 			{
 				if ( FLEXI_J16GE ) {
 					$session = JFactory::getSession();
@@ -139,9 +140,10 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 					$fc_screen_height = (int) $session->get('fc_screen_height', 0, 'flexicontent');
 					$_height = ($fc_screen_height && $fc_screen_height-128 > 550 ) ? ($fc_screen_height-128 > 1000 ? 1000 : $fc_screen_height-128 ) : 550;
 					$conf_link = 'index.php?option=com_config&view=component&component=com_flexicontent&path=';
-					$conf_link = FLEXI_J30GE ? "<a href='".$conf_link."' style='color: red;'>" :
-						"<a class='modal' rel=\"{handler: 'iframe', size: {x: ".$_width.", y: ".$_height."}, onClose: function() {}}\" href='".$conf_link."&tmpl=component' style='color: red;'>" ;
-					$msg = JText::sprintf( 'FLEXI_CONFIGURATION_NOT_SAVED', $conf_link.JText::_("FLEXI_CONFIG")."</a>" );
+
+
+					$conf_link = '<a href="'.$conf_link.'" class="btn btn-warning">';
+					$msg = JText::sprintf( 'FLEXI_CONFIGURATION_NOT_SAVED', $conf_link.JText::_("FLEXI_CONFIG").'</a>' );
 				} else {
 					$msg = str_replace('"_QQ_"', '"', JText::_( 'FLEXI_NO_SECTION_CHOOSEN' ));
 				}
@@ -152,20 +154,28 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 			echo '</div>';
 		}
 
-		if ($this->dopostinstall) {
+		if ($this->dopostinstall && $config_saved) {
+
 			?>
             <?php if (empty($skip_content_fieldset)): ?>
             <fieldset class="fc-board-set">
               <legend class="fc-board-header-content-editing"><?php echo JText::_( 'FLEXI_NAV_SD_CONTENT_EDITING' );?></legend>
               <div class="fc-board-set-inner">
                 <?php
-			$link = 'index.php?option='.$option.'&amp;view=items';
+			
+						$link = 'index.php?option='.$option.'&amp;view=items';
 			if (!isset($sbtns['items'])) FlexicontentViewFlexicontent::quickiconButton( $link, 'icon-48-items.png', JText::_( 'FLEXI_ITEMS' ) );
-			if ($this->perms->CanAdd && !isset($sbtns['additem']))
+			if (!isset($sbtns['additem']))
 			{
-				//$link = 'index.php?option='.$option.'&amp;view=item';
-				$link = 'index.php?option='.$option.'&amp;view=types&amp;format=raw';
-				FlexicontentViewFlexicontent::quickiconButton( $link, 'icon-48-item-add.png', JText::_( 'FLEXI_NEW_ITEM' ), 1, 1, 600, 450 );
+				// Check if user can create in at least one published category
+				require_once("components/com_flexicontent/models/item.php");
+				$itemmodel = new FlexicontentModelItem();
+				$CanAddAny = $itemmodel->getItemAccess()->get('access-create');
+				if ($CanAddAny) {
+					//$link = 'index.php?option='.$option.'&amp;view=item';
+					$link = 'index.php?option='.$option.'&amp;view=types&amp;format=raw';
+					FlexicontentViewFlexicontent::quickiconButton( $link, 'icon-48-item-add.png', JText::_( 'FLEXI_NEW_ITEM' ), 1, 1, 600, 450 );
+				}
 			}
 			/*if ($this->perms->CanArchives && !isset($sbtns['archives']))
 			{
@@ -176,8 +186,10 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 			{
 				$link = 'index.php?option='.$option.'&amp;view=categories';
 				if (!isset($sbtns['cats'])) FlexicontentViewFlexicontent::quickiconButton( $link, 'icon-48-categories.png', JText::_( 'FLEXI_CATEGORIES' ) );
-				$CanAddCats = FLEXI_J16GE ? $this->perms->CanAdd : $this->perms->CanAddCats;
-				if ($CanAddCats)
+
+
+				$canCreateAny = FlexicontentHelperPerm::getPermAny('core.create');
+				if ($canCreateAny)
 				{
 					$link = 'index.php?option='.$option.'&amp;view=category';
 					FlexicontentViewFlexicontent::quickiconButton( $link, 'icon-48-category-add.png', JText::_( 'FLEXI_NEW_CATEGORY' ) );
@@ -200,6 +212,9 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 				$link = '';
 				FlexicontentViewFlexicontent::quickiconButton( $link, 'icon-48-comments.png', JText::_( 'FLEXI_JCOMMENTS_MISSING' ), 1 );
 			}
+			
+			
+			
 			?>
               </div>
             </fieldset>
@@ -378,12 +393,13 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 		}
 		?>
             
+           
           </div>
           <!-- END OF #fc-dash-boardbtns --> 
           
         </div>
         <!--/.span7 wid100-->
-        <div class="span5 wid100">
+        <div class="span5 wid100 dashacc">
           <?php
 		if (!$this->dopostinstall || !$this->allplgpublish) :
 			// Make sure POST-INSTALLATION Task slider is open
@@ -392,16 +408,22 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 			echo JHtml::_('sliders.start', 'fc-dash-sliders', array('useCookie'=>1, 'show'=>-1, 'display'=>-1, 'startOffset'=>-1));
 		endif;
 		?>
-          <?php if (!$skip_sliders) : ?>
-          <?php if (!$this->dopostinstall || !$this->allplgpublish) : ?>
-          <?php
+          
+	
+		
+        <?php if (!$this->dopostinstall || !$this->allplgpublish) : ?>
+
+			<?php
 			$title = JText::_( 'FLEXI_POST_INSTALL' );
 			echo JHtml::_('sliders.panel', $title, 'postinstall' );
 			echo $this->loadTemplate('postinstall');
 			?>
-          <?php endif; ?>
-          <?php ob_start(); ?>
-          <?php
+		<?php endif; ?>
+		
+		<?php if (!$skip_sliders && $config_saved) : ?>
+			<?php ob_start(); ?>
+
+			<?php
 				echo JHtml::_('sliders.panel', $_title, 'requirements' );
 				echo '<table class="fc-table-list">';
 				foreach($php_lims as $type => $html) {
@@ -409,18 +431,31 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 				}
 				echo '</table>';
 			?>
-          <?php $fc_requirements = ob_get_clean(); ?>
-          <?php if ( isset($php_lims['warning']) ) : /* Place requirements at top slider if they are failing */ ?>
-          <?php echo $fc_requirements; ?>
-          <?php endif; ?>
-          <?php if (!isset($ssliders['pending'])): ?>
-          <?php
-			$title = JText::_( 'FLEXI_PENDING_SLIDER' ).' <span class="badge badge-warning">'.count($this->pending)." / ".$this->totalrows['pending'].'</span>';
+			<?php $fc_requirements = ob_get_clean(); ?>
+
+
+
+
+
+
+
+
+			
+			
+			<?php if ( isset($php_lims['warning']) ) : /* Place requirements at top slider if they are failing */ ?>
+			<?php echo $fc_requirements; ?>
+			<?php endif; ?>
+			
+			
+			<?php if (!isset($ssliders['pending'])): ?>
+			<?php
+			$title = JText::_( 'FLEXI_PENDING_SLIDER' ).' - <span class="badge badge-warning">'.$this->totalrows['pending'].'</span>';
 			echo JHtml::_('sliders.panel', $title, 'pending' );
 			$show_all_link = 'index.php?option=com_flexicontent&amp;view=items&amp;filter_state=PE';
-			
-			
 			?>
+      
+      
+            
           <table class="table no-border hover">
             <thead class="no-border">
               <tr>
@@ -437,7 +472,9 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 					$rights = FlexicontentHelperPerm::checkAllItemAccess($user->id, 'item', $row->id);
 					$canEdit 		= in_array('edit', $rights);
 					$canEditOwn	= in_array('edit.own', $rights) && $row->created_by == $user->id;
-					$link = 'index.php?option=com_flexicontent&amp;'.$items_task.'edit&amp;cid[]='. $row->id; ?>
+					$link = 'index.php?option=com_flexicontent&amp;'.$items_task.'edit&amp;cid='. $row->id;
+
+ ?>
             <tbody  class="no-border-y">
               <tr>
                 <td><?php
@@ -445,7 +482,11 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 						echo htmlspecialchars($row->title, ENT_QUOTES, 'UTF-8');
 					} else {
 					?>
-                  <?php echo ($i+1).". "; ?> <a href="<?php echo $link; ?>" title="<?php echo $edit_item_txt; ?>" <?php echo $onclick_modal_edit; ?>> <?php echo htmlspecialchars($row->title, ENT_QUOTES, 'UTF-8'); ?> </a>
+                  
+                  <?php echo ($i+1).". "; ?>
+						<a href="<?php echo $link; ?>" title="<?php echo $edit_item_txt; ?>" <?php echo $onclick_modal_edit; ?>>
+				<?php echo htmlspecialchars($row->title, ENT_QUOTES, 'UTF-8'); ?>
+						</a>
                   <?php
 					}
 					?></td>
@@ -456,7 +497,10 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
             </tbody>
             <tfoot>
               <tr>
-                <td colspan="3"><?php echo '<span class="'.$btn_class.'" onclick="window.open(\''.$show_all_link.'\')" >Show All</span><br/>'; ?></td>
+                <td colspan="3">               
+                <?php echo '<span class="'.$btn_class.'" onclick="window.open(\''.$show_all_link.'\')" >'.JText::_('FLEXI_ITEMS_MANAGER').'</span><br/>'; ?>
+
+                </td>
               </tr>
             </tfoot>
           </table>
@@ -464,8 +508,8 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
           
 
           <?php if (!isset($ssliders['revised'])): ?>
-          <?php
-			$title = JText::_( 'FLEXI_REVISED_VER_SLIDER' ).' <span class="badge badge-warning">'.count($this->revised)." / ".$this->totalrows['revised'].'</span>';
+<?php
+			$title = JText::_( 'FLEXI_REVISED_VER_SLIDER' ).' - <span class="badge badge-warning">'.$this->totalrows['revised'].'</span>';
 			echo JHtml::_('sliders.panel', $title, 'revised' );
 			$show_all_link = 'index.php?option=com_flexicontent&amp;view=items&amp;filter_state=RV';
 			?>
@@ -485,7 +529,7 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 					$rights = FlexicontentHelperPerm::checkAllItemAccess($user->id, 'item', $row->id);
 					$canEdit 		= in_array('edit', $rights);
 					$canEditOwn	= in_array('edit.own', $rights) && $row->created_by == $user->id;
-					$link = 'index.php?option=com_flexicontent&amp;'.$items_task.'edit&amp;cid[]='. $row->id; ?>
+					$link = 'index.php?option=com_flexicontent&amp;'.$items_task.'edit&amp;cid='. $row->id; ?>
             <tbody  class="no-border-y">
               <tr>
                 <td><?php
@@ -493,7 +537,12 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 						echo htmlspecialchars($row->title, ENT_QUOTES, 'UTF-8');
 					} else {
 					?>
-                  <?php echo ($i+1).". "; ?> <a href="<?php echo $link; ?>" title="<?php echo $edit_item_txt; ?>" <?php echo $onclick_modal_edit; ?>> <?php echo htmlspecialchars($row->title, ENT_QUOTES, 'UTF-8'); ?> </a>
+                  
+                  <?php echo ($i+1).". "; ?>
+						<a href="<?php echo $link; ?>" title="<?php echo $edit_item_txt; ?>" <?php echo $onclick_modal_edit; ?>>
+							<?php echo htmlspecialchars($row->title, ENT_QUOTES, 'UTF-8'); ?>
+						</a>
+                        
                   <?php
 					}
 					?></td>
@@ -504,14 +553,15 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
             </tbody>
             <tfoot>
               <tr>
-                <td colspan="3"><?php echo '<span class="'.$btn_class.'" onclick="window.open(\''.$show_all_link.'\')" >Show All</span><br/>'; ?></td>
+                <td colspan="3"><?php echo '<span class="'.$btn_class.'" onclick="window.open(\''.$show_all_link.'\')" >'.JText::_('FLEXI_ITEMS_MANAGER').'</span><br/>'; ?>
+</td>
               </tr>
             </tfoot>
           </table>
           <?php endif; /* !isset($ssliders['revised']) */ ?>
           <?php if (!isset($ssliders['inprogress'])): ?>
-          <?php
-			$title = JText::_( 'FLEXI_IN_PROGRESS_SLIDER' ).' <span class="badge badge-info">'.count($this->inprogress)." / ".$this->totalrows['inprogress'].'</span>';
+          		<?php
+			$title = JText::_( 'FLEXI_IN_PROGRESS_SLIDER' ).' - <span class="badge badge-info">'.$this->totalrows['inprogress'].'</span>';
 			echo JHtml::_('sliders.panel', $title, 'inprogress' );
 			$show_all_link = 'index.php?option=com_flexicontent&amp;view=items&amp;filter_state=IP';
 			?>
@@ -531,7 +581,7 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 					$rights = FlexicontentHelperPerm::checkAllItemAccess($user->id, 'item', $row->id);
 					$canEdit 		= in_array('edit', $rights);
 					$canEditOwn	= in_array('edit.own', $rights) && $row->created_by == $user->id;
-					$link = 'index.php?option=com_flexicontent&amp;'.$items_task.'edit&amp;cid[]='. $row->id; ?>
+					$link = 'index.php?option=com_flexicontent&amp;'.$items_task.'edit&amp;cid='. $row->id; ?>
             <tbody  class="no-border-y">
               <tr>
                 <td><?php
@@ -539,7 +589,9 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 						echo htmlspecialchars($row->title, ENT_QUOTES, 'UTF-8');
 					} else {
 					?>
-                  <?php echo ($i+1).". "; ?> <a href="<?php echo $link; ?>" title="<?php echo $edit_item_txt; ?>" <?php echo $onclick_modal_edit; ?>> <?php echo htmlspecialchars($row->title, ENT_QUOTES, 'UTF-8'); ?> </a>
+                  <a href="<?php echo $link; ?>" title="<?php echo $edit_item_txt; ?>" <?php echo $onclick_modal_edit; ?>>
+					<?php echo htmlspecialchars($row->title, ENT_QUOTES, 'UTF-8'); ?>
+					</a>
                   <?php
 					}
 					?></td>
@@ -550,14 +602,15 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
             </tbody>
             <tfoot>
               <tr>
-                <td colspan="3"><?php echo '<span class="'.$btn_class.'" onclick="window.open(\''.$show_all_link.'\')" >Show All</span><br/>'; ?></td>
+                <td colspan="3"><?php echo '<span class="'.$btn_class.'" onclick="window.open(\''.$show_all_link.'\')" >'.JText::_('FLEXI_ITEMS_MANAGER').'</span><br/>'; ?>
+</td>
               </tr>
             </tfoot>
           </table>
           <?php endif; /* !isset($ssliders['inprogress']) */ ?>
           <?php if (!isset($ssliders['draft'])): ?>
-          <?php
-			$title = JText::_( 'FLEXI_DRAFT_SLIDER' ).' <span class="badge badge-info">'.count($this->draft)." / ".$this->totalrows['draft'].'</span>';
+          	<?php
+			$title = JText::_( 'FLEXI_DRAFT_SLIDER' ).' - <span class="badge badge-info">'.$this->totalrows['draft'].'</span>';
 			echo JHtml::_('sliders.panel', $title, 'draft' );
 			$show_all_link = 'index.php?option=com_flexicontent&amp;view=items&amp;filter_state=OQ';
 			?>
@@ -577,7 +630,7 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 					$rights = FlexicontentHelperPerm::checkAllItemAccess($user->id, 'item', $row->id);
 					$canEdit 		= in_array('edit', $rights);
 					$canEditOwn	= in_array('edit.own', $rights) && $row->created_by == $user->id;
-					$link = 'index.php?option=com_flexicontent&amp;'.$items_task.'edit&amp;cid[]='. $row->id; ?>
+					$link = 'index.php?option=com_flexicontent&amp;'.$items_task.'edit&amp;cid='. $row->id; ?>
             <tbody  class="no-border-y">
               <tr>
                 <td><?php
@@ -585,7 +638,11 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 						echo htmlspecialchars($row->title, ENT_QUOTES, 'UTF-8');
 					} else {
 					?>
-                  <?php echo ($i+1).". "; ?> <a href="<?php echo $link; ?>" title="<?php echo $edit_item_txt; ?>" <?php echo $onclick_modal_edit; ?>> <?php echo htmlspecialchars($row->title, ENT_QUOTES, 'UTF-8'); ?> </a>
+                 <?php echo ($i+1).". "; ?>
+						<a href="<?php echo $link; ?>" title="<?php echo $edit_item_txt; ?>" <?php echo $onclick_modal_edit; ?>>
+
+							<?php echo htmlspecialchars($row->title, ENT_QUOTES, 'UTF-8'); ?>
+						</a>
                   <?php
 					}
 					?></td>
@@ -596,36 +653,15 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
             </tbody>
             <tfoot>
               <tr>
-                <td colspan="3"><?php echo '<span class="'.$btn_class.'" onclick="window.open(\''.$show_all_link.'\')" >Show All</span><br/>'; ?></td>
+                <td colspan="3"><?php echo '<span class="'.$btn_class.'" onclick="window.open(\''.$show_all_link.'\')" >'.JText::_('FLEXI_ITEMS_MANAGER').'</span><br/>'; ?></td>
               </tr>
             </tfoot>
           </table>
           <?php endif; /* !isset($ssliders['draft']) */ ?>
-          <?php if (!isset($ssliders['version'])): ?>
-          <?php
-			if ( ! $this->params->get('show_updatecheck', 1) || !$user->authorise('core.admin', 'com_flexicontent') )
-			{
-				$this->document->addScriptDeclaration("
-				jQuery(document).ready(function () {
-					jQuery('#updatecomponent').click(function(e){
-						if(jQuery.trim(jQuery('#displayfversion').html())=='') {
-							jQuery('#displayfversion').html('<p class=\"qf_centerimg\"><img src=\"components/com_flexicontent/assets/images/ajax-loader.gif\" align=\"center\"></p>');
-							jQuery.ajax({
-								url: 'index.php?option=com_flexicontent&task=fversioncompare&".(FLEXI_J30GE ? JSession::getFormToken() : JUtility::getToken())."=1',
-								success: function(str) {
-									jQuery('#displayfversion').html(str);
-									jQuery('#displayfversion').parent().css('height', 'auto');
-								}
-							});
-						}
-					});
-				});
-				");
-				echo JHtml::_('sliders.panel', JText::_( 'FLEXI_VERSION_CHECKING' ), 'updatecomponent' );
-				echo "<div id=\"displayfversion\" style='min-height:20px;'></div>";
-			}
-			?>
-          <?php endif; /* !isset($ssliders['version']) */ ?>
+          
+		  
+		  
+		  
           
           <?php ob_start(); ?>
           
@@ -640,7 +676,7 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 						JHTML::_('image.site', 'logo.png', '../administrator/components/com_flexicontent/assets/images/', NULL, NULL, 'FLEXIcontent', ' id="fc-dash-logo" '));
 				?>
               <p><span id="fc-dash-license" class="fc-info fc-nobgimage" > FLEXIcontent <?php echo FLEXI_VERSION . ' ' . FLEXI_RELEASE; ?><br/>
-                GNU/GPL licence, Copyright &copy; 2009-2015 </span></p>
+                GNU/GPL licence, Copyright &copy; 2009-2016</span></p>
               <hr>
               <p class="center"><span class="label label-info <?php echo $tooltip_class;?>" title="Core developer">Emmanuel Danan</span> <span class="label label-info <?php echo $tooltip_class;?>" title="Core developer">Georgios Papadakis</span> <a class="<?php echo $btn_class.(FLEXI_J16GE ? ' btn-primary ' : ' ').$tooltip_class;?> center"  href="http://www.flexicontent.org" title="FLEXIcontent home page" target="_blank">FLEXIcontent.org</a></p>
               <p class="center"> <span class="label label-info <?php echo $tooltip_class;?>" title="Core Developer">Marvelic Engine</span> <span class="label <?php echo $tooltip_class;?>" title="Core Developer">Suriya Kaewmungmuang</span><br>
@@ -658,15 +694,16 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 				echo $fc_requirements;
 			endif;
 			?>
-                      <?php if ( $this->params->get('show_updatecheck', 1) && $user->authorise('core.admin', 'com_flexicontent') ): ?>
-          <?php if (!isset($ssliders['updatecheck'])): ?>
-           <?php
-			$title = JText::_( 'FLEXI_UPDATE_CHECK' );
-			echo JHtml::_('sliders.panel', $title, 'updatecheck' );
-			
+                     
+          <?php
+			if ($hide_fc_license_credits) :
+				echo JHtml::_('sliders.panel', "About FLEXIcontent", 'aboutflexi');
+				echo $fc_logo_license;
+			endif;
 			?>
             
-            <?php
+            <?php if (!isset($ssliders['version'])): ?>
+           <?php
 		if ( $this->params->get('show_updatecheck', 1) && $user->authorise('core.admin', 'com_flexicontent') )
 		{
 			$this->document->addScriptDeclaration("
@@ -683,9 +720,9 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 				}
 			});
 			");
+			echo JHtml::_('sliders.panel', JText::_( 'FLEXI_UPDATE_CHECK' ), 'updatecomponent' );
 			echo '
 			<fieldset class="fc-board-set">
-				<legend class="fc-board-header-content-editing">'.JText::_( 'FLEXI_UPDATE_CHECK' ).'</legend>
 				<div class="fc-board-set-inner">
 					<div id="displayfversion" style="float: left;"></div>
 				</div>
@@ -693,14 +730,9 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
 			';
 		}
 		?>
-          <?php endif; /* !isset($ssliders['updatecheck']) */ ?>
-          <?php endif; /* !isset($ssliders['updatecheck']) */ ?>
-          <?php
-			if ($hide_fc_license_credits) :
-				echo JHtml::_('sliders.panel', "About FLEXIcontent", 'aboutflexi');
-				echo $fc_logo_license;
-			endif;
-			?>
+				
+			
+          <?php endif; /* !isset($ssliders['version']) */ ?>
           <?php echo JHtml::_('sliders.end'); ?>
           <?php endif; /* !$skip_sliders */ ?>
           <?php if (!$hide_fc_license_credits) echo $fc_logo_license; ?>

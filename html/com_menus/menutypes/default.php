@@ -16,6 +16,15 @@ $document = JFactory::getDocument();
 ?>
 <style type="text/css">
 .h-articles, .h-configurationmanager, .h-contacts, .h-newsfeeds, .h-callender, .h-wrapper, .h-search, .h-tags, .h-weblinks, .h-usersmanager {display: none;}
+/* FLEXIcontent Items */
+.h-flexicontent .author,
+.h-flexicontent .categories,
+.h-flexicontent .favoured,
+.h-flexicontent .favourites,
+.h-flexicontent .submission,
+.h-flexicontent .my,
+.h-flexicontent .tag,
+.h-flexicontent .tagged {display: none;}
 </style>
 <script type="text/javascript">
 	setmenutype = function(type)
@@ -32,13 +41,23 @@ $document = JFactory::getDocument();
 <?php echo JHtml::_('bootstrap.startAccordion', 'collapseTypes', array('active' => 'slide1')); ?>
 
 	<?php
+
+
 		$i = 0;
-		foreach ($this->types as $name => $list) : ?>
+		foreach ($this->types as $name => $list) : 
+		
+		?>
+
+
         <div class="h-<?php echo strtolower(str_replace(' ', '', $name));?>">
 		<?php echo JHtml::_('bootstrap.addSlide', 'collapseTypes', $name, 'collapse' . $i++); ?>
 			<ul class="nav nav-tabs nav-stacked">
-				<?php foreach ($list as $title => $item) : ?>
-					<li>
+				<?php foreach ($list as $title => $item) : 
+				// php list name
+				$list_title = htmlspecialchars($title);
+				$list_title = strtolower($list_title);
+				?>
+					<li class="<?php echo $list_title; ?>">
 						<a class="choose_type" href="#" title="<?php echo JText::_($item->description); ?>"
 							onclick="javascript:setmenutype('<?php echo base64_encode(json_encode(array('id' => $this->recordId, 'title' => (isset($item->type) ? $item->type : $item->title), 'request' => $item->request))); ?>')">
 							<?php echo $title;?> <small class="muted"><?php echo JText::_($item->description); ?></small>

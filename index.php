@@ -19,10 +19,15 @@ $user            = JFactory::getUser();
 
 
 // HIDE FLEXICONTENT CSS
-unset($this->_styleSheets[JURI::base( true ).'/components/com_flexicontent/assets/css/flexicontentbackend.css']);
-unset($this->_styleSheets[JURI::base( true ).'/components/com_flexicontent/assets/css/j3x.css']);
+unset($this->_styleSheets[JURI::base( true ).'/components/com_flexicontent/assets/css/flexicontentbackend.css?'.FLEXI_VHASH.'']);
+unset($this->_styleSheets[JURI::base( true ).'/components/com_flexicontent/assets/css/j3x.css?'.FLEXI_VHASH.'']);
+unset($this->_styleSheets[JURI::root( true ).'/administrator/components/com_flexicontent/assets/css/j3x.css']);
+unset($this->_styleSheets[JURI::root( true ).'/components/com_flexicontent/assets/css/flexi_form_fields.css?'.FLEXI_VHASH.'']);
+unset($this->_styleSheets[JURI::root( true ).'/components/com_flexicontent/librairies/jquery/css/ui-lightness/jquery-ui-1.9.2.css']);
 /*unset($this->_styleSheets[JURI::root( true ).'/components/com_flexicontent/librairies/select2/select2.css']);*/
 unset($this->_styleSheets[JURI::root( true ).'/components/com_flexicontent/assets/css/tabber.css']);
+unset($this->_styleSheets[JURI::root( true ).'/administrator/components/com_flexicontent/assets/css/flexicontentbackend.css']);
+unset($this->_styleSheets[JURI::root( true ).'/modules/mod_flexiadmin/assets/css/style.css']);
 
 
 // Add JavaScript Frameworks
@@ -32,6 +37,7 @@ $doc->addScriptVersion($this->baseurl . '/templates/' . $this->template . '/js/t
 //CURRENT FRONTEND TEMPLATE		
 $tpath = $this->baseurl.'/templates/'.$this->template;
 // Add Stylesheets
+$doc->addStyleSheetVersion($this->baseurl . '/templates/' . $this->template . '/css/jquery-ui.css');
 $doc->addStyleSheetVersion($this->baseurl . '/templates/' . $this->template . '/css/flexi.css');
 $doc->addStyleSheetVersion($this->baseurl . '/templates/' . $this->template . '/css/template.css');
 $doc->addStyleSheetVersion($this->baseurl . '/templates/' . $this->template . '/css/flexi-up.css');
@@ -40,13 +46,13 @@ $doc->addStyleSheetVersion($this->baseurl . '/templates/' . $this->template . '/
 // Load custom.css
 $file = 'templates/' . $this->template . '/css/custom.css';
 
-if (is_file($file))
-{
-	$doc->addStyleSheetVersion($file);
-}
-
 // Load specific language related CSS
-$file = 'language/' . $lang->getTag() . '/' . $lang->getTag() . '.css';
+$languageCss = 'language/' . $lang->getTag() . '/' . $lang->getTag() . '.css';
+
+if (file_exists($languageCss) && filesize($languageCss) > 0)
+{
+	$doc->addStyleSheetVersion($languageCss);
+}
 
 if (is_file($file))
 {
@@ -54,11 +60,13 @@ if (is_file($file))
 }
 
 $jinput = JFactory::getApplication()->input;
-$option = $jinput->getCmd('option', '');
-$view = $jinput->getCmd('view', '');
-$layout = $jinput->getCmd('layout', '');
-$task = $jinput->getCmd('task', '');
-$itemid = $jinput->getCmd('Itemid', '');
+// Detecting Active Variables
+$option   = $input->get('option', '');
+$view     = $input->get('view', '');
+$layout   = $input->get('layout', '');
+$task     = $input->get('task', '');
+$itemid   = $input->get('Itemid', '');
+
 
 $sitename = htmlspecialchars($app->get('sitename', ''), ENT_QUOTES, 'UTF-8');
 $cpanel   = ($option === 'com_cpanel');
@@ -112,111 +120,129 @@ function colorIsLight($color)
 }
 ?>
 <!DOCTYPE html>
+
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
-<head>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<jdoc:include type="head" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<jdoc:include type="head" />
+<!-- Template color -->
+<?php if ($this->params->get('templateColor')) : ?>
+<style type="text/css">
+.navbar-inner, .navbar-inverse .navbar-inner, .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover, .navbar-inverse .nav li.dropdown.open > .dropdown-toggle, .navbar-inverse .nav li.dropdown.active > .dropdown-toggle, .navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle, #status.status-top {
+ background: <?php echo $this->params->get('templateColor');
+?>;
+}
+</style>
+<?php endif; ?>
+<!-- Template header color -->
+<?php if ($displayHeader && $this->params->get('headerColor')) : ?>
+<style type="text/css">
+.header {
+ background: <?php echo $this->params->get('headerColor');
+?>;
+}
+</style>
+<?php endif; ?>
 
-	<!-- Template color -->
-	<?php if ($this->params->get('templateColor')) : ?>
-		<style type="text/css">
-			.navbar-inner, .navbar-inverse .navbar-inner, .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover, .navbar-inverse .nav li.dropdown.open > .dropdown-toggle, .navbar-inverse .nav li.dropdown.active > .dropdown-toggle, .navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle, #status.status-top {
-				background: <?php echo $this->params->get('templateColor'); ?>;
-			}
-		</style>
-	<?php endif; ?>
-	<!-- Template header color -->
-	<?php if ($displayHeader && $this->params->get('headerColor')) : ?>
-		<style type="text/css">
-			.header {
-				background: <?php echo $this->params->get('headerColor'); ?>;
-			}
-		</style>
-	<?php endif; ?>
+<!-- Sidebar background color -->
+<?php if ($this->params->get('sidebarColor')) : ?>
+<style type="text/css">
+.nav-list > .active > a, .nav-list > .active > a:hover {
+ background: <?php echo $this->params->get('sidebarColor');
+?>;
+}
+</style>
+<?php endif; ?>
 
-	<!-- Sidebar background color -->
-	<?php if ($this->params->get('sidebarColor')) : ?>
-		<style type="text/css">
-			.nav-list > .active > a, .nav-list > .active > a:hover {
-				background: <?php echo $this->params->get('sidebarColor'); ?>;
-			}
-		</style>
-	<?php endif; ?>
-
-	<!-- Link color -->
-	<?php if ($this->params->get('linkColor')) : ?>
-		<style type="text/css">
-			a, .j-toggle-sidebar-button, .icon-arrow-up-2:hover
-			{
-				color: <?php echo $this->params->get('linkColor'); ?>;
-			}
-		</style>
-	<?php endif; ?>
-
-
+<!-- Link color -->
+<?php if ($this->params->get('linkColor')) : ?>
+<style type="text/css">
+a, .j-toggle-sidebar-button, .icon-arrow-up-2:hover {
+ color: <?php echo $this->params->get('linkColor');
+?>;
+}
+</style>
+<?php endif; ?>
+<?php if ($this->params->get('hoverColor')) : ?>
+<style type="text/css">
+a:hover, a:focus {
+color: <?php echo $this->params->get('hoverColor');
+?>;
+}
+#cpanel div.icon a:hover, #cpanel div.icon a:focus, #cpanel div.icon a:active, .cpanel div.icon a:hover, .cpanel div.icon a:focus, .cpanel div.icon a:active {
+border-color: <?php echo $this->params->get('hoverColor');
+?>;
+}
+</style>
+<?php endif; ?>
 <?php if ($this->params->get('flexiColor')) : ?>
 <style type="text/css">
 .site-logo, .navbar .btn-navbar, .label-important, .badge-important, .pane-toggler-down span.badge, .pane-toggler span.badge, .fcsep_level2, .flexicontent .accordion.accordion-semi .panel-heading a, .navbar-inverse .dropdown-menu>li>a:hover, .navbar-inverse .dropdown-menu>li>a:focus, .navbar-inverse .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus, .dropdown-submenu:hover>a, .dropdown-submenu:focus>a, .com_flexicontent .accordion.accordion-semi .panel-heading a, .pane-toggler-down span.badge, .pane-toggler span.badge, .com_flexicontent .accordion.accordion-color .panel-heading a, .com_flexicontent .accordion.accordion-color .panel-collapse .panel-body, .com_flexicontent .accordion.accordion-semi .panel-heading a, .com_flexicontent .accordion.accordion-semi .panel-heading.success a, .com_flexicontent .accordion.accordion-semi .panel-heading a.collapsed:hover, .pane-sliders .pane-toggler.title:hover, .pane-sliders .title.pane-toggler-down {
- background: <?php echo $this->params->get('flexiColor');?>;
+ background: <?php echo $this->params->get('flexiColor');
+?>;
 }
-
-
-.pane-sliders .panel h3, .pane-sliders .panel h3 a, h3.tabberheading, .nav-tabs>li>a:hover, #flexicontent ul.tabbernav li a:hover, .flexicontent .accordion.accordion-semi .panel-heading a.collapsed:hover, #status a:hover, #status a:focus, dl.tabs dt.open span, dl.tabs dt.open h3 a, .flexicontent .nav-tabs > li > a:hover, .flexicontent .nav-tabs > li > a:active, .show-all, .show-all a, .com_flexicontent .accordion .panel-heading a, .accordion .panel-heading h4 a  {
- color: <?php echo $this->params->get('flexiColor');?>;
+.pane-sliders .pane-toggler.title:hover a {
+	color: #fff;
 }
-
-.color-primary, .purple { 
- color: <?php echo $this->params->get('flexiColor');?> !important;
- }
+.pane-sliders .panel h3, .pane-sliders .panel h3 a, h3.tabberheading, .nav-tabs>li>a:hover, #flexicontent ul.tabbernav li a:hover, .flexicontent .accordion.accordion-semi .panel-heading a.collapsed:hover, #status a:hover, #status a:focus, dl.tabs dt.open span, dl.tabs dt.open h3 a, .flexicontent .nav-tabs > li > a:hover, .flexicontent .nav-tabs > li > a:active, .show-all, .show-all a, .com_flexicontent .accordion .panel-heading a, .accordion .panel-heading h4 a {
+ color: <?php echo $this->params->get('flexiColor');
+?>;
+}
+.color-primary, .purple {
+ color: <?php echo $this->params->get('flexiColor');
+?> !important;
+}
 #flexicontent ul.tabbernav li.tabberactive a, #flexicontent ul.tabbernav li.tabberactive a:hover, .nav-tabs>.active>a, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus, .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
- color: <?php echo $this->params->get('flexiColor');?>;
- border-top: 2px solid <?php echo $this->params->get('flexiColor');?>;
+ color: <?php echo $this->params->get('flexiColor');
+?>;
+ border-top: 2px solid <?php echo $this->params->get('flexiColor');
+?>;
 }
-
-dd.tabs dl.tabs dt.open, dl.tabs dt.open {border-top: 3px solid <?php echo $this->params->get('flexiColor');?>;}
-
+dd.tabs dl.tabs dt.open, dl.tabs dt.open {
+border-top: 3px solid <?php echo $this->params->get('flexiColor');
+?>;
+}
 a.thumbnail:hover, a.thumbnail:focus {
-border-color:  <?php echo $this->params->get('flexiColor');?>;
+border-color:  <?php echo $this->params->get('flexiColor');
+?>;
 }
-.flexicontent .nav-tabs > li.active > a, .flexicontent .nav-tabs > li.active > a:hover, .flexicontent .nav-tabs > li.active > a:focus { border-top: 2px solid <?php echo $this->params->get('flexiColor');?>;}
+.flexicontent .nav-tabs > li.active > a, .flexicontent .nav-tabs > li.active > a:hover, .flexicontent .nav-tabs > li.active > a:focus {
+border-top: 2px solid <?php echo $this->params->get('flexiColor');
+?>;
+}
+.tabs-left>.nav-tabs .active>a, .tabs-left>.nav-tabs .active>a:hover, .tabs-left>.nav-tabs .active>a:focus {
+border-left: 2px solid <?php echo $this->params->get('flexiColor');
+?>;
+}
 
-.tabs-left>.nav-tabs .active>a, .tabs-left>.nav-tabs .active>a:hover, .tabs-left>.nav-tabs .active>a:focus { border-left: 2px solid <?php echo $this->params->get('flexiColor');?>;}
 @media (max-width: 767px) {
 .navbar-inverse .nav-collapse .nav > li > a:hover, .navbar-inverse .nav-collapse .nav > li > a:focus, .navbar-inverse .nav-collapse .dropdown-menu a:hover, .navbar-inverse .nav-collapse .dropdown-menu a:focus {
-    background-color: <?php echo $this->params->get('flexiColor');?>;
+ background-color: <?php echo $this->params->get('flexiColor');
+?>;
 }
 }
-
-ul.adminmenum_menu li a:hover{
+ul.adminmenum_menu li a:hover {
 	background-color: transparent !important;
-	color: <?php echo $this->params->get('flexiColor');?> !important;
+ color: <?php echo $this->params->get('flexiColor');
+?> !important;
 }
-
 ul.adminmenum_menu li li a:hover, ul.adminmenum_menu li li a:active, ul.adminmenum_menu li li a:focus {
-background-color: <?php echo $this->params->get('flexiColor');?> !important;
-color: #fff !important;
-
+background-color: <?php echo $this->params->get('flexiColor');
+?> !important;
+	color: #fff !important;
 }
-
 /* background color li's on hover submenu and deeper */
-ul.adminmenum_menu ul li a:hover{
+ul.adminmenum_menu ul li a:hover {
 	background-color: #0083C5;
 }
-
-ul.amm_menu_disabled li.amm_li_disabled a, ul.amm_menu_disabled li.amm_li_disabled a:hover {color: #555 !important;}
-
-.dropdown-toggle.menu-article:after, .dropdown-toggle.menu-category:after {display: none !important;}
-
-
-
-
+ul.amm_menu_disabled li.amm_li_disabled a, ul.amm_menu_disabled li.amm_li_disabled a:hover {
+	color: #555 !important;
+}
+.dropdown-toggle.menu-article:after, .dropdown-toggle.menu-category:after {
+	display: none !important;
+}
 </style>
-
-
 <?php endif; ?>
-
-
 <?php if ($this->params->get('flexiTags') == 0) : ?>
 <style type="text/css">
 .htags, #columnchoose_adminListTableFCitems_12, #columnchoose_adminListTableFCitems_12_label {
@@ -224,7 +250,6 @@ ul.amm_menu_disabled li.amm_li_disabled a, ul.amm_menu_disabled li.amm_li_disabl
 }
 </style>
 <?php endif; ?>
-
 <?php if ($this->params->get('flexiAuthor') == 0) : ?>
 <style type="text/css">
 .hauthor, #columnchoose_adminListTableFCitems_4_label, #columnchoose_adminListTableFCitems_4 {
@@ -232,7 +257,6 @@ ul.amm_menu_disabled li.amm_li_disabled a, ul.amm_menu_disabled li.amm_li_disabl
 }
 </style>
 <?php endif; ?>
-
 <?php if ($this->params->get('flexiLang') == 0) : ?>
 <style type="text/css">
 .hlang, #columnchoose_adminListTableFCitems_5_label, #columnchoose_adminListTableFCitems_5, #columnchoose_adminListTableFCitems_9_label, #columnchoose_adminListTableFCitems_9, #columnchoose_adminListTableFCcats_11_label {
@@ -275,80 +299,63 @@ ul.amm_menu_disabled li.amm_li_disabled a, ul.amm_menu_disabled li.amm_li_disabl
 }
 </style>
 <?php endif; ?>
-
 <?php if ($this->params->get('loadCss')) : ?>
 <style type="text/css">
 <?php echo $this->params->get('loadCss');?>
 </style>
-
-
 <?php endif; ?>
-	<!--[if lt IE 9]>
+<!--[if lt IE 9]>
 	<script src="<?php echo JUri::root(true); ?>/media/jui/js/html5.js"></script>
-	<![endif]-->
+<![endif]-->
 </head>
 
-<body class="admin <?php echo $option . ' view-' . $view . ' layout-' . $layout . ' task-' . $task . ' itemid-' . $itemid; ?><?php if ($this->params->get('amm_used') != '0') : ?><?php echo ' amm';?><?php endif; ?>">
+<body class="admin <?php echo $option . ' view-' . $view . ' layout-' . $layout . ' task-' . $task . ' itemid-' . $itemid; ?><?php if ($this->params->get('amm_used') != '0') : ?><?php echo ' amm';?><?php endif; ?> ">
 <!-- Top Navigation -->
 
 <nav class="navbar<?php echo $template_is_light ? '' : ' navbar-inverse'; ?> navbar-fixed-top">
-
-<div class="navbar-inner">
-		<div class="container-fluid w100">
-        <!--Logo + Menu-->
-        <div class="row-fluid w100">
-    <div class="span2 logo-box">
-   
-<a class="site-logo <?php echo ($hidden ? 'disabled' : ''); ?>" <?php echo ($hidden ? '' : 'href="' . $this->baseurl . '"'); ?>><img src="<?php echo $logo; ?>" alt="<?php echo $sitename;?>" class="logox" /></a>
-    </div>
-    
-    
-        <!--NAVIGATION--> 
-    <div class="span10 bgcolor eq-height outvc"> 
-    
-<div class="vc"> 
-        <?php if ($this->params->get('admin_menus') != '0') : ?>
-        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
-        <?php endif; ?>
-        <a class="brand hidden-desktop hidden-tablet" href="<?php echo JUri::root(); ?>" title="<?php echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename); ?>" target="_blank"><span class="icon-out-2 small"></span></a>
-        <div<?php echo ($this->params->get('admin_menus') != '0') ? ' class="nav-collapse"' : ''; ?>>
-          <jdoc:include type="modules" name="menu" style="none" />
-          <ul class="nav nav-user<?php echo ($this->direction == 'rtl') ? ' pull-left' : ' pull-right'; ?>">
-            <li class="dropdown"> <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="icon-user"></span> <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li> <span> <span class="icon-user"></span> <strong><?php echo $user->name; ?></strong> </span> </li>
-                <li class="divider"></li>
-                <li class=""> <a href="index.php?option=com_admin&amp;task=profile.edit&amp;id=<?php echo $user->id; ?>"><?php echo JText::_('TPL_ISIS_EDIT_ACCOUNT'); ?></a> </li>
-                <li class="divider"></li>
-                <li class=""><a href="<?php echo JRoute::_('index.php?option=com_login&task=logout&' . JSession::getFormToken() . '=1'); ?>"><?php echo JText::_('TPL_ISIS_LOGOUT'); ?></a> </li>
+  <div class="navbar-inner">
+    <div class="container-fluid w100"> 
+      <!--Logo + Menu-->
+      <div class="row-fluid w100">
+        <div class="span2 logo-box"> <a class="site-logo <?php echo ($hidden ? 'disabled' : ''); ?>" <?php echo ($hidden ? '' : 'href="' . $this->baseurl . '"'); ?>><img src="<?php echo $logo; ?>" alt="<?php echo $sitename;?>" class="logox" /></a> </div>
+        
+        <!--NAVIGATION-->
+        <div class="span10 bgcolor eq-height outvc preloadz">
+          <div class="vc">
+            <?php if ($this->params->get('admin_menus') != '0') : ?>
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+            <?php endif; ?>
+            <a class="brand hidden-desktop hidden-tablet" href="<?php echo JUri::root(); ?>" title="<?php echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename); ?>" target="_blank"><span class="icon-out-2 small"></span></a>
+            <div<?php echo ($this->params->get('admin_menus') != '0') ? ' class="nav-collapse"' : ''; ?>>
+              <jdoc:include type="modules" name="menu" style="none" />
+              <ul class="nav nav-user<?php echo ($this->direction == 'rtl') ? ' pull-left' : ' pull-right'; ?>">
+                <li class="dropdown"> <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="icon-user"></span> <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li> <span> <span class="icon-user"></span> <strong><?php echo $user->name; ?></strong> </span> </li>
+                    <li class="divider"></li>
+                    <li class=""> <a href="index.php?option=com_admin&amp;task=profile.edit&amp;id=<?php echo $user->id; ?>"><?php echo JText::_('TPL_ISIS_EDIT_ACCOUNT'); ?></a> </li>
+                    <li class="divider"></li>
+                    <li class=""><a href="<?php echo JRoute::_('index.php?option=com_login&task=logout&' . JSession::getFormToken() . '=1'); ?>"><?php echo JText::_('TPL_ISIS_LOGOUT'); ?></a> </li>
+                  </ul>
+                </li>
               </ul>
-            </li>
-          </ul>
-          <a class="brand visible-desktop visible-tablet" href="<?php echo JUri::root(); ?>" title="<?php echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename); ?>" target="_blank"><span class="icon-out-2 small"></span></a> 
-          
-          
-          
+              <a class="brand visible-desktop visible-tablet" href="<?php echo JUri::root(); ?>" title="<?php echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename); ?>" target="_blank"><span class="icon-out-2 small"></span></a> </div>
           </div>
-                
-    </div>
-    </div>
-    <!--/NAVIGATION-->
-    </div>
-    <!--/Logo + Menu-->
         </div>
-</div>
+        <!--/NAVIGATION--> 
+      </div>
+      <!--/Logo + Menu--> 
+    </div>
+  </div>
 </nav>
-
-
 <?php if ($displayHeader) : ?>
 <div class="xspace"></div>
 <header class="header help20">
- <div class="container-title">
-			<jdoc:include type="modules" name="title" />
-		</div>
+  <div class="container-title">
+    <jdoc:include type="modules" name="title" />
+  </div>
 </header>
 <?php endif; ?>
-
 <?php if (!$cpanel) : ?>
 <!-- Subheader --> 
 <a class="btn btn-subhead" data-toggle="collapse" data-target=".subhead-collapse"><?php echo JText::_('TPL_ISIS_TOOLBAR'); ?> <i class="icon-wrench"></i></a>
@@ -369,80 +376,73 @@ ul.amm_menu_disabled li.amm_li_disabled a, ul.amm_menu_disabled li.amm_li_disabl
 <?php endif; ?>
 <!-- container-fluid -->
 <div class="container-fluid container-main <?php if($cpanel ==1) :?>cpanel<?php endif; ?>">
+<section id="content">
 
-
-
-	<section id="content">
-
-		<!-- Begin Content -->
-		<jdoc:include type="modules" name="top" style="xhtml" />
-		<div class="row-fluid">
-			<?php if ($showSubmenu) : ?>
-			<div class="span2">
-				<jdoc:include type="modules" name="submenu" style="none" />
-			</div>
-			<div class="span10 mainx">
-				<?php else : ?>
-				<div class="span12 mainx">
-					<?php endif; ?>
-					<jdoc:include type="message" />
-					<?php
+<!-- Begin Content -->
+<jdoc:include type="modules" name="top" style="xhtml" />
+<div class="row-fluid">
+  <?php if ($showSubmenu) : ?>
+  <div class="span2">
+    <jdoc:include type="modules" name="submenu" style="none" />
+  </div>
+  <div class="span10 mainx">
+    <?php else : ?>
+    <div class="span12 mainx">
+      <?php endif; ?>
+      <jdoc:include type="message" />
+      <?php
 					// Show the page title here if the header is hidden
 					if (!$displayHeader) : ?>
-						<h1 class="content-title"><?php echo JHtml::_('string.truncate', $app->JComponentTitle, 0, false, false); ?></h1>
-					<?php endif; ?>
-					<jdoc:include type="component" />
-				</div>
-			</div>
-			<?php if ($this->countModules('bottom')) : ?>
-				<jdoc:include type="modules" name="bottom" style="xhtml" />
-			<?php endif; ?>
-			<!-- End Content -->
-   
-   <?php if ($cpanel) : ?>    
-       <div class="row-fluid version">
-       <div class="span3"></div>
-       <div class="span9">
-         <hr>
-     
-            <p class="text-right grey"><small><?php
+      <h1 class="content-title"><?php echo JHtml::_('string.truncate', $app->JComponentTitle, 0, false, false); ?></h1>
+      <?php endif; ?>
+      <jdoc:include type="component" />
+    </div>
+  </div>
+  <?php if ($this->countModules('bottom')) : ?>
+  <jdoc:include type="modules" name="bottom" style="xhtml" />
+  <?php endif; ?>
+  <!-- End Content -->
+  
+  <?php if ($cpanel) : ?>
+  <div class="row-fluid version">
+    <div class="span12">
+      <hr>
+      <p class="text-right grey"><small>
+        <?php
 jimport('joomla.version');
 $version = new JVersion();
 
-echo 'Joomla! - '.$version->getShortVersion();?></small></p>
-</div>
-</div>
-<?php endif; ?>
-	</section>
-
-	<?php if (!$this->countModules('status') || (!$statusFixed && $this->countModules('status'))) : ?>
-		<footer class="footer">
-			<p align="center">
-				<jdoc:include type="modules" name="footer" style="no" />
-				&copy; <?php echo $sitename; ?> <?php echo date('Y'); ?></p>
-		</footer>
-	<?php endif; ?>
+echo 'Joomla! - '.$version->getShortVersion();?>
+        </small></p>
+    </div>
+  </div>
+  <?php endif; ?>
+  </section>
+  <?php if (!$this->countModules('status') || (!$statusFixed && $this->countModules('status'))) : ?>
+  <footer class="footer">
+    <p align="center">
+      <jdoc:include type="modules" name="footer" style="no" />
+      &copy; <?php echo $sitename; ?> <?php echo date('Y'); ?></p>
+  </footer>
+  <?php endif; ?>
 </div>
 <?php if (($statusFixed) && ($this->countModules('status'))) : ?>
-	<!-- Begin Status Module -->
-	<div id="status" class="navbar navbar-fixed-bottom hidden-phone">
-		<div class="btn-toolbar">
-			<div class="btn-group pull-right">
-				<p>
-					<jdoc:include type="modules" name="footer" style="no" />
-					&copy; <?php echo date('Y'); ?> <?php echo $sitename; ?>
-				</p>
-
-			</div>
-			<jdoc:include type="modules" name="status" style="no" />
-		</div>
-	</div>
-	<!-- End Status Module -->
+<!-- Begin Status Module -->
+<div id="status" class="navbar navbar-fixed-bottom hidden-phone">
+  <div class="btn-toolbar">
+    <div class="btn-group pull-right">
+      <p>
+        <jdoc:include type="modules" name="footer" style="no" />
+        &copy; <?php echo date('Y'); ?> <?php echo $sitename; ?> </p>
+    </div>
+    <jdoc:include type="modules" name="status" style="no" />
+  </div>
+</div>
+<!-- End Status Module -->
 <?php endif; ?>
-
 <jdoc:include type="modules" name="debug" style="none" />
 <?php if ($stickyToolbar) : ?>
-	<script>
+<script>
 		jQuery(function($)
 		{
 

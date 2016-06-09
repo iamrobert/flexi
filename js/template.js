@@ -6,28 +6,86 @@
  * @since       3.0
  */
 /** ----------------------------
-+ iamrobert add classes
++ iamrobert add /remove classes
 ----------------------------**/
 (function( $ ){
  
   $(document).ready(function(){
-	  
+
+		// IAMROBERT TEMPLATE
+		$('.fcsep_level0').parents('.controls').removeClass('controls');
+		$('.fcsep_level1').parents('.controls').removeClass('controls');
+		$('.fcsep_level2').parents('.controls').removeClass('controls');
+		
+		$('li.hugegallery').parents('.controls').removeClass('controls');
+		// BLOCKFLAT
+		$( ".com_templates .span12 table" ).wrap( "<div class=\"block-flat\"></div>" );
+		$( ".com_menus .span12 table" ).wrap( "<div class=\"block-flat\"></div>" );
+			  
 	  // 
 	  // FILTER BAR - clearfix
 	  $( "div#filter-bar" ).addClass( "clearfix" );
+	  
+	  //REMOVE YOUR ARTICLES
+	  $('.com_cpanel h3.module-title.nav-header.none').unwrap();
 	  });  
+	  
+	
+	  
 	  })( jQuery );
+
+
+
+/** ----------------------------
++ META DESCRIPTION
+----------------------------**/
+jQuery(function($) {
+$( "textarea#jform_metadesc" ).after( "<span id=\"summarychrs\">0</span>" );
+
+
+
+
+function countChar(inobj, maxl, outobj) {
+var isTextCounter = $('#jform_metadesc');
+if (isTextCounter.length > 0) {
+    var len = inobj.value.length;
+    var msg = ' characters left';
+    if (len >= maxl) {
+        inobj.value = inobj.value.substring(0, maxl);
+        $(outobj).text(0 + msg);
+    } else {
+        $(outobj).text(maxl - len + msg);
+    }
+}
+
+}
+
+$(document).ready(function(){
+
+    //set up summary field character count
+    countChar($('#jform_metadesc').get(0),160, '#summarychrs'); //show inital value on page load
+    $('#jform_metadesc').keyup(function() {
+        countChar(this, 160, '#summarychrs'); //set up on keyup event function
+    });
+
+});
+
+});
+//metadescription counter
+
 
 
 /** ----------------------------
 + Joomla Default
 ----------------------------**/
 
-
 (function($)
 {
 	$(document).ready(function()
 	{
+;
+	
+	
 		$('*[rel=tooltip]').tooltip();
 
 		// Turn radios into btn-group
@@ -280,8 +338,7 @@ $(window).resize(function () {
     }); 
 
  
- 
-  // HIGHER DIV LOWER
+   // HIGHER DIV LOWER
     $(document).ready(function() {
         $('.xspace').css('margin-top', $('nav.navbar').css('height'));
     });
@@ -289,22 +346,27 @@ $(window).resize(function () {
     $(window).resize(function() {
         $('.xspace').css('margin-top', $('nav.navbar').css('height'));
     });   //
+	
+	
 	})(jQuery);
 //
 
 
+
 (function( $ ){
  
-  $(document).ready(function(){
+  $(window).ready(function(){
  
     var current_width = $(window).width();
     //do something with the width value here!
     if(current_width < 767)
       $('.bgcolor, .logo-box').addClass("hide-eq-height").removeClass("eq-height");
-  
-  
+
+
    if(current_width > 767)
       $('.bgcolor, .logo-box').addClass("eq-height").removeClass("hide-eq-height");
+	  
+
   });
  
   //update the width value when the browser is resized (useful for devices which switch from portrait to landscape)
@@ -316,10 +378,16 @@ $(window).resize(function () {
   
  if(current_width > 767)
       $('.bgcolor, .logo-box').addClass("eq-height").removeClass("hide-eq-height");
+
  	
   });
  
+
+
 })( jQuery );
+
+
+
 
 
 jQuery(function($) {
@@ -350,3 +418,25 @@ jQuery(function($) {
     }
   });
 });
+
+
+jQuery(function(){
+	/*jQuery("#qtc_item_state1").attr("checked","checked");
+	
+	jQuery("#qtc_item_state1").parents(".control-group").css({"display":"none"});
+	jQuery("#USD").parents(".control-group").css({"display":"none"}); */
+	jQuery("#USD").attr('value','0');
+	jQuery("#jform_price_USD").attr('value','0');
+	jQuery("#item_slab").attr('value','1');
+	jQuery("#min_item").attr('value','1');
+	jQuery("#max_item").attr('value','1000');
+	jQuery("#qtc_price_currencey_textbox").css("display","none");
+	jQuery("#item_slab").parent(".controls").parent(".control-group").css("display","none");
+	jQuery("#min_item").parent(".controls").parent(".control-group").css("display","none");
+	jQuery("#max_item").parent(".controls").parent(".control-group").css("display","none");
+	jQuery("#item_attris").parent(".q2c-wrapper").parent("div").css("display","none");
+	jQuery("#mediafile").parent("div").css("display","none");
+});
+
+
+  

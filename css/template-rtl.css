@@ -7574,6 +7574,10 @@ html[dir=rtl] .quick-icons .nav-list [class*=" icon-"] {
 	.btn-toolbar .btn-wrapper .btn {
 		width: 100% !important;
 	}
+	
+	.btn-toolbar .btn-wrapper a.btn {
+			width: 90% !important;
+	}
 	.subhead {
 		background: none repeat scroll 0 0 transparent;
 		border-bottom: 0 solid #e3e3e3;
@@ -8070,6 +8074,8 @@ a.grid_true {
 .j-toggle-button-wrapper.j-toggle-visible {
 	right: 7px;
 }
+
+
 .j-toggle-sidebar-button {
 	font-size: 16px;
 	color: #3071a9;

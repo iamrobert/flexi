@@ -67,6 +67,11 @@
 				label="TPL_ISIS_COLOR_LINK_LABEL"
 				description="TPL_ISIS_COLOR_LINK_DESC" />
 
+<field name="hoverColor" class="" type="color" default="#005580"
+				validate="color"
+				label="Hover Color"
+				description="Color on Hover" />
+ 
 <field name="flexiColor" class="" type="color" default="#7761a7"
 				validate="color"
 				label="FLEXIcontent Main Color"

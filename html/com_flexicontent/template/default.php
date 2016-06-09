@@ -18,15 +18,17 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-// Load JS tabber lib
-/*
-$this->document->addScript(JURI::root(true).'/components/com_flexicontent/assets/js/tabber-minimized.js');
-$this->document->addStyleSheet(JURI::root(true).'/components/com_flexicontent/assets/css/tabber.css');
-$this->document->addScriptDeclaration(' document.write(\'<style type="text/css">.fctabber{display:none;}<\/style>\'); '); 
-*/
-// ADD BOOTSTRAP TAB MEMORY
+jimport('joomla.filesystem.folder');
+jimport('joomla.filesystem.file');
+jimport('joomla.filesystem.path');
 
-				  
+if ( !$this->layout->name ) die('Template folder does not exist');
+
+// Load JS tabber lib
+$this->document->addScriptVersion(JURI::root(true).'/components/com_flexicontent/assets/js/tabber-minimized.js', FLEXI_VHASH);
+$this->document->addStyleSheetVersion(JURI::root(true).'/components/com_flexicontent/assets/css/tabber.css', FLEXI_VHASH);
+$this->document->addScriptDeclaration(' document.write(\'<style type="text/css">.fctabber{display:none;}<\/style>\'); ');  // temporarily hide the tabbers until javascript runs
+
 $tip_class = FLEXI_J30GE ? ' hasTooltip' : ' hasTip';
 $btn_class = FLEXI_J30GE ? 'btn' : 'fc_button fcsimple';
 
@@ -45,12 +47,12 @@ $code_btn_lbls = array(
 	'catFieldDisplay'=>'FLEXI_ADD_FIELD_DISPLAY'
 );
 $code_btn_tips = array(
-	'fieldPosXML'=>'Please <br/>- place new position <strong>inside &lt;fieldgroup&gt; &lt;/fieldgroup&gt;</strong>, <br/>- <strong>set a name</strong> for the field position and remember to use same name inside your item.php or category_items.php',
-	'paramTextXML'=>'Please <br/>- place new parameter <strong>inside &lt;fields ...&gt; &lt;/fields&gt;</strong>, <br/>- <strong>set the name</strong> for the parameter and customize it, <br/>- make sure you prefix it with e.g. my_ to have a unique name <br/>- to use it add inside PHP files: <br/>if ( $item->parameters->get(\'my_param01\')) { /* do ... */ }',
-	'paramRadioXML'=>'Please <br/>- place new parameter <strong>inside &lt;fields ...&gt; &lt;/fields&gt;</strong>, <br/>- <strong>set the name</strong> for the parameter and customize it, <br/>- make sure you prefix it with e.g. my_ to have a unique name <br/>- to use it add inside PHP files: <br/>if ( $item->parameters->get(\'my_param01\')) { /* do ... */ }',
-	'paramSelectXML'=>'Please <br/>- place new parameter <strong>inside &lt;fields ...&gt; &lt;/fields&gt;</strong>, <br/>- <strong>set the name</strong> for the parameter and customize it, <br/>- make sure you prefix it with e.g. my_ to have a unique name <br/>- to use it add inside PHP files: <br/>if ( $item->parameters->get(\'my_param01\')) { /* do ... */ }',
-	'itemPosHTML'=>'This code will <strong>loop through a set</strong> of fields added to a field position place and display them<br/>- place it outside the code of other position <br/>- be careful not break PHP or HTML',
-	'catPosHTML'=>'This code will <strong>loop through a set</strong> of fields added to a field position place and display them<br/>- place it outside the code of other position <br/>- be careful not break PHP or HTML',
+	'fieldPosXML'=>'Please <br/>- place new position <b>inside &lt;fieldgroup&gt; &lt;/fieldgroup&gt;</b>, <br/>- <b>set a name</b> for the field position and remember to use same name inside your item.php or category_items.php',
+	'paramTextXML'=>'Please <br/>- place new parameter <b>inside &lt;fields ...&gt; &lt;/fields&gt;</b>, <br/>- <b>set the name</b> for the parameter and customize it, <br/>- make sure you prefix it with e.g. my_ to have a unique name <br/>- to use it add inside PHP files: <br/>if ( $item->parameters->get(\'my_param01\')) { /* do ... */ }',
+	'paramRadioXML'=>'Please <br/>- place new parameter <b>inside &lt;fields ...&gt; &lt;/fields&gt;</b>, <br/>- <b>set the name</b> for the parameter and customize it, <br/>- make sure you prefix it with e.g. my_ to have a unique name <br/>- to use it add inside PHP files: <br/>if ( $item->parameters->get(\'my_param01\')) { /* do ... */ }',
+	'paramSelectXML'=>'Please <br/>- place new parameter <b>inside &lt;fields ...&gt; &lt;/fields&gt;</b>, <br/>- <b>set the name</b> for the parameter and customize it, <br/>- make sure you prefix it with e.g. my_ to have a unique name <br/>- to use it add inside PHP files: <br/>if ( $item->parameters->get(\'my_param01\')) { /* do ... */ }',
+	'itemPosHTML'=>'This code will <b>loop through a set</b> of fields added to a field position place and display them<br/>- place it outside the code of other position <br/>- be careful not break PHP or HTML',
+	'catPosHTML'=>'This code will <b>loop through a set</b> of fields added to a field position place and display them<br/>- place it outside the code of other position <br/>- be careful not break PHP or HTML',
 	'itemFieldDisplay'=>'This code will display a single field manually, NOTE:<br/>- You need to add this field to the renderonly position, in the "Field\'s placement" TAB<br/>- be careful not break PHP or HTML',
 	'catFieldDisplay'=>'This code will display a single field manually, NOTE:<br/>- You need to add this field to the renderonly position, in the "Field\'s placement" TAB<br/>- be careful not break PHP or HTML'
 );
@@ -87,7 +89,7 @@ $code_btn_rawcode = array(
 <div class="flexi lineinfo <?php echo $_position_name; ?> group">
 	
 		<?php foreach ($item->positions[$_position_name] as $field) : /* LOOP through fields of the position */?>
-		<div class="flexi element">
+		<div class="flexi element field_<?php echo $field->name; ?>">
 		
 			<?php if ($field->label) : /* Display label according to configuration */ ?>
 				<span class="flexi label field_<?php echo $field->name; ?>">
@@ -133,7 +135,7 @@ if (!$use_editor)  $app->enqueueMessage(JText::_('Codemirror is disabled, please
 ?>
 
 <script type="text/javascript">
-	function <?php echo $this->use_jquery_sortable ? 'initordering' : 'storeordering'; ?>() {
+	function tmpls_fcfield_init_ordering() {
 	<?php echo $this->jssort . ';' ; ?>
 	}
 	
@@ -191,13 +193,13 @@ if (!$use_editor)  $app->enqueueMessage(JText::_('Codemirror is disabled, please
 		var layout_name  = jQuery('#editor__layout_name').val();
 		var file_subpath = jQuery('#editor__file_subpath').val();
 		if (file_subpath=='') {
-			alert('Please load a file before trying to save');
+			alert(<?php echo "'".JText::_('FLEXI_TMPLS_LOAD_FILE_BEFORE_SAVING', true)."'"; ?>);
 			return;
 		}
 		
 		<?php
 		if (in_array($this->layout->name, array('blog','default','faq','items-tabbed','presentation'))) {
-			echo 'if (!confirm("This is a built-in template files will be RESET on upgrade. Please duplicate template and edit files of new template. Continue ?")) return false;';
+			echo 'if (!confirm("'.JText::_('FLEXI_TMPLS_SAVE_BUILT_IN_TEMPLATE_FILE_WARNING', true).'")) return false;';
 		}
 		?>
 		
@@ -268,6 +270,11 @@ if (!$use_editor)  $app->enqueueMessage(JText::_('Codemirror is disabled, please
 				jQuery('#fc_doajax_loading').remove();
 				var theData = jQuery.parseJSON(data);
 				jQuery('#ajax-system-message-container').html(theData.sysmssg);
+				
+				file_subpath.split('.').pop().toLowerCase() == 'css' ?
+					jQuery('#edit-css-files-warning').show() :
+					jQuery('#edit-css-files-warning').hide() ;
+									
 				// Loading task always return data, even empty data, set them into the editor
 				set_editor_contents(txtarea, theData);
 				// Display the buttons
@@ -277,42 +284,6 @@ if (!$use_editor)  $app->enqueueMessage(JText::_('Codemirror is disabled, please
 			}
 		});
 	}
-	
-	
-	/*
---------------------------------------------------
-+ SET TAB MEMORY
-==================================================
-*/	
-jQuery(function($) {
-  var json, tabsState;
-  $('a[data-toggle="pill"], a[data-toggle="tab"]').on('shown', function(e) {
-    var href, json, parentId, tabsState;
-
-    tabsState = localStorage.getItem("tabs-state");
-    json = JSON.parse(tabsState || "{}");
-    parentId = $(e.target).parents("ul.nav.nav-pills, ul.nav.nav-tabs").attr("id");
-    href = $(e.target).attr('href');
-    json[parentId] = href;
-
-    return localStorage.setItem("tabs-state", JSON.stringify(json));
-  });
-
-  tabsState = localStorage.getItem("tabs-state");
-  json = JSON.parse(tabsState || "{}");
-
-  $.each(json, function(containerId, href) {
-    return $("#" + containerId + " a[href=" + href + "]").tab('show');
-  });
-
-  $("ul.nav.nav-pills, ul.nav.nav-tabs").each(function() {
-    var $this = $(this);
-    if (!json[$this.attr("id")]) {
-      return $this.find("a[data-toggle=tab]:first, a[data-toggle=pill]:first").tab("show");
-    }
-  });
-});
-
 </script>
 
 <div id="flexicontent" class="flexicontent">
@@ -662,12 +633,17 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 				</span>
 				<?php
 				$tmpldir = JPATH_ROOT.DS.'components'.DS.'com_flexicontent'.DS.'templates'.DS.$this->layout->name;
-				$it = new RegexIterator(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tmpldir)), '#'.$this->layout->view.'(_.*\.|\.)(php|xml|css|js)#i');
+				$it = new RegexIterator(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tmpldir)), '#('.$this->layout->view.'(_.*\.|\.)(php|xml|less|css|js)|include.*less)#i');
 				//$it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tmpldir));
 				$it->rewind();
-				$ext_badge = array('php'=>'success', 'xml'=>'info', 'css'=>'warning', 'js'=>'important', 'ini'=>'info');
+				$ext_badge = array('php'=>'success', 'xml'=>'info', 'css'=>'warning', 'js'=>'important', 'ini'=>'info', 'less'=>'inverse');
 				$file_tip = array(
+					'config.less'=>'Contains your LESS imports, variables, mixins, etc',
+					'config_auto_item.less'=>'Auto-created LESS variables (every save of this form), <br/> saves layout parameters as LESS variables',
+					'config_auto_category.less'=>'Auto-created LESS variables (every save of this form), <br/> saves layout parameters as LESS variables',
+					'item.less'=>'Contains LESS directives, used to create CSS of this item layout',
 					'item.css'=>'Contains CSS specific to this item layout',
+					'category.less'=>'Contains LESS directives, used to create CSS of this category layout',
 					'category.css'=>'Contains CSS specific to this category layout',
 					'item.xml'=>'Layout\'s structure: including display parameters, field positions, file list, etc',
 					'category.xml'=>'Layout\'s structure: including display parameters, field positions, file list, etc',
@@ -690,9 +666,10 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 				$file_tip['category_subcategories_html5.php'] = $file_tip['category_subcategories.php'].' (HTML5 version)';
 				
 				
-				$file_tip_extra = array(
-					'item.xml'=>'This file contains layout\' s structure: including <br/> - <strong>display parameters, field positions, file list, etc</strong>, <br/> - you can add extra parameters/positions, <br/>-- if you add a new position, you will need to also add the dispay -LOOP- of the new position inside files: <br/><strong>item.php</strong> <br/><strong>item_html5.php</strong> <br/><br/>(click to edit file and then use the code button)',
-					'category.xml'=>'This file contains layout\' s structure: including <br/> - <strong>display parameters, field positions, file list, etc</strong>, <br/> - you can add extra parameters/positions, <br/>-- if you add a new position, you will need to also add the dispay -LOOP- of the new position inside files: <br/><strong>category_items.php</strong> <br/><strong>category_items_html5.php</strong> <br/><br/>(click to edit file and then use the code button)',
+						$file_tip_extra = array(
+					'config.less'=>'NOTE:<br/>- this is automatically imported by item.less and category.less <br/> - if you need to import extra less files, then files must be in same folder (less/include/) for automatic compiling to be triggered',
+					'item.xml'=>'This file contains layout\' s structure: including <br/> - <b>display parameters, field positions, file list, etc</b>, <br/> - you can add extra parameters/positions, <br/>-- if you add a new position, you will need to also add the dispay -LOOP- of the new position inside files: <br/><b>item.php</b> <br/><b>item_html5.php</b> <br/><br/>(click to edit file and then use the code button)',
+					'category.xml'=>'This file contains layout\' s structure: including <br/> - <b>display parameters, field positions, file list, etc</b>, <br/> - you can add extra parameters/positions, <br/>-- if you add a new position, you will need to also add the dispay -LOOP- of the new position inside files: <br/><b>category_items.php</b> <br/><b>category_items_html5.php</b> <br/><br/>(click to edit file and then use the code button)',
 					'item.php'=>'This file display the item, thus has display LOOPs of for every position to show fields of every position, if you add new position in the XML file, then make sure that you ADD the display loop here <br/><br/>(click to edit file and then use the code button)',
 					'category_items.php'=>'This file includes: <br/><br/>- Item list filtering form, <br/>- Item loop (that displays every item\'s fields), <br/><br/>if you add new field position in the XML file, then make sure that you ADD here, the display loop that displays the fields of the position <br/><br/>(click to edit file and then use the code button)'
 				);
@@ -716,10 +693,19 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 						//echo ' -- <span class="label">SubPath</span> '. $it->getSubPath();
 						//echo ' -- <span class="label">Key</span> '. $it->key();
 						$subpath = $it->getSubPath();
-						$subpath_highlighted = $subpath ? '<span class="label">'.$subpath.'/</span>' : '';
+						$subpath_highlighted = $subpath ? '<span class="label">'.str_replace('\\', '/', $subpath).'/</span>' : '';
 						
 						$subpath_file = $it->getSubPathName();
-						$filename = preg_replace('#^'.$subpath.'\\'.DS.'#', '', $subpath_file);
+						$filename = basename( $subpath_file ); //preg_replace('#^'.$subpath.'\\'.DS.'#', '', $subpath_file);
+						
+						// Skip some files, e.g. auto generated item / category specific files
+						if (
+							($this->layout->view == 'item' && $filename == 'config_auto_category.less') ||
+							($this->layout->view == 'category' && $filename == 'config_auto_item.less')
+						) {
+							$it->next();
+							continue;
+						}
 						
 						$pi = pathinfo($it->key());
 						$ext = $pi['extension'];
@@ -733,11 +719,11 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 						echo '
 						'.$file_type.
 						(!isset($file_tip_extra[$filename]) ? '<img src="components/com_flexicontent/assets/images/tick_f2.png" alt="Edit file">' :
-							'<img src="components/com_flexicontent/assets/images/comment.png" data-placement="bottom" class="'.$tip_class.'" title="'.$file_tip_extra[$filename].'" alt="Edit file"/>'
+							'<img src="components/com_flexicontent/assets/images/comments.png" data-placement="bottom" class="'.$tip_class.'" title="'.$file_tip_extra[$filename].'" alt="Edit file"/>'
 						).'
-						<a href="javascript:;" class="'.$tip_class.'" data-placement="right" onclick="load_layout_file(\''.addslashes($this->layout->name).'\', \''.addslashes($it->getSubPathName()).'\', \'0\', \''.implode($btn_allowed, ' ').'\'); return false;"
+						<a href="javascript:;" class="'.$tip_class.'" data-placement="right" onclick="load_layout_file(\''.addslashes($this->layout->name).'\', \''.addslashes($it->getSubPathName()).'\', \'0\', \''.implode(' ', $btn_allowed).'\'); return false;"
 						title="'.(isset($file_tip[$filename]) ? $file_tip[$filename] : $ext.' file').'">'
-							.$subpath_highlighted.$filename.
+							.$subpath_highlighted.'&nbsp;'.$filename.
 						'</a>'
 						;
 						echo "<br/>";
@@ -753,10 +739,14 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 					<span id="layout_edit_name_container" class="label label-info"><?php echo JText::_( 'FLEXI_NO_FILE_LOADED' ); ?></span>
 				</span>
 				<div class="fcclear"></div>
-				<div id="ajax-system-message-container">
-				</div>
+				<div id="ajax-system-message-container"></div>
 				<div class="fcclear"></div>
 				
+                
+                <div class="fc-note fc-mssg" id="edit-css-files-warning" style="display: none;">
+					<?php echo JText::_( 'FLEXI_MODIFY_LESS_FILES_INSTEAD_OF_CSS' ); ?>
+				</div>
+                
 				<?php
 				if ($use_editor) {
 					$editor = JFactory::getEditor('codemirror');
@@ -817,10 +807,6 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 
 <!-- / ENDTAB -->
 <?php echo JHtml::_('bootstrap.endTabSet');?>
-
-
-	
-	
 	<input type="hidden" name="option" value="com_flexicontent" />
 	<input type="hidden" name="controller" value="templates" />
 	<input type="hidden" name="rows" id="rows" value="" />
