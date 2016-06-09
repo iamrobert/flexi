@@ -21,6 +21,8 @@ defined('_JEXEC') or die('Restricted access');
 $app = JFactory::getApplication();
 $timage =  $this->baseurl.'/templates/'.$app->getTemplate().'/images/flexi/';
 
+use Joomla\String\StringHelper;
+
 //FLEXIcontent
 $tip_class = FLEXI_J30GE ? ' hasTooltip' : ' hasTip';
 $btn_class = FLEXI_J30GE ? 'btn' : 'fc_button fcsimple';
@@ -113,7 +115,7 @@ $date_zone_tip = '<i data-placement="bottom" class="icon-info '.$tip_class.'" ti
 // COMMON repeated texts
 $edit_item_title = JText::_('FLEXI_EDIT_ITEM', true);
 $edit_cat_title = JText::_('FLEXI_EDIT_CATEGORY', true);
-$edit_layout = JText::_('FLEXI_EDIT_LAYOUT', true);
+$edit_layout = JText::_('FLEXI_EDIT_LAYOUT_N_GLOBAL_PARAMETERS', true);
 $rem_filt_txt = JText::_('FLEXI_REMOVE_FILTER', true);
 $rem_filt_tip = ' class="'.$tip_class.' filterdel" title="'.flexicontent_html::getToolTip('FLEXI_ACTIVE_FILTER', 'FLEXI_CLICK_TO_REMOVE_THIS_FILTER', 1, 1).'" ';
 $scheduled_for_publication = JText::_( 'FLEXI_SCHEDULED_FOR_PUBLICATION', true );
@@ -212,7 +214,7 @@ var move_within_ordering_groups_limits = <?php echo '"'.JText::_('FLEXI_MOVE_WIT
 <?php if ($this->unassociated && !$this->badcatitems) : ?>
 	var unassociated_items = <?php echo $this->unassociated; ?>;
 	function bindItems() {
-		jQuery('#log-bind').html('<p class="centerimg"><img src="components/com_flexicontent/assets/images/ajax-loader-orange.gif" align="center"></p>');
+		jQuery('#log-bind').html('<p class="centerimg"><img src="components/com_flexicontent/assets/images/ajax-loader-orange.gif"></p>');
 		
 		//$('bindForm').submb
 		//this.form.action += '&typeid='+this.form.elements['typeid'].options[this.form.elements['typeid'].selectedIndex].value;
@@ -259,10 +261,10 @@ jQuery(document).ready(function(){
 		$('fixcatForm').action += '&default_cat='+$('fixcatForm').elements['default_cat'].options[$('fixcatForm').elements['default_cat'].selectedIndex].value;
 		
 		if(MooTools.version>="1.2.4") {
-			$('log-fixcat').set('html', '<p class="centerimg"><img src="components/com_flexicontent/assets/images/ajax-loader-orange.gif" align="center"></p>');
+			$('log-fixcat').set('html', '<p class="centerimg"><img src="components/com_flexicontent/assets/images/ajax-loader-orange.gif"></p>');
 			e = e.stop();
 		}else{
-			$('log-fixcat').setHTML('<p class="centerimg"><img src="components/com_flexicontent/assets/images/ajax-loader-orange.gif" align="center"></p>');
+			$('log-fixcat').setHTML('<p class="centerimg"><img src="components/com_flexicontent/assets/images/ajax-loader-orange.gif"></p>');
 			e = new Event(e).stop();
 		}
 		if(MooTools.version>="1.2.4") {
@@ -361,7 +363,7 @@ jQuery(document).ready(function(){
                          <button  data-original-title="<?php echo JText::_('FLEXI_RESET_FILTERS'); ?>" title="<?php echo JText::_('FLEXI_RESET_FILTERS'); ?>" class="<?php echo $btn_class; ?> <?php echo $tip_class; ?>" onclick="document.adminForm.limitstart.value=0; delAllFilters(); Joomla.submitform();"><?php echo FLEXI_J30GE ? '<i class="icon-remove"></i>' : JText::_('FLEXI_CLEAR'); ?></button>
 			</span></span>
             
-            <!--mmm-->
+    
         
     
         <?php $_class = FLEXI_J30GE ? ' btn' : ' fc_button fcsimple fcsmall'; ?>
@@ -391,15 +393,16 @@ jQuery(document).ready(function(){
       
       <!--CAT-->
       <div class="block-flat-s cat">
-        <div class="smallx"> <i class="icon-folder"></i> <?php echo $this->lists['filter_cats']; ?> <span class="break-sm">
+        <div class="smallx"> <i class="icon-folder"></i> <?php echo $this->lists['filter_cats']; ?> <span class="break-sm shrink">
           
-          <span class="radio"><?php echo $this->lists['filter_subcats']; ?></span></span> <span class="fc-filter boxy"> <?php echo $catsinstate_tip; ?> <?php echo $this->lists['filter_catsinstate']; ?> </span> </div>
+          <span class="radio"><?php echo $this->lists['filter_subcats']; ?></span></span></div>
       </div>
       <!--/CAT--> 
 
       <!--STATES-->
       <div class="block-flat-s states">
-        <div class="smallx"> <span class="fc-filter boxy"> <i class="icon-search"></i> <?php echo $this->lists['filter_state']; ?> </span> <span class="fc-filter boxy"> <i class="icon-book"></i> <?php echo $this->lists['filter_type']; ?> </span> <span class="fc-filter boxy hidden-tablet hidden-phone hlang"> <i class="icon-comments-2"></i> <?php echo $this->lists['filter_lang']; ?> </span> <span class="fc-filter boxy hauthor hidden-phone"><i class="icon-user"></i> <?php echo $this->lists['filter_author']; ?></span> <span class="fc-filter boxy h1200 htags"><i class="icon-tag"></i> <?php echo $this->lists['filter_tag']; ?> </span> </div>
+        <div class="smallx"> <span class="fc-filter boxy"> <i class="icon-search"></i> <?php echo $this->lists['filter_state']; ?> </span> <span class="fc-filter boxy"> <i class="icon-book"></i> <?php echo $this->lists['filter_type']; ?> </span> <span class="fc-filter boxy hidden-tablet hidden-phone hlang"> <i class="icon-comments-2"></i> <?php echo $this->lists['filter_lang']; ?> </span> <span class="fc-filter boxy hauthor shrink hidden-phone"><i class="icon-user"></i> <?php echo $this->lists['filter_author']; ?></span> <span class="fc-filter boxy h1200 htags"><i class="icon-tag"></i> <?php echo $this->lists['filter_tag']; ?> </span> 
+        <span class="fc-filter boxy shrink"> <?php echo $catsinstate_tip; ?> <?php echo $this->lists['filter_catsinstate']; ?> </span></div>
       </div>
       <div class="block-flat-s order hidden-phone hflexiorder">
         <div class="smallx"> <span class="fc-filter boxy"> <?php echo $ordering_type_tip; ?>
@@ -459,17 +462,17 @@ jQuery(document).ready(function(){
             <th class="center h1200"></th>
             <th class="col_title left hideOnDemandClass"> <?php echo JHTML::_('grid.sort', 'FLEXI_TITLE', 'i.title', $this->lists['order_Dir'], $this->lists['order'] ); ?>
               <?php if ($this->search) : ?>
-              <span <?php echo $rem_filt_tip; ?>> <img src="administrator/templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('search');document.adminForm.submit();" /> </span>
+              <span <?php echo $rem_filt_tip; ?>> <img src="templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('search');document.adminForm.submit();" /> </span>
               <?php endif; ?>
             </th>
             <th class="col_authors center hidden-phone hauthor hideOnDemandClass"> <?php echo JHTML::_('grid.sort', 'FLEXI_AUTHOR', 'i.created_by', $this->lists['order_Dir'], $this->lists['order'] ); ?>
               <?php if ($this->filter_author) : ?>
-              <span <?php echo $rem_filt_tip; ?>> <img src="administrator/templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('filter_author');document.adminForm.submit();" /> </span>
+              <span <?php echo $rem_filt_tip; ?>> <img src="templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('filter_author');document.adminForm.submit();" /> </span>
               <?php endif; ?>
             </th>
             <th class="col_lang center hidden-tablet hidden-phone hlang hideOnDemandClass"> <?php echo JHTML::_('grid.sort', 'FLEXI_LANGUAGE', 'i.language', $this->lists['order_Dir'], $this->lists['order'] ); ?>
               <?php if ($this->filter_lang) : ?>
-              <span <?php echo $rem_filt_tip; ?>> <img src="administrator/templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('filter_lang');document.adminForm.submit();" /> </span>
+              <span <?php echo $rem_filt_tip; ?>> <img src="templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('filter_lang');document.adminForm.submit();" /> </span>
               <?php endif; ?>
             </th>
             <?php if ( $enable_translation_groups ) : ?>
@@ -477,12 +480,12 @@ jQuery(document).ready(function(){
             <?php endif; ?>
             <th class="col_type center hideOnDemandClass nowrap"> <?php echo JHTML::_('grid.sort', 'FLEXI_TYPE_NAME', 'type_name', $this->lists['order_Dir'], $this->lists['order'] ); ?>
               <?php if ($this->filter_type) : ?>
-              <span <?php echo $rem_filt_tip; ?>> <img src="administrator/templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('filter_type');document.adminForm.submit();" /> </span>
+              <span <?php echo $rem_filt_tip; ?>> <img src="templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('filter_type');document.adminForm.submit();" /> </span>
               <?php endif; ?>
             </th>
             <th class="col_state center hideOnDemandClass nowrap"> <?php echo JText::_( 'FLEXI_STATE', true ); ?>
               <?php if ($this->filter_state) : ?>
-              <span <?php echo $rem_filt_tip; ?>> <img src="administrator/templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('filter_state');document.adminForm.submit();" /> </span>
+              <span <?php echo $rem_filt_tip; ?>> <img src="templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('filter_state');document.adminForm.submit();" /> </span>
               <?php endif; ?>
             </th>
             <th class="col_temp left hideOnDemandClass h1200"> <?php echo JText::_( 'FLEXI_TEMPLATE' ); ?> </th>
@@ -497,25 +500,25 @@ jQuery(document).ready(function(){
 				else :
 					echo JHTML::_('grid.sort', 'FLEXI_REORDER', 'catsordering', $this->lists['order_Dir'], $this->lists['order'] );
 				endif;
-
+			
 				if ($this->CanOrder && $this->ordering) :
-					echo JHTML::_('grid.order', $this->rows, 'filesave.png', $ctrl.'saveorder' );
+				echo str_replace('rel="tooltip"', '', JHTML::_('grid.order', $this->rows, 'filesave.png', $ctrl.'saveorder'));
 				endif;
 				?>
             </th>
             <th class="col_access center hideOnDemandClass"> <?php echo JHTML::_('grid.sort', 'FLEXI_ACCESS', 'i.access', $this->lists['order_Dir'], $this->lists['order'] ); ?>
               <?php if ($this->filter_access) : ?>
-              <span <?php echo $rem_filt_tip; ?>> <img src="administrator/templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('filter_access');document.adminForm.submit();" /> </span>
+              <span <?php echo $rem_filt_tip; ?>> <img src="templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('filter_access');document.adminForm.submit();" /> </span>
               <?php endif; ?>
             </th>
             <th class="col_cats left hideOnDemandClass"> <?php echo $categories_tip; ?> <?php echo JText::_( 'FLEXI_CATEGORIES' ); ?>
               <?php if ($this->filter_cats) : ?>
-              <span <?php echo $rem_filt_tip; ?>> <img src="administrator/templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('filter_cats');document.adminForm.submit();" /> </span>
+              <span <?php echo $rem_filt_tip; ?>> <img src="templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('filter_cats');document.adminForm.submit();" /> </span>
               <?php endif; ?>
             </th>
             <th class="col_tags center h1200 hideOnDemandClass htags"> <?php echo JText::_( 'FLEXI_TAGS' ); ?>
               <?php if ($this->filter_tag) : ?>
-              <span <?php echo $rem_filt_tip; ?>> <img src="administrator/templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('filter_tag');document.adminForm.submit();" /> </span>
+              <span <?php echo $rem_filt_tip; ?>> <img src="templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('filter_tag');document.adminForm.submit();" /> </span>
               <?php endif; ?>
             </th>
             <th class="col_created center nowrap hidden-phone hideOnDemandClass"> <?php echo JHTML::_('grid.sort',   'FLEXI_CREATED', 'i.created', $this->lists['order_Dir'], $this->lists['order'] ); ?>
@@ -523,7 +526,7 @@ jQuery(document).ready(function(){
 				if ($this->date == '1') :
 					if (($this->startdate && ($this->startdate != JText::_('FLEXI_FROM'))) || ($this->enddate && ($this->startdate != JText::_('FLEXI_TO')))) :
 				?>
-              <span <?php echo $rem_filt_tip; ?>> <img src="administrator/templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('startdate');delFilter('enddate');document.adminForm.submit();" /> </span>
+              <span <?php echo $rem_filt_tip; ?>> <img src="templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('startdate');delFilter('enddate');document.adminForm.submit();" /> </span>
               <?php
 					endif;
 				endif;
@@ -534,7 +537,7 @@ jQuery(document).ready(function(){
 				if ($this->date == '2') :
 					if (($this->startdate && ($this->startdate != JText::_('FLEXI_FROM'))) || ($this->enddate && ($this->startdate != JText::_('FLEXI_TO')))) :
 				?>
-              <span <?php echo $rem_filt_tip; ?>> <img src="administrator/templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('startdate');delFilter('enddate');document.adminForm.submit();" /> </span>
+              <span <?php echo $rem_filt_tip; ?>> <img src="templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('startdate');delFilter('enddate');document.adminForm.submit();" /> </span>
               <?php
 					endif;
 				endif;
@@ -543,7 +546,7 @@ jQuery(document).ready(function(){
             <th class="col_hits center h1400 hideOnDemandClass"> <?php echo JHTML::_('grid.sort', 'FLEXI_HITS', 'i.hits', $this->lists['order_Dir'], $this->lists['order'] ); ?> </th>
             <th class="col_id center hid hideOnDemandClass h1400"> <?php echo JHTML::_('grid.sort', 'FLEXI_ID', 'i.id', $this->lists['order_Dir'], $this->lists['order'] ); ?>
               <?php if ($this->filter_id) : ?>
-              <span <?php echo $rem_filt_tip; ?>> <img src="administrator/templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('filter_id');document.adminForm.submit();" /> </span>
+              <span <?php echo $rem_filt_tip; ?>> <img src="templates/<?php echo $template;?>/images/flexi/delete.png" alt="<?php echo $rem_filt_txt ?>" onclick="delFilter('filter_id');document.adminForm.submit();" /> </span>
               <?php endif; ?>
             </th>
           </tr>
@@ -576,7 +579,7 @@ jQuery(document).ready(function(){
 			$publish_up->setTimezone($tz);
 			$publish_down->setTimezone($tz);
 			
-			$link = 'index.php?option=com_flexicontent&amp;'.$items_task.'edit&amp;cid[]='. $row->id;
+			$link = 'index.php?option=com_flexicontent&amp;'.$items_task.'edit&amp;cid='. $row->id;
 			
 			if (($canEdit || $canEditOwn) && $this->CanAccLvl) {
 				$access = flexicontent_html::userlevel('access['.$row->id.']', $row->access, 'onchange="return listItemTask(\'cb'.$i.'\',\'items.access\')"');
@@ -806,7 +809,7 @@ jQuery(document).ready(function(){
 					if ( $ix==0 && ($this->filter_order=='catsordering' || $this->filter_order=='i.ordering') )
 						$typeofcats .= ' orderingcat';
 					
-					$catlink	= 'index.php?option=com_flexicontent&amp;'.$cats_task.'edit&amp;cid[]='. $category->id;
+					$catlink	= 'index.php?option=com_flexicontent&amp;'.$cats_task.'edit&amp;cid='. $category->id;
 					$title = htmlspecialchars($category->title, ENT_QUOTES, 'UTF-8');
 					if ($this->CanCats) :
 				?>
@@ -889,13 +892,16 @@ jQuery(document).ready(function(){
 
     <div class="clear"></div>
     <div class="row-fluid hidden-phone">
-      <div class="span12"> <sup>[1]</sup> <?php echo JText::_('FLEXI_TMPL_NOT_SET_USING_TYPE_DEFAULT'); ?><br />
-        <sup>[2]</sup> <?php echo JText::sprintf('FLEXI_INLINE_ITEM_STATE_SELECTOR_DISABLED', $this->inline_ss_max); ?><br />
-        <?php if ( $enable_translation_groups )	:?>
-        <sup>[3]</sup> <?php echo JText::_('FLEXI_SORT_TO_GROUP_TRANSLATION'); ?><br />
-        <?php endif;?>
-        <sup>[4]</sup> <?php echo JText::_('FLEXI_MULTIPLE_ITEM_ORDERINGS'); ?><br />
-        <sup>[5]</sup> <?php echo JText::_('FLEXI_CAN_ADD_CUSTOM_FIELD_COLUMNS_COMPONENT_AND_PER_TYPE'); ?><br />
+      <div class="span12"> 
+      
+    <sup>[1]</sup> <?php echo JText::_('FLEXI_TMPL_NOT_SET_USING_TYPE_DEFAULT'); ?><br />
+	<sup>[2]</sup> <?php echo JText::sprintf('FLEXI_INLINE_ITEM_STATE_SELECTOR_DISABLED', $this->inline_ss_max); ?><br />
+	<?php if ( $enable_translation_groups )	:?>
+	<sup>[3]</sup> <?php echo JText::_('FLEXI_SORT_TO_GROUP_TRANSLATION'); ?><br />
+	<?php endif;?>
+	<sup>[4]</sup> <?php echo JText::_('FLEXI_MULTIPLE_ITEM_ORDERINGS'); ?><br />
+	<sup>[5]</sup> <?php echo JText::_('FLEXI_CAN_ADD_CUSTOM_FIELD_COLUMNS_COMPONENT_AND_PER_TYPE'); ?>
+    
       </div>
     </div>
       <input type="hidden" name="boxchecked" value="0" />

@@ -60,7 +60,6 @@ if ($this->filter_type == '' || $this->filter_type == 0) {
 $ord_grp = 1;
 $list_total_cols = 13;
 
-
 // Parse parameter and find fieldgroup
 $f2g_map = array();
 $grouped_fields = array();
@@ -82,6 +81,7 @@ foreach ($this->allrows as $row)
 	if ($row->field_type=='fieldgroup') {
 		$row->parameters = new JRegistry($row->attribs);
 		$fid_arr = preg_split('/[\s]*,[\s]*/', $row->parameters->get('fields'));
+		$grouped_fields[$row->id] = array();  // Add this in case it is empty (= has no fields in it)
 		foreach($fid_arr as $_fid) $f2g_map[$_fid] = $row;
 	}
 	$allrows_byid[$row->id] = $row;  // used to display information for: CASCADE-after-master feature (and in future for more cases)
@@ -420,7 +420,7 @@ function delAllFilters() {
 				}
 				?></td>
             <td class="hidden-tablet hidden-phone"><?php echo $row->name; ?></td>
-            <td align="left"><?php
+            <td class="text-left"><?php
 				switch ($row->field_type) {
 				case 'fieldgroup':
 					echo '<span class="badge" style="display:display: inline-block; margin: 0px 0px 1px; border-radius: 3px; width: 94%; padding: 2px 3%;">
@@ -513,8 +513,7 @@ function delAllFilters() {
  <p><?php echo $pagination_footer; ?></p>
  
  
-      <p class="hidden-phone"><sup>[1]</sup> <?php echo JText::_('FLEXI_DEFINE_FIELD_ORDER_FILTER_BY_TYPE'); ?><br />
-      <sup>[2]</sup> <?php echo JText::_('FLEXI_DEFINE_FIELD_ORDER_FILTER_WITHOUT_TYPE'); ?></p>
+
       <input type="hidden" name="boxchecked" value="0" />
       <input type="hidden" name="option" value="com_flexicontent" />
       <input type="hidden" name="controller" value="fields" />
