@@ -1,0 +1,529 @@
+/* all ul's. for submenu's there is an override below */
+
+ul.adminmenum_menu {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+/* level 2 ul. override below */
+
+ul.adminmenum_menu ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	z-index: 110;
+}
+
+/* all li's. for submenu's there is an override below */
+
+ul.adminmenum_menu li {
+	float: left;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	list-style: none;
+	color: @amm-menu-color;
+	-webkit-transition: color 250ms ease, background 250ms ease;
+	-moz-transition: color 250ms ease, background 250ms ease;
+	transition: color 250ms ease, background 250ms ease;
+	line-height: normal;
+}
+
+/* all a's. for submenu's there is an override below */
+
+body ul.adminmenum_menu li a {
+	//display: block;
+   display: flex;
+	align-items: center;
+	text-decoration: none;
+	font-size: 15px;
+	white-space: nowrap;
+	//	line-height: 13px;
+	vertical-align: middle;
+	background-repeat: no-repeat;
+	background-position: 5px 55%;
+	color: @amm-menu-color;
+	-webkit-transition: color 250ms ease, background 250ms ease;
+	-moz-transition: color 250ms ease, background 250ms ease;
+	transition: color 250ms ease, background 250ms ease;
+	position: relative;
+	padding: 2px 0 2px 5px;
+}
+
+//[class^="icon-"]:before, [class*=" icon-"]:before {
+//  font-family:'IcoMoon';
+//  font-style:normal;
+//  speak:none;
+//}
+//[class^="icon-"].disabled, [class*=" icon-"].disabled { font-weight:normal; }
+//.icon-joomla:before { content:"\e200"; }
+//.icon-chevron-up:before, .icon-uparrow:before, .icon-arrow-up:before { content:"\e005"; }
+//.icon-chevron-right:before, .icon-rightarrow:before, .icon-arrow-right:before { content:"\e006"; }
+//.icon-chevron-down:before, .icon-downarrow:before, .icon-arrow-down:before { content:"\e007"; }
+//.icon-chevron-left:before, .icon-leftarrow:before, .icon-arrow-left:before { content:"\e008"; }
+/* padding for all a's. override below */
+
+body ul.adminmenum_menu li a span.pad_a {
+	display: block;
+	padding: 10px 15px 7px 25px;
+}
+
+/* level 1 when no icon */
+
+body ul.adminmenum_menu li a.no_icon_level_1 span.pad_a {
+	padding-left: 10px;
+}
+
+/* a's on hover */
+
+ul.adminmenum_menu>li a:hover,
+ul.adminmenum_menu>li a:focus,
+ul.adminmenum_menu>li a:active {
+	color: #fff;
+}
+
+/* white arrows on level 1 dropdown parents */
+
+ul.adminmenum_menu li.parent span.arrow_down {
+	position: relative;
+	margin-right: 10px;
+	&:after {
+		font-family: 'IcoMoon';
+		font-style: normal;
+		speak: none;
+		content: "\e007";
+		right: 0;
+		position: absolute;
+		font-size: 8px;
+		top: calc(50% + 1px);
+		transform: translateY(-50%);
+	}
+}
+
+/* ul's submenu and deeper */
+
+ul.adminmenum_menu li ul {
+	position: absolute;
+	left: 0;
+	font-weight: normal;
+	top: 44px;
+}
+
+/* all level 2 li's and deeper */
+
+ul.adminmenum_menu li li {
+	float: none;
+	border: 0;
+	width: 225px;
+}
+
+/* all level 2 a's and deeper */
+
+ul.adminmenum_menu li li a {
+	display: block;
+	text-decoration: none;
+	padding: 0;
+	white-space: normal;
+	border: 1px solid transparent;
+	font-weight: normal;
+	line-height: 18px;
+	color: #333;
+}
+
+/* padding for a's level 2 and deeper */
+
+ul.adminmenum_menu li li a span.pad_a {
+	padding: 2px 17px 2px 23px;
+}
+
+/* offset level 3 and deeper */
+
+ul.adminmenum_menu li li ul {
+	left: 225px;
+	top: 0px;
+}
+
+/* arrow for parents for submenu and deeper	*/
+
+ul.adminmenum_menu .arrow_right {
+	position: relative;
+	margin-right: 10px;
+	&:after {
+		font-family: 'IcoMoon';
+		font-style: normal;
+		speak: none;
+		content: "\e006";
+		right: 0;
+		position: absolute;
+		font-size: 8px;
+	}
+}
+
+/* background color li's on hover first level */
+
+ul.adminmenum_menu li:hover>a {
+	background-color: @amm-menu-hover-bkg;
+	color: @amm-menu-hover-color;
+}
+
+/* background color li's on hover submenu and deeper */
+
+ul.adminmenum_menu ul li a:hover {
+	background-color: @amm-menu-active-hover-bkg;
+}
+
+/* hide submenus */
+
+ul.adminmenum_menu li ul {
+	display: none;
+}
+
+/* line separator before or after menu. optional. see module configuration */
+
+.amm_line_separator {
+	height: 1px;
+	background: #6B6B6B;
+}
+
+/* a's and text separator when menu is disabled on edit-pages */
+
+ul.amm_menu_disabled {
+	opacity: 0.75;
+}
+
+ul.amm_menu_disabled li.amm_li_disabled a,
+ul.amm_menu_disabled li.amm_li_disabled a:hover {
+	cursor: default;
+	background-color: none;
+	color: @textColor !important;
+}
+
+/* li's hover when menu is disabled on edit-pages */
+
+ul.amm_menu_disabled li.amm_li_disabled a:hover {
+	background-color: transparent;
+}
+
+/* text separators no hand cursor */
+
+ul.adminmenum_menu a.adminmenum_text_separator,
+ul.adminmenum_menu a.adminmenum_text_separator_level_1 {
+	cursor: default;
+}
+
+/* text separators level 2 and deeper */
+
+ul.adminmenum_menu a.adminmenum_text_separator,
+ul.adminmenum_menu a.adminmenum_text_separator:hover {
+	background-color: #F6F6F6;
+	color: #999999;
+}
+
+/* line separator horizontal */
+
+ul.adminmenum_menu li.adminmenum_line_separator_level_1 span {
+	display: block;
+	background-color: #6B6B6B;
+	width: 1px;
+	height: 30px;
+}
+
+/* line separator horizontal when menu is disabled */
+
+ul.amm_menu_disabled li.adminmenum_line_separator_level_1 span {
+	background-color: #647084;
+}
+
+/* line separator vertical background */
+
+ul.adminmenum_menu li.adminmenum_line_separator,
+ul.adminmenum_menu li.adminmenum_line_separator:hover {
+	background-color: #fff;
+	overflow: hidden;
+}
+
+/* line separator vertical line */
+
+ul.adminmenum_menu li.adminmenum_line_separator span {
+	display: block;
+	background-color: @flexibordercolorbottom;
+	height: 1px;
+	margin: 0;
+}
+
+/* placeholder of the show-hide button in the touchscreen view */
+
+ul.adminmenum_menu span.showhide {
+	float: right;
+	display: inline;
+	cursor: pointer;
+}
+
+/* show-hide button in the touchscreen view */
+
+ul.adminmenum_menu span.showhide span {
+	display: block;
+	height: 20px;
+	width: 60px;
+	height: 100%;
+	margin-top: 0;
+	border-left: 1px solid rgba(255, 255, 255, 0.04);
+	position: absolute;
+	z-index: 99;
+	right: 0;
+	top: 0;
+	background: none !important;
+	&:after {
+		font-weight: normal;
+		speak: none;
+		content: "+";
+		right: 45%;
+		position: absolute;
+		top: 25%;
+		color: #f5f5f5;
+		text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+		width: 10px;
+		text-align: center;
+	}
+	&.amm_close {
+		&:after {
+			content: "-";
+		}
+	}
+}
+
+ul.adminmenum_menu ul span.showhide span:after {
+	color: #1c1c22;
+}
+
+/* different border color for show-hide button in the touchscreen view when level 2 or deeper */
+
+ul.adminmenum_menu li li span.showhide span {
+	border-color: @flexibordercolorbottom;
+}
+
+ul.adminmenum_menu li li span.showhide span.amm_close {
+	color: #fff;
+	border-color: rgba(255, 255, 255, 0.04);
+	&:after {
+		color: #fff;
+	}
+}
+
+/* for 738px or less */
+
+@media (max-width: @md-max) {
+	/* menu items full with */
+	.navbar .nav.pull-right {
+		margin-right: 5px;
+	}
+	ul.adminmenum_menu li.parent span.arrow_down:after {
+		display: none !important;
+	}
+	ul.adminmenum_menu li,
+	ul.adminmenum_menu li li {
+		width: 100%;
+	}
+	ul.adminmenum_menu li {
+		background-color: @navbarBackground;
+		border-top: 1px solid rgba(255, 255, 255, 0.04);
+		border-bottom: none;
+	}
+	body ul.adminmenum_menu li a {
+		//text-transform: uppercase;
+		font-weight: normal;
+		font-size: 14px;
+		padding-left: 20px;
+		background-position: 20px 50%;
+	}
+	ul.adminmenum_menu .arrow_right:after {
+		display: none !important;
+	}
+	/* level2 and deeper */
+	ul.adminmenum_menu li ul li {
+		background-color: #fff;
+		border: 0;
+	}
+	ul.adminmenum_menu li ul li a {
+		text-transform: none;
+		font-weight: normal;
+		font-size: 15px;
+		border-bottom: 1px solid @flexibordercolorbottom;
+	}
+	/* no dropdown image in touchscreen view */
+	ul.adminmenum_menu li.parent span.arrow_down {
+		background-image: none;
+	}
+	.amm_line_separator {
+		display: none;
+	}
+	/* no menu left or right of this menu */
+	html body .nav-collapse ul.nav {
+		clear: both;
+	}
+	/* no cascading of ul's, just throw them under eachother */
+	ul.adminmenum_menu li ul {
+		position: relative;
+		left: 0;
+		font-weight: normal;
+		text-transform: uppercase;
+		top: 0;
+		border: 0;
+	}
+	/* offset level 3 and deeper */
+	ul.adminmenum_menu li li ul {
+		left: 0;
+		top: 0;
+	}
+	/* hide arrows level 2 and deeper */
+	ul.adminmenum_menu .arrow_right,
+	ul.adminmenum_menu .arrow_right:hover {
+		background-image: none;
+	}
+	/* line separator level 1 background */
+	ul.adminmenum_menu li.adminmenum_line_separator_level_1,
+	ul.adminmenum_menu li.adminmenum_line_separator_level_1:hover {
+		background-color: #152D52;
+		overflow: hidden;
+	}
+	/* line separator level 1 line */
+	ul.adminmenum_menu li.adminmenum_line_separator_level_1 span {
+		display: block;
+		height: 1px;
+	}
+	/* paddings and background positions for the 7 levels of the menu */
+	body ul.adminmenum_menu li a.no_icon_level_1 span.pad_a {
+		padding-left: 25px;
+	}
+	body ul.adminmenum_menu li li span.pad_a {
+		padding-top: 8px;
+		padding-bottom: 4px;
+	}
+	ul.adminmenum_menu li li a {
+		background-position: 22px 9px;
+	}
+	body ul.adminmenum_menu li li span.pad_a {
+		padding-left: 42px;
+	}
+	ul.adminmenum_menu li li li a {
+		background-position: 45px 9px;
+	}
+	ul.adminmenum_menu li li li span.pad_a {
+		padding-left: 65px;
+	}
+	ul.adminmenum_menu li li li li a {
+		background-position: 68px 9px;
+	}
+	ul.adminmenum_menu li li li li span.pad_a {
+		padding-left: 88px;
+	}
+	ul.adminmenum_menu li li li li li a {
+		background-position: 91px 9px;
+	}
+	ul.adminmenum_menu li li li li li span.pad_a {
+		padding-left: 111px;
+	}
+	ul.adminmenum_menu li li li li li li a {
+		background-position: 114px 9px;
+	}
+	ul.adminmenum_menu li li li li li li span.pad_a {
+		padding-left: 134px;
+	}
+	ul.adminmenum_menu li li li li li li li a {
+		background-position: 137px 9px;
+	}
+	ul.adminmenum_menu li li li li li li li span.pad_a {
+		padding-left: 157px;
+	}
+	ul.adminmenum_menu li.adminmenum_line_separator span {
+		background-color: #fff;
+	}
+}
+
+/* for 738px or more */
+
+@media (min-width: @md) {
+   
+   
+body ul.adminmenum_menu li > a {
+
+      }
+	/* hide submenus */
+	ul.adminmenum_menu li:hover li ul,
+	ul.adminmenum_menu li li:hover li ul,
+	ul.adminmenum_menu li li li:hover li ul,
+	ul.adminmenum_menu li li li li:hover li ul,
+	ul.adminmenum_menu li li li li li:hover li ul,
+	ul.adminmenum_menu li li li li li li:hover li ul,
+	ul.adminmenum_menu li li li li li li li:hover li ul {
+		display: none;
+	}
+	/* show submenus */
+	ul.adminmenum_menu li:hover ul,
+	ul.adminmenum_menu li li:hover ul,
+	ul.adminmenum_menu li li li:hover ul,
+	ul.adminmenum_menu li li li li:hover ul,
+	ul.adminmenum_menu li li li li li:hover ul,
+	ul.adminmenum_menu li li li li li li:hover ul,
+	ul.adminmenum_menu li li li li li li li:hover ul,
+	ul.adminmenum_menu li li li li li li li li:hover ul {
+		display: block;
+	}
+	/*ul.adminmenum_menu li.adminmenum_text_separator_level_1 span.showhide,*/
+	ul.adminmenum_menu span.showhide {
+		display: none;
+	}
+	/* submenu */
+	ul.adminmenum_menu li ul {
+		-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+		-moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+		-webkit-background-clip: padding-box;
+		-moz-background-clip: padding;
+		background-clip: padding-box;
+		border: none;
+		border-radius: 0 0 3px 3px;
+		background-color: #fff;
+		width: 225px;
+		padding: 0 0 5px 0;
+
+	}
+   
+   
+	/* arrow above submenu */
+	.adminmenum_submenu:before {
+		content: " ";
+		display: inline-block;
+		position: absolute;
+		left: 0;
+		height: 7px;
+		top: -6px;
+		width: 195px; //	background: url("../images/amm/submenu.png") 9px 0 no-repeat transparent;
+	}
+	body ul.adminmenum_menu li li a {
+		font-size: 14px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+}
+
+/* for 738px or more */
+
+@media screen and (min-width: 1200px) {
+	ul.adminmenum_menu li {
+		margin-right: 5px;
+	}
+}
+
+/* for 738px or more */
+
+@media screen and (min-width: 1400px) {
+	ul.adminmenum_menu li {
+		margin-right: 10px;
+	}
+	body ul.adminmenum_menu li a {
+		background-position: 10px 55%;
+		padding-left: 10px;
+	}
+}

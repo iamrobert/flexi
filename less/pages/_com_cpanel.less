@@ -1,0 +1,267 @@
+// com_cpanel
+
+.com_cpanel {
+	.well {
+		padding: 8px 14px;
+		border: 1px solid rgba(0,0,0,0.05);
+		.module-title.nav-header {
+			color: @textColor;
+		}
+		> .row-striped, > .list-striped {
+			margin: 0 -14px;
+			> .row-fluid {
+				padding: 8px 14px;
+				[class*="span"] {
+					margin-left: 0;
+				}
+			}
+			> li {
+				padding-left: 15px;
+				padding-right: 15px;
+			}
+		}
+	}
+}
+
+
+
+/* 
+ --------------------------------------------------
+ + AMM MENU
+ ==================================================
+ */
+div fieldset td input[type=radio] {
+	min-width: 30px;
+}
+body #sbox-content table.amm_table {
+	background: #ccc;
+}
+
+@media (max-width: 767px) {
+.adminmenum_line_separator {
+	display: none !important;
+}
+.nav-collapse.in.collapse {
+	height: auto !important;
+}
+}
+/* 
+ --------------------------------------------------
+ + CONTROL PANEL
+ ==================================================
+ */
+
+
+@media (min-width: 767px) {
+.wrap20.cpanel {
+	margin-top: 40px;
+}
+}
+/* mod quick icons */
+.span9 .module-title.nav-header {
+	display: none;
+}
+.side-r {
+	margin-top: 40px;
+	float: right;
+}
+.com_cpanel h3 {
+	color: @text;
+	text-shadow: none;
+	font-weight: bold;
+	font-size: 20px;
+	line-height: 36px;
+	margin-top: 0;
+	border-bottom: none;
+}
+.side-r .ak-icon-item .span6 {
+	width: 100%;
+}
+div.com_cpanel .side-r span {
+	display: inline-block;
+	text-align: center;
+}
+.com_cpanel .well.well-small.span9 {
+	background: none;
+	padding: 0;
+	box-shadow: none;
+	border: none;
+	margin-bottom: 0;
+}
+/* right column */
+.com_cpanel .well.well-small.span3 {
+	margin-left: 0;
+	float: right;
+}
+
+
+.cpanel .icon {
+	float: left;
+	padding: 5px 10px 5px 0px;
+	margin: 0;
+	text-align: center;
+}
+.cpanel .icon a {
+	background-color: @offwhite;
+	background-position: 0;
+	display: block;
+	float: left;
+	height: 107px;
+	width: 107px;
+	padding: 7px;
+	vertical-align: middle;
+	text-decoration: none;
+	border: 1px solid @borderColor;
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+	-webkit-transition-property: all;
+	-moz-transition-property: all;
+	-webkit-transition-duration: 0.15s;
+	transition-duration: 0.15s;
+}
+.cpanel .well.well-small.span9 {
+	border: none;
+}
+
+div#cpanel a:hover img, div.cpanel a:hover img {
+	filter: brightness(70%);
+}
+.well.well-small.span3 {
+	background: #fff;
+}
+#cpanel span, .cpanel span {
+	display: inline-block;
+}
+.cpanel .well .module-title.nav-header {
+	padding: 0 0px 0px;
+}
+
+
+
+/* FLEXIContent CPANEL MOD_FLEXICONTENT */
+
+.row-fluid .youritems .row-striped .row-fluid {
+	width: 100%;}
+	
+.row-fluid .youritems.well.well-small.span4 {
+	margin-right: 0;
+	margin-left: 0 !important;
+}
+
+.row-fluid .youritems.well.well-small.span4 {
+	margin-right: 0;
+	margin-left: 0!important;
+}
+@media(min-width:767px) {
+.row-fluid .youritems.well.well-small.span4:nth-child(4) {
+	margin-left: 2% !important;
+}
+.row-fluid .youritems.well.well-small.span4:nth-child(3) {
+	margin-left: 0% !important;
+	margin-right: 0% !important;
+}
+.row-fluid .youritems.well.well-small.span4:nth-child(5) {
+	float: right;
+	margin-right: 0% !important;
+	margin-left: 0% !important;
+}
+.row-fluid .youritems .row-striped .row-fluid .span3:last-child {
+text-align:right;
+font-size: 12px;	
+}
+}
+
+@media(min-width:1200px) {
+.row-fluid .youritems.well.well-small.span4:nth-child(4) {
+	margin-left: 2.7% !important;
+}
+}	
+.com_cpanel {
+.block.youritems.well.well-small.span4 > .module-title.nav-header + div {
+	float :right;
+}
+}
+.block.youritems.well.well-small h3 {
+	    display: inline-block;
+		}
+
+button.itemlist {
+  margin: 4px;
+  max-width: 116px;
+  min-height: 66px;
+}
+
+.block > .row-striped{
+	overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.block.youritems > .row-striped{
+	overflow-y: hidden;
+}
+.adminlink{
+  font-weight:bold;
+line-height:36px;
+   color: @linkColor;
+   		&:hover, &:focus {
+		color: @linkColorHover;		
+			}
+}
+.pending.well.well-small.span12 {
+  margin-left: 0;
+}
+.revised.well.well-small.span12 {
+  margin-left: 0;
+}
+.youritems.well.well-small.span12 {
+  margin-left: 0;
+}
+.trashed.well.well-small.span12 {
+  margin-left: 0;
+}
+.inprogress.well.well-small.span12 {
+  margin-left: 0;
+}
+.inprogress.well.well-small.span6 {
+  margin-left: 0;
+}
+h2.nav-header {
+    border-bottom: 1px solid #E3E3E3;
+}
+
+.aqi-module.joomla30-layout {
+   .row-striped {
+      border-top: none;
+      .row-fluid {
+      background: #fff !important;
+         border-bottom: @border;
+         padding: 10px 0;
+         &:last-of-type {
+            border-bottom: none;
+         }
+         }
+   }
+}
+
+
+.com_cpanel div.well.well-small.span3 > h3.module-title.nav-header {
+   border-bottom: @border;
+	margin-bottom: 10px;
+	padding-bottom: 0;
+	color: @primary-color;
+}
+
+
+.com_cpanel .well {
+	padding: 8px 14px;
+	background: #fff;
+	border-left: 1px solid @flexibordercolorbottom;
+	border-bottom: 1px solid @flexibordercolorbottom;
+	box-shadow: 0 1px 0 0 rgba(0,0,0,0.04);
+}
+
+
+.com_cpanel div.row-fluid > div > div:nth-child(2) > div > h3.module-title.nav-header  {
+   padding-bottom: 0;
+}

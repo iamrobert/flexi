@@ -1,0 +1,206 @@
+/*
+--------------------------------------------------
++ TYPOGRAPHY
+==================================================
+*/
+
+h3.tabberheading {
+	font-weight: 300;
+}
+.ruler {
+	border-bottom: 1px solid #dadada;
+	padding: 7px 0;
+	margin-bottom: 20px;
+	font-weight: 300;
+}
+
+
+/*
+--------------------------------------------------
++ TABBER
+==================================================
+*/
+.tabberlive .tabbertabhide {
+	display: none;
+}
+.fctabber {
+}
+.tabberlive {
+	margin-top: 1em;
+}
+ul.tabbernav {
+	margin: 0;
+	padding: 3px 0;
+	border-bottom: 1px solid #778;
+	font: bold 15px 'Open Sans','Proxima Nova', "Helvetica Neue", Helvetica, "source-han-sans-traditional", "Microsoft JhengHei UI", "微軟正黑體", "Microsoft JhengHei", "蘋果儷中黑", "Apple LiGothic Medium", "黑體-繁", "Heiti TC", "SimHei", Arial, sans-serif;
+	margin-right: 0px;
+}
+ul.tabbernav li {
+	list-style: none;
+	margin: 10px 2px 0px 2px;
+	display: inline-block;
+	white-space: nowrap;
+}
+ul.tabbernav li a {
+	padding: 3px 0.5em;
+	margin-left: 3px;
+	border: 1px solid #778;
+	border-bottom: none;
+	background: #DDE;
+	text-decoration: none;
+	font: bold 15px 'Open Sans','Proxima Nova', "Helvetica Neue", Helvetica, "source-han-sans-traditional", "Microsoft JhengHei UI", "微軟正黑體", "Microsoft JhengHei", "蘋果儷中黑", "Apple LiGothic Medium", "黑體-繁", "Heiti TC", "SimHei", Arial, sans-serif;
+}
+
+ul.tabbernav li a, dl.tabs dt span, dl.tabs dt h3 a, ul.tabbernav li a:link {
+	color: #667;
+}
+ul.tabbernav li a:visited {
+	color: #667;
+}
+ul.tabbernav li a:hover {
+	color: #000;
+	background: #AAE;
+	border-color: #227;
+}
+ul.tabbernav li.tabberactive a {
+	background-color: #fff;
+	border-bottom: 1px solid #fff;
+}
+ul.tabbernav li.tabberactive a:hover {
+	color: #000;
+	background: white;
+	border-bottom: 1px solid white;
+}
+#flexicontent .tabberlive {
+	padding: 3px 0 0 0;
+	width: 100%;
+	float: left;
+	border-width: 0px;
+	border-bottom: 0px solid transparent;
+	margin: 0;
+	overflow: hidden;
+	padding-left: 0;
+}
+#flexicontent .tabbertab {
+	margin: 0px;
+	padding: 2%;
+	width: 96%;
+	float: left;
+	background: none repeat scroll 0 0 #fff;
+	border-bottom: 1px solid @flexibordercolorbottom;
+	border-left: 1px solid #ececec;
+	border-radius: 0;
+	border-right: 1px solid #ececec;
+	box-shadow: 0 1px 0 0 rgba(0,0,0,0.04);
+	margin-bottom: 40px;
+}
+/* tab in tab */
+#flexicontent .tabbertab .tabbertab {
+	width: 94%;
+	border-radius: 0;
+	border: 1px solid #ececec;
+	border-bottom: 1px solid @flexibordercolorbottom;
+	border-top: none;
+}
+#flexicontent .tabbertab ul.tabbernav {
+	border-bottom: 1px solid #ececec;
+	width: 98%;
+}
+/* tab in tab with bootstrap tab*/
+#flexicontent .tab-content .tabberlive .tabbernav {background: #f0f0f0;}
+#flexicontent .tab-content .tabbertab {
+	width: 94%;
+		border-radius: 0;
+	border: 1px solid #ececec;
+	border-bottom: 1px solid @flexibordercolorbottom;
+	border-top: none;
+}
+
+#flexicontent .tab-content  ul.tabbernav {
+	border: 1px solid #ececec;
+	border-top: none;
+	width: 98%;
+}
+
+#flexicontent .fctabber {
+	overflow: visible;
+	width: 5000px;
+}
+#flexicontent ul.tabbernav {
+	line-height: 100%;
+	border-bottom: 0px solid transparent;
+	margin: 0;
+	padding: 0px;
+	width: 99%;
+	display: inline-block;
+	float: left;
+}
+#flexicontent ul.tabbernav li {
+	line-height: 100%;
+	padding: 0px;
+	margin: 4px 0px 0px 0px;
+ overflow: visible;
+ display: inline-block;
+	float: left;
+}
+#flexicontent ul.tabbernav li a {
+	line-height: 1.2;
+	font-size: 15px;
+	margin: 0px;
+	padding: 9px 15px;
+	display: inline-block;
+	border-radius: 0px;
+	text-align: center;
+	border: none;
+	font-weight: normal;
+	text-shadow: none;
+}
+
+#flexicontent #fcform_tabset_0 #grpmarker_tabset_0 ul.tabbernav li a:before, #flexicontent #fcform_tabset_0 #grpmarker_tabset_1 ul.tabbernav li a:before, div #flexicontent [id*='fcform_tabset_'] [id*='grpmarker_tabset_'] ul.tabbernav li a:before {
+	margin: 0;
+	display: none;
+}
+#flexicontent ul.tabbernav li a {
+	background: none;
+	color: #4f4f4f;
+}
+#flexicontent ul.tabbernav li:hover a {
+	background: none;
+	border-left: none;
+	border-top: none;
+	border-right: none;
+	color: #ccc;
+}
+#flexicontent ul.tabbernav li.tabberactive a, #flexicontent ul.tabbernav li.tabberactive a:hover {
+	color: #816bb1;
+	background-color: white;
+	border-bottom: 0px solid transparent;
+	border-top: 2px solid #7761a7;
+	border-right: 1px solid #ececec;
+	border-left: 1px solid #ececec;
+	border-radius: 0;
+	box-shadow: 1px -3px 4px -3px rgba(0,0,0,0.08);
+	padding-bottom: 10px;
+	padding-top: 8px;
+	position: static;
+	font-weight: bold!important;
+}
+
+#flexicontent ul.tabbernav li:first-child.tabberactive a, #flexicontent ul.tabbernav li:first-child.tabberactive a:hover {
+   
+   //border-left: none;
+}
+
+#flexicontent ul.tabbernav li {
+	margin: 0px 0 -1px 0!important;
+	display: inline-block;
+	text-align: justify;
+}
+#flexicontent #grpmarker_tabset_0 ul.tabbernav li a {
+}
+#flexicontent #grpmarker_tabset_0 ul.tabbernav li.tabberactive {
+	border-bottom: 1px solid #fff;
+}
+#flexicontent h3.tabberheading {
+	display: none;
+}

@@ -1,0 +1,768 @@
+@import 'include/config.less';
+
+#flexicontent {
+	margin-bottom: @mb;   //*** needed because of Joomla's bottom info bar overlaping the content
+}
+
+
+// ***
+// *** HEADER ICONS
+// ***
+
+.fc-layout-params-icon:before {
+	color: white !important;
+}
+.fc-rss-params-icon:before {
+	color: @orange !important;
+}
+/*.fc-display-params-icon:before {
+	color: @warningColor !important;
+}*/
+
+
+
+[class^="fcsb-icon-"],
+[class*=" fcsb-icon-"] {
+	display: inline-block;
+	height: 14px;
+	line-height: 14px;
+	width: 20px;
+	margin-right: 9px !important;
+	font-size: 16px;
+}
+[class^="fcsb-icon-"]:before,
+[class*=" fcsb-icon-"]:before {
+	font-family: "IcoMoon";
+	font-style: normal;
+}
+.disabled[class^="fcsb-icon-"],
+.disabled[class*=" fcsb-icon-"] {
+	font-weight: normal;
+	color: #aaa;
+}
+
+/*.fcsb-icon-flexicontent:before,*/
+.icon-flexicontent:before {
+	content: "\e250";
+}
+/*.fcsb-icon-items:before,*/
+.icon-items:before {
+	content: "\e242";
+}
+.icon-itemedit:before,
+.icon-itemadd:before {
+	content: "\2c";
+}
+/*.fcsb-icon-reviews:before,*/
+.icon-reviews:before,
+icon-reviewadd:before,
+.icon-reviewedit:before {
+	content: "%";
+}
+/*.fcsb-icon-types:before,*/
+.icon-types:before,
+icon-typeadd:before,
+.icon-typeedit:before {
+	content: "\e243";
+}
+/*.fcsb-icon-fc_categories:before,*/
+.icon-fc_categories:before,
+.icon-fc_categoryadd:before,
+.icon-fc_categoryedit:before {
+	content: "\2d";
+}
+/*.fcsb-icon-fields:before,*/
+.icon-fields:before,
+.icon-fieldadd:before,
+.icon-fieldedit:before {
+	content: "\e230";
+}
+/*.fcsb-icon-tags:before,*/
+.icon-tags:before {
+	content: "\e264";
+}
+.icon-tagadd:before,
+.icon-tagedit:before {
+	content: "\e262";
+}
+/*.fcsb-icon-templates:before,*/
+.icon-templates:before {
+	content: "\3c";
+}
+/*.fcsb-icon-authors:before,*/
+.icon-authors:before {
+	content: "\e01f";
+}
+/*.fcsb-icon-users:before,*/
+.icon-authoredit:before,
+.icon-authoradd:before {
+	content: "\22";
+}
+/*.fcsb-icon-groups:before,*/
+.icon-groups:before,
+.icon-groupedit:before,
+.icon-groupadd:before {
+	content: "\e01f";
+}
+/*.fcsb-icon-filemanager:before,*/
+.icon-files:before {
+	content: "\30";
+}
+.icon-fileedit:before,
+.icon-fileadd:before {
+	content: "\e239";
+}
+/*.fcsb-icon-search:before,*/
+.icon-searchtext:before {
+	content: "\53";
+}
+/*.fcsb-icon-stats:before,*/
+.icon-stats:before {
+	content: "\75";
+}
+/*.fcsb-icon-comments:before {
+	content: "\25";
+}
+.fcsb-icon-plugins:before {
+	content: "2";
+}
+.fcsb-icon-translations:before {
+	content: "5";
+}*/
+
+.icon-test:before {
+	content: "l";
+	color: @successColor;
+	font-weight: bold;
+}
+.icon-savenew:before {
+	content: "\5d";
+	color: @successColor;
+}
+.icon-32-delete:before,
+.icon-32-trash:before {
+	content: "\4c";
+}
+.icon-copy_wvalues:before,
+.icon-params:before {
+	content: "\e018";
+	color: @successColor;
+}
+/*.fcsb-icon-archive:before,*/
+.icon-32-archive:before {
+	content: "\50";
+}
+/*.fcsb-icon-wrench:before {
+	content: ":";
+}*/
+/*.fcsb-icon-import:before {
+	content: "\e022";
+}*/
+.icon-import:before {
+	content: "\e022";
+	color: @warningColor;
+}
+.icon-32-restore:before {
+	content: "\6c";
+}
+.icon-translate:before {
+	content: "\25";
+}
+.icon-32-basicindex:before,
+.icon-32-advindex:before {
+	content: "S";
+}
+.icon-32-basicfilter:before,
+.icon-32-advfilter:before {
+	content: "T";
+}
+.icon-basicindex:before,
+.icon-advindex:before,
+.icon-advindexdirty:before {
+	content: "\e001";
+}
+.icon-language:before {
+	content: "\35";
+}
+@media (min-width: 1020) {
+	#toolbar-copy,
+	#toolbar-maintenance-btns-group,
+	#toolbar-download {
+		margin-left: 32px;
+	}
+}
+
+#toolbar .dropdown-menu {
+	span.icon-lock {
+	}
+	span.icon-upload {
+		color: @warningColor;
+	}
+	span.icon-loop {
+	}
+	span.icon-download {
+		color: @successColor;
+	}
+	span.icon-box-add {
+		color: @successColor;
+	}
+	span.icon-upload {
+		color: @warningColor;
+	}
+}
+
+
+.flexicontent #adminForm a.saveorder {
+	float: none !important;
+	vertical-align: middle !important;
+	display: inline-block !important;
+	margin: 0;
+}
+
+.flexicontent #adminForm .fc_drag_handle_none,
+.flexicontent #adminForm .fc_drag_handle {
+	float: none !important;
+	display: inline-block !important;
+	vertical-align: middle !important;
+}
+
+
+html body#minwidth-body {
+	min-width: 760;
+}
+
+
+// ***
+// *** Sortable rows handles
+// ***
+
+.flexicontent .fc_drag_handle_none,
+.flexicontent .fc_drag_handle {
+	display: block;
+	width: 16px;
+	height: 16px;
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+.flexicontent .fc_drag_handle {
+	cursor: move;
+}
+.flexicontent .fc_drag_handle_none {
+	background: url(../images/flexi/move2_none.svg) 0% 0% no-repeat transparent;
+}
+.flexicontent .fc_drag_handle.fc_drag_handle_disabled {
+	background: url(../images/flexi/move3.svg) 0% 0% no-repeat transparent;
+	cursor: auto;
+}
+.flexicontent .fc_drag_handle.fc_drag_handle_both {
+	background: url(../images/flexi/move2.svg) 0% 0% no-repeat transparent;
+}
+.flexicontent .fc_drag_handle.fc_drag_handle_uponly {
+	background: url(../images/flexi/move2_uponly.svg) 0% 0% no-repeat transparent;
+}
+.flexicontent .fc_drag_handle.fc_drag_handle_downonly {
+	background: url(../images/flexi/move2_downonly.svg) 0% 0% no-repeat transparent;
+}
+
+
+
+// ***
+// *** FLEXIcontent Dashboard
+// ***
+
+/* dashboard buttons container / dashboard sliders / dashboard credits container */
+div#fc-dash-boardbtns,
+div#fc-dash-sliders,
+div#fc-dash-credits {
+	float: left;
+	clear: both;
+}
+
+/* layout overrides */
+@media only screen and (max-width: 850px) {
+  /* stretch span to 100% */
+  #fc-dash-boardbtns,
+  #fc-dash-sliders {
+    width: 100%;
+    margin-bottom: 20px;
+    clear: both;
+    display: block;
+    margin: 0 auto;
+  }
+}
+
+div#fc-dash-sliders {
+   float:right;
+   max-width:850px;
+   	width: 100%;
+   
+   .accordion-heading .accordion-toggle {
+     @media only screen and (max-width: 1300px) { 
+       font-size: 13px; 
+      }
+   }
+   
+   .accordion-inner {
+      .btn {
+         float:right;
+      }
+     th,
+  td {
+     &:first-of-type {
+        padding-left: 0;
+     }
+     &:last-of-type {
+        padding-right: 0;
+     }
+  }
+      
+   }
+}
+
+
+
+div#fc-dash-credits {
+   float: none;
+}
+
+#fc-dash-boardbtns {
+   h3 {
+      display: block;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 18px;
+    font-size: 19.5px;
+    line-height: 36px;
+    color: @textColor;
+    border: 0;
+    border-bottom: 1px solid #e5e5e5;
+	font-weight: 600;
+   }
+   
+   .fc-board-button {
+      			float: left;
+      	/* Inner container of dashboard button (of extra styling choices) */
+
+      
+      a {
+        	background: #fff;
+			box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.04);
+			margin: 0 15px 10px 0;
+			padding: 10px;
+			position: relative;
+			border-top: none;
+			display: block;
+			border-radius: 8px;
+			width: 108px;
+			min-height: 97px;
+             @media only screen and (max-width: 1405px) { 
+               width: 97px; 
+         }
+         transition: background 300ms cubic-bezier(0.215,0.61,0.355,1), box-shadow 300ms cubic-bezier(0.215,0.61,0.355,1), color 300ms cubic-bezier(0.215,0.61,0.355,1);
+         text-align: center;
+               text-decoration: none;
+         
+            display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-webkit-flex-flow: row wrap;
+	-ms-flex-flow: row wrap;
+	flex-flow: row wrap;
+         -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; -webkit-box-align: center; -ms-flex-align: center; align-items: center; -ms-flex-line-pack: center; align-content: center;
+
+		.fc-dashboard-icon {
+	font-size: 2.2rem;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 2.2rem;
+	line-height: 2.2rem;
+	display: block;
+    
+		}
+
+         .fc-board-btn-text {
+            width: 100%;
+            display: 100%;
+            margin-top: 5px;
+            color: @grayDark;
+            font-weight: bold;
+             text-decoration: none;
+         }
+         &:hover, &:focus {
+         	box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.04);
+		      background: @offwhite;
+            .fc-dashboard-icon,  .fc-board-btn-tex {
+              
+            }
+			}
+      }
+   }
+}
+// Dashboard button SET (a fieldset)
+
+
+
+
+
+// ***
+// *** FLEXIcontent Layout editor
+// ***
+
+.code_box {
+	width: 100%;
+	margin-bottom: 8px;
+}
+
+.code_box > .btn {
+	min-width: 300;
+	text-align: left;
+}
+
+
+
+// ***
+// *** Import view
+// ***
+
+#flexicontent table label.fckey {
+	display: inline-block;
+	float: none !important;
+	width: 82%;
+	padding: 6px 6% !important;
+	margin: 1px 6% 0 1px;
+}
+
+.fcimport_sampleline {
+	font-size: 12px;
+	line-height: 1.6em;
+	display: inline-block;
+	margin-top: 4px;
+}
+.fcimport_missingfile {
+	background: url(../images/flexi/warning.svg) 0 0 no-repeat;
+	padding: 2px 0 2px 20px;
+	color: @warningColor;
+}
+
+ol.fcimport_field_value_list {
+	margin: 0;
+	padding: 0;
+	position: relative;
+	left: 0;
+}
+ul.fcimport_field_value_list {
+	margin: 0;
+	padding: 0;
+	position: relative;
+	left: 0;
+}
+
+dl.fcimport_field_prop_list.fcimport_field_prop_mainlist dt {
+	text-align: right;
+	width: auto;
+	clear: none;
+}
+dl.fcimport_field_prop_list.fcimport_field_prop_mainlist dd {
+	float: left;
+	margin-right: 48px;
+}
+
+dl.fcimport_field_prop_list {
+	border: 0 solid;
+	margin: 0;
+	padding: 0;
+}
+dl.fcimport_field_prop_list > dt {
+	float: left;
+	clear: left;
+	width: auto;
+	text-align: left;
+	font-weight: bold;
+	color: @successColor;
+	margin-right: 6px;
+}
+dl.fcimport_field_prop_list > dt:after {
+	content: ":";
+}
+dl.fcimport_field_prop_list > dd {
+	margin: 0;
+	padding: 0;
+}
+
+ol.fcimport_field_value_list {
+	margin-left: 1.5em;
+	padding-left: 0;
+}
+ul.fcimport_field_value_list {
+	margin-left: 0em;
+	padding-left: 0.2em;
+	margin-bottom: 0;
+}
+ul.fcimport_field_value_list li {
+	background: url(../images/flexi/readon.gif) 0% 50% no-repeat transparent;
+	padding-left: 16px;
+	list-style: none;
+}
+ul.fcimport_field_value_list li:first-child {
+	border-top: 0 dashed;
+	width: 100%;
+}
+ul.fcimport_field_value_list li {
+	border-top: 1px dashed @grayLight;
+	float: left;
+	clear: both;
+}
+
+ol.fcimport_field_value_list li,
+ul.fcimport_field_value_list li {
+	margin-bottom: 0em;
+}
+
+.fcimport_field_value_list ol li {
+	list-style: decimal;
+	background-image: none;
+	padding-left: 0em;
+}
+
+
+
+// ***
+// *** TASK SCREENS: e.g. post install screen
+// ***
+
+table.postinstall-tbl td .install-task {
+	display: inline-block;
+	min-height: 24px;
+}
+table.postinstall-tbl td .fc_button.fc_simple {
+	margin: 0 16px;
+	padding: 0 24px;
+}
+
+table.postinstall-tbl td .ajax-loader {
+	background: url("../images/flexi/ajax-loader.gif") no-repeat scroll center center transparent;
+	width: 16px;
+	height: 24px;
+	display: inline-block;
+	vertical-align: middle;
+	padding: 0;
+}
+
+
+// Copy parameters
+
+.copyok {
+	background: url(../images/flexi/accept.svg) 0% 50% no-repeat transparent;
+	padding: 1px 0 1px 20px;
+	margin: 5px 15px;
+}
+.copyfailed {
+	background: url(../images/flexi/delete.svg) 0% 50% no-repeat transparent;
+	padding: 1px 0 1px 20px;
+	margin: 5px 15px;
+}
+.copywarn {
+	background: url(../images/flexi/warning.svg) 0% 50% no-repeat transparent;
+	padding: 1px 0 1px 20px;
+	margin: 5px 15px;
+}
+
+
+// Task result
+
+.install-ok {
+	background: url(../images/flexi/accept.svg) 0% 50% no-repeat transparent;
+	padding: 0;
+	margin: 0;
+	width: 20px;
+	height: 24px;
+	display: inline-block;
+	vertical-align: middle;
+}
+.install-notok {
+	background: url(../images/flexi/delete.svg) 0% 50% no-repeat transparent;
+	padding: 0;
+	margin: 0;
+	width: 20px;
+	height: 24px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+
+// ***
+// *** Import screen
+// ***
+
+#import-log {
+	margin: 10px 10px 15px 10px;
+	font-size: 12px;
+	line-height: 140%;
+	white-space: normal;
+}
+.alert-modalbox {
+	display: block;
+	border-color: #D8000C !important;
+	margin: 0 0 15px 0 !important;
+	padding: 8px 10px 8px 36px !important;
+
+	border: 1px solid !important;
+	border-radius: @radius-lg !important;
+	border-color: #D8000C !important;
+
+	background: #f0f0f0 url(../images/flexi/error.svg) no-repeat 10px 50%;
+	color: @black !important;
+}
+.alert-modalbox-title {
+	display: block;
+	margin: 5px 0;
+	font-weight: bold;
+}
+.centerimg {
+	display: block;
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 0;
+	padding: 0;
+	height: 30px;
+}
+.spinner {
+	display: block;
+	margin-top: 20px;
+	margin-bottom: 0;
+	padding: 0;
+	height: 30px;
+}
+.lang-success {
+	color: @successColor;
+	font-weight: bold;
+}
+.lang-fail {
+	color: @warningColor;
+	font-weight: bold;
+}
+#missing {
+	display: none;
+}
+.button-close {
+	text-align: center;
+	margin: 20px 0;
+	padding: 0;
+}
+ul.import-ok,
+ul.import-failed {
+	list-style: none;
+	margin: 5px 0 10px;
+	padding: 0 0 0 10px;
+}
+ul.import-ok li {
+	background: url(../images/flexi/accept.svg) 0% 50% no-repeat transparent;
+	padding: 1px 0 1px 20px;
+}
+ul.import-failed li {
+	background: url(../images/flexi/delete.svg) 0% 50% no-repeat transparent;
+	padding: 1px 0 1px 20px;
+}
+
+
+
+// ***
+// *** Backend listings
+// ***
+
+// Some defaults for icons inside backend lists
+
+.fc-man-icon-s {
+	float: none;
+	min-width: 16px;
+}
+img.btn.btn-small.fc-man-icon-s {
+	border-radius: @radius-sm;
+}
+.btn.btn-micro.fc-man-icon-s {
+	border-radius: @radius-sm;
+	padding: 2px;
+}
+
+
+
+
+
+
+
+
+
+.flexicontent .fcmanlist
+{
+	.btn.btn-small img.fc-man-icon-s {
+		float: left;
+	}
+	.btn.btn-small.fc-preview-btn img.fc-man-icon-s {
+		margin-top: 1px;
+		margin-bottom: -1px;
+	}
+	.btn.btn-small.fc-edit-layout-btn img.fc-man-icon-s,
+	.btn.btn-small.fc-rss-list-btn img.fc-man-icon-s {
+	}
+
+	th :not(.btn-group) > [class^="icon-"],
+	th :not(.btn-group) > [class*="icon-"] {
+		font-size: 14px;
+	}
+	.col_template, .col_alias {
+		font-family: @flexiFont;
+	}
+   .col_access select {
+      width: 90px;
+      	font-size: 12px;
+      color: @textColor;
+   }
+	// Some defaults for buttons inside backend lists
+   
+	:not(.btn-group) > .btn.btn-small {
+	//	padding: 2px 5px;
+	//	font-size: 14px;
+      [class^="icon-"], [class*=" icon-"] {
+         margin-right: 0;
+      }
+   }
+
+	:not(.btn-group) > .btn.btn-micro {
+		padding: 1px 1px 1px 1px;
+		font-size: 12px;
+	}
+	:not(.btn-group) > .btn.btn-mini {
+		padding: 1px 1px 0 2px;
+		font-size: 10px;
+	}
+	.btn.btn-small.fc-assignments-btn {
+		min-width: 50px;
+		box-sizing: border-box;
+	}
+}
+
+// Last option not shown due to overlayed toolbar at the bottom
+body .j-sidebar-container {
+	padding-bottom: 36px;
+}
+
+body .popover {
+ max-width: 500px !important;
+ min-width: 400px !important;
+}
+
+
+
+
+
+
+	
+//	border-radius: 0px;
+//	width: 100%;
+//	margin: 0 4px 16px 0;
+//	padding: 12px;

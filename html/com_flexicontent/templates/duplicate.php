@@ -19,17 +19,15 @@
 defined('_JEXEC') or die('Restricted access');
 
 $ctrl_task = FLEXI_J16GE ? 'task=templates.' : 'controller=templates&task=';
-$close_popup_js = FLEXI_J16GE ? "window.parent.SqueezeBox.close();" : "window.parent.document.getElementById('sbox-window').close();";
-?>
-<script type="text/javascript">
 
+$js = "
 jQuery(document).ready(function() {
 	var adminForm = jQuery('#adminForm');
 	adminForm.submit(function( event ) {
 		var log_bind = jQuery('#log-bind');
-		log_bind.html('<p class="centerimg"><img src="templates/<?php echo $template;?>/images/flexi/ajax-loader.gif" class="center"></p>');
+		log_bind.html('<p class=\"centerimg\"><img src=\"components/com_flexicontent/assets/images/ajax-loader.gif\" align=\"center\"></p>');
 		jQuery.ajax({
-			type: "POST",
+			type: 'POST',
 			data: adminForm.serialize(),
 			url:  adminForm.prop('action'),
 			success: function(str) {
@@ -39,51 +37,42 @@ jQuery(document).ready(function() {
 		event.preventDefault();
 	});	
 });
-</script>
-<style type="text/css">
-fieldset {
-	padding: 0;
-	margin: 0;
-	border: 0;
-}
-</style>
-<div class="row-fluid">
-  <div class="span-12">
-    <form action="index.php?option=com_flexicontent&<?php echo $ctrl_task; ?>duplicate&layout=duplicate&<?php echo FLEXI_J16GE ? 'format=raw' : 'tmpl=component';?>" method="post" name="adminForm" id="adminForm" class="form-horizontal">
-      <fieldset>
-        <h3 color="purple"> <?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE' ); ?> <i class="icon-info hasTooltip purple tags" data-placement="bottom" title="<?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE_DESC' ); ?>"></i> </h3>
-        <hr>
-        
-          <div class="control-group">
-            <div class="controls">
-              <div class="center">
-                <p>
-                  <input type="text" id="dest" name="dest" value="<?php echo $this->dest; ?>" class="input_box" />
-                  <input type="hidden" id="source" name="source" value="<?php echo $this->source; ?>" />
-                </p>
-                <button id="import" type="submit" class="fc_button btn btn-primary" value="<?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE_BUTTON' ); ?>" />
-                <?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE_BUTTON' ); ?>
-                </button>
-                <button type="button" class="fc_button btn" onclick="window.parent.document.adminForm.submit();<?php echo $close_popup_js;?>" value="<?php echo JText::_( 'FLEXI_CLOSE_IMPORT_TAGS' ); ?>" />
-                <?php echo JText::_( 'FLEXI_CLOSE_IMPORT_TAGS' ); ?>
-                </button>
-              </div>
-            </div>
-          </div>
-      </fieldset>
-      <div id="log-bind"></div>
-      <?php echo JHTML::_( 'form.token' ); ?>
-      <input type="hidden" name="option" value="com_flexicontent" />
-      <?php if (FLEXI_J16GE) : ?>
-      <input type="hidden" name="task" value="templates.duplicate" />
-      <input type="hidden" name="layout" value="templates.duplicate" />
-      <input type="hidden" name="format" value="raw" />
-      <?php else : ?>
-      <input type="hidden" name="task" value="duplicate" />
-      <input type="hidden" name="controller" value="templates" />
-      <input type="hidden" name="view" value="templates" />
-      <input type="hidden" name="tmpl" value="component" />
-      <?php endif; ?>
-    </form>
-  </div>
+";
+
+JFactory::getDocument()->addScriptDeclaration($js);
+?>
+
+<form action="index.php?option=com_flexicontent&<?php echo $ctrl_task; ?>duplicate&layout=duplicate&<?php echo FLEXI_J16GE ? 'format=raw' : 'tmpl=component';?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
+
+	<fieldset>
+		<legend>
+			<?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE' ); ?>
+<i class="ml-10 small icon-info hasTooltip" data-placement="right" title="<?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE_DESC', true ); ?>"></i>		
+		</legend>
+		
+		<div class="control-group text-center">
+			<div class="controls">
+		<input type="text" id="dest" name="dest" value="<?php echo $this->dest; ?>" size="52" />
+		<input type="hidden" id="source" name="source" value="<?php echo $this->source; ?>" />
+		</div>
+		</div>
+	</fieldset>
+	
+	<div class="control-group text-center">
+			<div class="controls">
+	<div class="btn-group">
+	<input id="import" type="submit" class="btn btn-success" value="<?php echo JText::_( 'FLEXI_DUPLICATE_TEMPLATE_BUTTON' ); ?>" />
+	<input type="button" class="btn btn-danger" onclick="window.parent.fc_tmpls_modal.dialog('close');" value="<?php echo JText::_( 'FLEXI_CLOSE_IMPORT_TAGS' ); ?>" />
+			</div>
+		</div>
 </div>
+
+
+	<div id="log-bind"></div>
+
+	<?php echo JHtml::_( 'form.token' ); ?>
+	<input type="hidden" name="option" value="com_flexicontent" />
+	<input type="hidden" name="task" value="templates.duplicate" />
+	<input type="hidden" name="layout" value="templates.duplicate" />
+	<input type="hidden" name="format" value="raw" />
+</form>

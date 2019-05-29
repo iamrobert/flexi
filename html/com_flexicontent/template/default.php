@@ -25,8 +25,8 @@ jimport('joomla.filesystem.path');
 if ( !$this->layout->name ) die('Template folder does not exist');
 
 // Load JS tabber lib
-$this->document->addScriptVersion(JURI::root(true).'/components/com_flexicontent/assets/js/tabber-minimized.js', FLEXI_VHASH);
-$this->document->addStyleSheetVersion(JURI::root(true).'/components/com_flexicontent/assets/css/tabber.css', FLEXI_VHASH);
+$this->document->addScriptVersion(JUri::root(true).'/components/com_flexicontent/assets/js/tabber-minimized.js', FLEXI_VHASH);
+$this->document->addStyleSheetVersion(JUri::root(true).'/components/com_flexicontent/assets/css/tabber.css', FLEXI_VHASH);
 $this->document->addScriptDeclaration(' document.write(\'<style type="text/css">.fctabber{display:none;}<\/style>\'); ');  // temporarily hide the tabbers until javascript runs
 
 $tip_class = FLEXI_J30GE ? ' hasTooltip' : ' hasTip';
@@ -135,7 +135,7 @@ if (!$use_editor)  $app->enqueueMessage(JText::_('Codemirror is disabled, please
 ?>
 
 <script type="text/javascript">
-	function <?php echo $this->use_jquery_sortable ? 'fcfield_initordering' : 'fcfield_storeordering'; ?>() {
+	function tmpls_fcfield_init_ordering() {
 	<?php echo $this->jssort . ';' ; ?>
 	}
 	
@@ -265,7 +265,7 @@ if (!$use_editor)  $app->enqueueMessage(JText::_('Codemirror is disabled, please
 		jQuery.ajax({
 			type: form.attr('method'),
 			url: form.attr('action'),
-			data: { layout_name: layout_name, file_subpath: file_subpath, load_mode: load_mode, '<?php echo (FLEXI_J30GE ? JSession::getFormToken() : JUtility::getToken());?>': 1 },
+			data: { layout_name: layout_name, file_subpath: file_subpath, load_mode: load_mode, '<?php echo JSession::getFormToken();?>': 1 },
 			success: function (data) {
 				jQuery('#fc_doajax_loading').remove();
 				var theData = jQuery.parseJSON(data);
@@ -290,23 +290,27 @@ if (!$use_editor)  $app->enqueueMessage(JText::_('Codemirror is disabled, please
 
 <form action="index.php" method="post" name="adminForm" id="adminForm" class="form-horizontal">
 	
-    
+	<div class="fctabber tabset_layout" id="tabset_layout" style="margin:16px 0 !important;">
 
+		<div class="tabbertab" id="tabset_layout_information_tab" data-icon-class="icon-info" >
+			<h3 class="tabberheading"> <?php echo JText::_( 'FLEXI_INFORMATION' ); ?></h3>
 
-<?php 
-$options = array('active'    => 'tab1_id');
-echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCookie'=>1));?> 
+	<!--div class="fc-info fc-nobgimage fc-mssg-inline" style="font-size: 12px; margin: 0px 0px 16px 0px !important; padding: 16px 32px !important">
+		<?php echo !empty($fieldSet->label) ? $fieldSet->label : JText::_( 'FLEXI_PARAMETERS_THEMES_SPECIFIC' ) . ' : ' . $this->layout->name; ?>
+	</div-->
+	
+	
 
-<!--FLEXI TAB1 -->
-<?php echo JHtml::_('bootstrap.addTab', 'ID-Tabs-Group', 'tab1_id', '<i class="icon-info"></i>'.JText::_('FLEXI_INFORMATION')); ?> 
 <!--Content TAB1 -->
  <div class="row-fluid" id="lay-desc-table">
-     <div class="span4">
-				<img src="../<?php echo $this->layout->thumb; ?>" alt="<?php echo JText::_( 'FLEXI_TEMPLATE_THUMBNAIL' ); ?>" style="max-width:none;" />
-</div>
-<div class="span8">
-           
- 					<div class="row-fluid">
+     <div class="span12">
+
+         <div class="float-left hidden-phone">
+          <img src="../<?php echo $this->layout->thumb; ?>" alt="<?php echo JText::_( 'FLEXI_TEMPLATE_THUMBNAIL' ); ?>" style="max-width:none;" /></div>
+            <div class="float-left ml-20">
+
+                        
+               <div class="row-fluid">
                 <div class="span3">
 							<label class="label">
 							<?php echo JText::_( 'FLEXI_FOLDER' ); ?>
@@ -402,38 +406,47 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 						</div>
                         </div>
                         
+                         </div>
                         </div>
                         </div>
 <!--/Content TAB1 -->
-
-<?php echo JHtml::_('bootstrap.endTab');?> 
-<!--/FLEXI_ACCOUNT_DETAILS TAB1 -->
-
-<!--TAB 2 START-->
-<?php echo JHtml::_('bootstrap.addTab', 'ID-Tabs-Group', 'tab2_id', '<i class="icon-signup"></i>'.JText::_('FLEXI_FIELDS_PLACEMENT')); ?> 
-
-<div class="alert alert-info">
-				<strong><?php echo JText::_('FLEXI_NOTES');?>:</strong>
-				<?php echo JText::_('FLEXI_INSTRUCTIONS_ADD_FIELD_TO_LAYOUT_POSITION');?>
-			</div>
 		
-        <div class="row-fluid">
-				<!--Content Tab2 Col1-->
-                <div class="span6 full_width_980">
-                
-                
-                <fieldset id="available_fields_container">
-						<h3 class="fcsep_level1"><?php echo JText::_('FLEXI_AVAILABLE_FIELDS') ?></h3>
-                        
-                        <div style="float:left; clear:both; width:100%; margin:0px 0px 12px 0px;">
+		</div>
+		
+		<div class="tabbertab" id="tabset_layout_fields_placement_tab" data-icon-class="icon-signup" >
+			<h3 class="tabberheading"> <?php echo JText::_( 'FLEXI_FIELDS_PLACEMENT' ); ?></h3>
+				
+			
+			<div class="row-fluid">
+<div class="span12 text-right">
+<span data-toggle="collapse" data-target="#howto_box" class="btn clearfix"><span class="icon-help mr-0"></span></span>
+</div></div>
+<div id="howto_box" class="collapse">
+	<div class="alert alert-info mt-20">
+<strong><?php echo JText::_('FLEXI_NOTES');?>:</strong>
+				<?php echo JText::_('FLEXI_INSTRUCTIONS_ADD_FIELD_TO_LAYOUT_POSITION');?>
+	</div>
+</div>
+		
+		
+
+			
+			<div class="container-fluid no-padding-left no-padding-right">
+				<div class="span6 full_width_980">
+					
+					<fieldset id="available_fields_container">
+						<legend class="fcsep_level1"><?php echo JText::_('FLEXI_AVAILABLE_FIELDS') ?></legend>
+						<div class="fcclear"></div>
+						
+						<div style="float:left; clear:both; width:100%; margin:0px 0px 12px 0px;">
 							<div style="float:left; margin-right:32px;">
-								<div style="float:left;" class="postitle label" ><?php echo JText::_('FLEXI_FILTER').' '.JText::_('FLEXI_TYPE'); ?></div>
+								<div style="float:left;" class="positions_title no-padding-left"><strong><?php echo JText::_('FLEXI_FILTER').' '.JText::_('FLEXI_TYPE'); ?>:</strong></div>
 								<div style="float:left; clear:both;">
 									<?php echo sprintf(str_replace('__au__', '_available', $this->content_type_select), 'available_fields_container', 'hide', 'available'); ?>
 								</div>
 							</div>
 							<div style="float:left;">
-								<div style="float:left;" class="postitle label" ><?php echo JText::_('FLEXI_FILTER').' '.JText::_('FLEXI_FIELD_TYPE'); ?></div>
+								<div style="float:left;" class="positions_title no-padding-left"><strong><?php echo JText::_('FLEXI_FILTER').' '.JText::_('FLEXI_FIELD_TYPE'); ?>:</strong></div>
 								<div style="float:left; clear:both;">
 									<?php echo sprintf(str_replace('__au__', '_available', $this->field_type_select), 'available_fields_container', 'hide', 'available'); ?>
 								</div>
@@ -441,7 +454,7 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 						</div>
 						
 						
-						<div class="postitle label label-info" style="margin-top:10px;"><?php echo JText::_('FLEXI_CORE_FIELDS'); ?></div>
+						<div class="positions_title label label-info" style="margin-top:10px;"><?php echo JText::_('FLEXI_CORE_FIELDS'); ?></div>
 					
 						<div class="positions_container">
 							<ul id="sortablecorefields" class="positions">
@@ -461,7 +474,7 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 						</div>
 						
 						
-						<div class="postitle label label-info" style="margin-top:10px;"><?php echo JText::_('FLEXI_NON_CORE_FIELDS'); ?></div>
+						<div class="positions_title label label-info" style="margin-top:10px;"><?php echo JText::_('FLEXI_CUSTOM_NON_CORE_FIELDS'); ?></div>
 						
 						<div class="positions_container">
 							<ul id="sortableuserfields" class="positions">
@@ -481,31 +494,30 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 						</div>
 					
 					</fieldset>
-                       <!--end Content Tab2 Col1--> 
-                </div>
-                <!--row2-->
-                <div class="span6 full_width_980">
-                
-                <!--Content Tab2 Col2-->
-                <fieldset id="layout_positions_container">
-						<legend style="margin:0 0 12px 0; font-size:14px; padding-top:6px; padding-bottom:6px; background:gray;" class="fcsep_level1"><?php echo JText::_('FLEXI_AVAILABLE_POS') ?></legend>
+					
+				</div>	
+				
+				<div class="span6 full_width_980 padded_wrap_box">
+					
+					<fieldset id="layout_positions_container">
+						<legend class="fcsep_level1"><?php echo JText::_('FLEXI_AVAILABLE_POS') ?></legend>
 						<div class="fcclear"></div>
 						
-						<div style="float:left; clear:both; width:100%; margin:0px 0px 12px 0px;">
+					<div style="float:left; clear:both; width:100%; margin:0px 0px 12px 0px;">
 							<div style="float:left; margin-right:32px;">
-								<div style="float:left;" class="postitle label" ><?php echo JText::_('FLEXI_FILTER').' '.JText::_('FLEXI_TYPE'); ?></div>
+								<div style="float:left;" class="positions_title no-padding-left" ><strong><?php echo JText::_('FLEXI_FILTER').' '.JText::_('FLEXI_TYPE'); ?>:</strong></div>
 								<div style="float:left; clear:both;">
 									<?php echo sprintf(str_replace('__au__', '_used',$this->content_type_select), 'layout_positions_container', 'highlight', 'used'); ?>
 								</div>
 							</div>
 							<div style="float:left;">
-								<div style="float:left;" class="postitle label" ><?php echo JText::_('FLEXI_FILTER').' '.JText::_('FLEXI_FIELD_TYPE'); ?></div>
+								<div style="float:left;" class="positions_title no-padding-left" ><strong><?php echo JText::_('FLEXI_FILTER').' '.JText::_('FLEXI_FIELD_TYPE'); ?>:</strong></div>
 								<div style="float:left; clear:both;">
 									<?php echo sprintf(str_replace('__au__', '_used',$this->field_type_select), 'layout_positions_container', 'highlight', 'used'); ?>
 								</div>
 							</div>
-						</div>
-						
+				</div>
+							<div class="fcclear"></div>
 						<?php
 						if (isset($this->layout->positions)) :
 							$count=-1;
@@ -526,14 +538,14 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 								
 							?>
 							
-							<div class="postitle label label-success" style="margin:10px 0 2px"><?php echo $pos; ?></div>
+							<div class="positions_title label label-success"><?php echo $pos; ?></div>
 							
 							<?php
 							if ( isset($this->layout->attributes[$count]['readonly']) ) {
 								switch ($this->layout->view) {
-									case FLEXI_ITEMVIEW: $msg='in the <strong>Item Type</strong> configuration and/or in each individual <strong>Item</strong>'; break;
-									case 'category': $msg='in each individual <strong>Category</strong>'; break;
-									default: $msg='in each <strong>'.$this->layout->view.'</strong>'; break;
+									case FLEXI_ITEMVIEW: $msg='in the <b>Item Type</b> configuration and/or in each individual <b>Item</b>'; break;
+									case 'category': $msg='in each individual <b>Category</b>'; break;
+									default: $msg='in each <b>'.$this->layout->view.'</b>'; break;
 								}
 								echo "<div class='positions_readonly_info fc-mssg fc-info fc-nobgimage'>NON-editable position.<br/> To customize edit TEMPLATE parameters ".$msg."</div>";
 								continue;
@@ -570,69 +582,111 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 						endif;
 						?>
 					</fieldset>
-                    <!--/ Content Tab2 Col2-->
-                </div>
-                </div>	
-            
-<?php echo JHtml::_('bootstrap.endTab');?> 
-<!--/ TAB 2-->
-
-
-<!--TAB 3 START-->
-<?php echo JHtml::_('bootstrap.addTab', 'ID-Tabs-Group', 'tab3_id', '<i class="icon-options"></i>'.JText::_('FLEXI_DISPLAY_PARAMETERS')); ?> 
-<!-- Content Tab3 Col1-->
-<p class="fc-mssg-inline fc-warning">
-				Parameters specific to the layout, <br/> -
-				<?php echo JText::_( $this->layout->view == 'item' ?
-					'your <strong>content types / items</strong> ' :
-					'your <strong>content lists</strong> (categories, etc)'
+					
+				</div>
+			</div>
+			
+		</div>
+		
+		<?php
+			$pfx = $this->layout->view == 'category' ? 'FCC' : 'FCI';
+		?>
+		
+		<div class="tabbertab" id="tabset_layout_disp_params_tab" data-icon-class="icon-options" >	
+			<h3 class="tabberheading"> <?php echo JText::_( 'FLEXI_DISPLAY_PARAMETERS' ); ?> </h3>
+			
+			
+<div class="row-fluid">
+<div class="span12 text-right">
+<span data-toggle="collapse" data-target="#howto_box2" class="btn clearfix"><span class="icon-help mr-0"></span></span>
+</div></div>
+<div id="howto_box2" class="collapse">
+	<div class="alert alert-info mt-20">
+<?php echo JText::_( $this->layout->view == 'item' ?
+					'your <b>content types / items</b> ' :
+					'your <b>content lists</b> (categories, etc)'
 				);?>
-				will inherit defaults from here, but may <strong>override</strong> them
-				<br/> -
-				<?php echo JText::_( 'setting any parameter below to <strong>"Use global"</strong>, will use default value inside the <strong>template\'s PHP code</strong>');?>
-			</p>
+				will inherit defaults from here, you may <b>override</b> them inside <b>type</b> (but <b>avoid</b> overriding inside the <b>item</b>)
+				<br/> -	<?php echo JText::_( 'setting any parameter below to <b>"Use global"</b>, will use default value inside the <b>template\'s PHP code</b>');?>
+	</div>
+	
+		<div class="alert alert-info mt-20">
+-	<span class="fc_less_parameter"></span> parameters: add more to <b><?php echo $this->layout->view; ?>.xml</b> , then inside file: <b>less/<?php echo $this->layout->view; ?>.less</b> use less variables: &nbsp; @<b><?php echo $pfx; ?>_</b>parameter_name;
+				<br/> - NOTE: <b>FCC_</b> for category and <b>FCI_</b> for item layout, EXAMPLE:  <code style="font-size:100%; color:black;">body&nbsp; .flexi.label &nbsp;{ color: @<?php echo $pfx; ?>_label_bg_color; }</code>
+	</div>
+</div>
+		
+		
+		
 
-
-<?php
+			
+			
+				<?php
 				$groupname = 'attribs';  // Field Group name this is for name of <fields name="..." >
 				$fieldSets = $this->layout->params->getFieldsets($groupname);
 				foreach ($fieldSets as $fsname => $fieldSet) :
 					if (isset($fieldSet->description) && trim($fieldSet->description)) :
-						echo '<p class="tip">'.$this->escape(JText::_($fieldSet->description)).'</p>';
+						echo '<div class="fc-mssg fc-info">'.JText::_($fieldSet->description).'</div>';
 					endif;
 					?>
-					<fieldset class="panelform m20">
+					<fieldset>
 						<?php foreach ($this->layout->params->getFieldset($fsname) as $field) :
-							echo '<div class="control-group">';
-							$fieldname = $field->__get('fieldname');
+						
+							$fieldname =  $field->__get('fieldname');
+							$cssprep = $field->getAttribute('cssprep');
+							//$_labelclass = $cssprep == 'less' ? 'fc_less_parameter' : '';
+							$blanklabel = ($this->layout->params->getLabel($fieldname, $groupname) == '');
+						$blanklabel = 'wurtang';
+							$_labelclass = $cssprep == 'less' ? '' : '';
 							$value = $this->layout->params->getValue($fieldname, $groupname, @$this->conf->attribs[$fieldname]);
-							echo '<div class="control-label">'.$this->layout->params->getLabel($fieldname, $groupname).'</div>';
-							echo '<div class="controls">';
+						
+						if ($this->layout->params->getLabel($fieldname, $groupname) != '') {
+							
+						echo '<div class="control-group">';	
+					
+						} else {
+							
+						echo '<div class="control-group labeltitle">';	
+						}
+						if ($this->layout->params->getLabel($fieldname, $groupname) != '') {
+						
+							
+					 	
+						echo
+								str_replace('class="', 'class="'.$_labelclass.' ',
+									str_replace('jform_attribs_', 'jform_layouts_'.$this->layout->name.'_',
+										'<div class="control-label">'.$this->layout->params->getLabel($fieldname, $groupname).'</div>'
+									)
+								);
+								}
 							echo
 								str_replace('jform_attribs_', 'jform_layouts_'.$this->layout->name.'_', 
 									str_replace('[attribs]', '[layouts]['.$this->layout->name.']',
-										$this->layout->params->getInput($fieldname, $groupname, $value)
+										'<div class="controls">'.$this->layout->params->getInput($fieldname, $groupname, $value).'</div>'
 									)
 								);
-							echo '</div></div>';
+							echo '</div>';
 						endforeach; ?>
 					</fieldset>
 				<?php endforeach; ?>
-                
-<!-- / Content Tab3 Col1-->
-<?php echo JHtml::_('bootstrap.endTab');?> 
-<!--/ TAB 3-->
+				
 
-<!--TAB 4 START-->
-<?php echo JHtml::_('bootstrap.addTab', 'ID-Tabs-Group', 'tab4_id', '<i class="icon-signup"></i>'.JText::_('FLEXI_EDIT_LAYOUT_FILES')); ?> 
 
-<div class="row-fluid">
-<div id="layout-filelist-container" class="span4">
-				<span class="fcsep_level0">
-					<span class="label label-info"><?php echo JText::_( 'FLEXI_LAYOUT_FILES' ); ?></span>
+
+				
+		</div>
+		
+		<div class="tabbertab" id="tabset_layout_edit_files_tab" data-icon-class="icon-signup" >
+			<h3 class="tabberheading"> <?php echo JText::_( 'FLEXI_EDIT_LAYOUT_FILES' ); ?></h3>
+			
+			<div id="layout-filelist-container" class="span4" style="margin:0.5%;">
+				<span class="fcsep_level0 block mb-20">
+					<?php echo JText::_( 'FLEXI_LAYOUT_FILES' ); ?>
 				</span>
+				
 				<?php
 				$tmpldir = JPATH_ROOT.DS.'components'.DS.'com_flexicontent'.DS.'templates'.DS.$this->layout->name;
+				
 				$it = new RegexIterator(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tmpldir)), '#('.$this->layout->view.'(_.*\.|\.)(php|xml|less|css|js)|include.*less)#i');
 				//$it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tmpldir));
 				$it->rewind();
@@ -666,7 +720,7 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 				$file_tip['category_subcategories_html5.php'] = $file_tip['category_subcategories.php'].' (HTML5 version)';
 				
 				
-						$file_tip_extra = array(
+				$file_tip_extra = array(
 					'config.less'=>'NOTE:<br/>- this is automatically imported by item.less and category.less <br/> - if you need to import extra less files, then files must be in same folder (less/include/) for automatic compiling to be triggered',
 					'item.xml'=>'This file contains layout\' s structure: including <br/> - <b>display parameters, field positions, file list, etc</b>, <br/> - you can add extra parameters/positions, <br/>-- if you add a new position, you will need to also add the dispay -LOOP- of the new position inside files: <br/><b>item.php</b> <br/><b>item_html5.php</b> <br/><br/>(click to edit file and then use the code button)',
 					'category.xml'=>'This file contains layout\' s structure: including <br/> - <b>display parameters, field positions, file list, etc</b>, <br/> - you can add extra parameters/positions, <br/>-- if you add a new position, you will need to also add the dispay -LOOP- of the new position inside files: <br/><b>category_items.php</b> <br/><b>category_items_html5.php</b> <br/><br/>(click to edit file and then use the code button)',
@@ -718,8 +772,8 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 						$btn_allowed = isset($file_code_btns[$filename]) ? array_keys($file_code_btns[$filename]) : array();
 						echo '
 						'.$file_type.
-						(!isset($file_tip_extra[$filename]) ? '<img src="components/com_flexicontent/assets/images/tick_f2.png" alt="Edit file">' :
-							'<img src="components/com_flexicontent/assets/images/comments.png" data-placement="bottom" class="'.$tip_class.'" title="'.$file_tip_extra[$filename].'" alt="Edit file"/>'
+						(!isset($file_tip_extra[$filename]) ? '<i class="icon-apply light-grey"></i>' :
+							'<i data-placement="bottom" class="icon-info '.$tip_class.'" title="'.$file_tip_extra[$filename].'"></i>'
 						).'
 						<a href="javascript:;" class="'.$tip_class.'" data-placement="right" onclick="load_layout_file(\''.addslashes($this->layout->name).'\', \''.addslashes($it->getSubPathName()).'\', \'0\', \''.implode(' ', $btn_allowed).'\'); return false;"
 						title="'.(isset($file_tip[$filename]) ? $file_tip[$filename] : $ext.' file').'">'
@@ -734,19 +788,18 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 				?>
 			</div>
 
-			<div id="layout-fileeditor-container" class="span8">
-				<span class="fcsep_level0" style="margin-top: 0;">
-					<span id="layout_edit_name_container" class="label label-info"><?php echo JText::_( 'FLEXI_NO_FILE_LOADED' ); ?></span>
+			<div id="layout-fileeditor-container" class="span8" style="margin:0.5%;">
+				<span class="fcsep_level0 block mb-20">
+					<?php echo JText::_( 'FLEXI_NO_FILE_LOADED' ); ?>
 				</span>
 				<div class="fcclear"></div>
 				<div id="ajax-system-message-container"></div>
 				<div class="fcclear"></div>
 				
-                
-                <div class="fc-note fc-mssg" id="edit-css-files-warning" style="display: none;">
+				<div class="fc-note fc-mssg" id="edit-css-files-warning" style="display: none;">
 					<?php echo JText::_( 'FLEXI_MODIFY_LESS_FILES_INSTEAD_OF_CSS' ); ?>
 				</div>
-                
+				
 				<?php
 				if ($use_editor) {
 					$editor = JFactory::getEditor('codemirror');
@@ -765,7 +818,7 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 				
 				<br/>
 				
-				<?php echo str_replace('<input', '<input form="layout_file_editor_form"', JHTML::_( 'form.token' )); ?>
+				<?php echo str_replace('<input', '<input form="layout_file_editor_form"', JHtml::_( 'form.token' )); ?>
 				<input type="hidden" name="load_mode" id="editor__load_mode" form="layout_file_editor_form"/>
 				<input type="hidden" name="layout_name" id="editor__layout_name" form="layout_file_editor_form"/>
 				<input type="hidden" name="file_subpath" id="editor__file_subpath" form="layout_file_editor_form"/>
@@ -778,35 +831,37 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 				title="<?php echo flexicontent_html::getToolTip('Download file', 'This will download the current file from server and not the text currently in the editor, if you want the text in the editor then just copy paste it in a local text file', 0, 1); ?>"
 				/>
 				<input type="button" name="load_file_btn" id="editor__load_common_file_btn" class="<?php echo $btn_class; ?> btn-info <?php echo $tip_class; ?>" onclick="load_layout_file('', '', 1, -1); return false;" style="display:none;" value="Load/customize system's default" form="layout_file_editor_form"
-				title="<?php echo flexicontent_html::getToolTip('System\'s default code', 'Please note that this loads the <strong>system\'s default</strong> for the current file, which maybe different than <strong>template\'s default</strong> code', 0, 1); ?>"
+				title="<?php echo flexicontent_html::getToolTip('System\'s default code', 'Please note that this loads the <b>system\'s default</b> for the current file, which maybe different than <b>template\'s default</b> code', 0, 1); ?>"
 				/>
 				
 				
-				<span class="fcsep_level0" id="code_box_header">
+				<span class="fcsep_level0" id="code_box_header" style="display:none; margin:16px 0 12px 0; background-color:#333; ">
 					<span id="layout_edit_" class="label label-info"><?php echo JText::_( 'FLEXI_INSERT_TEMPLATE_CODE' ); ?></span>
 				</span>
 				<div class="fcclear"></div>
 				
 				<?php foreach ($code_btn_lbls as $_posname => $btn_lbl) : ?>
-				<span class="code_box <?php echo $_posname; ?> nowrap_box" style="display:none;" >
-					<span class="btn <?php echo $tip_class; ?>"
+				<div class="code_box <?php echo $_posname; ?> nowrap_box" style="display:none;" >
+					<div class="btn <?php echo $tip_class; ?>"
 						title="<?php echo flexicontent_html::getToolTip('Insert code', $code_btn_tips[$_posname], 0, 1); ?>"
-						onclick="toggle_code_inputbox(this);"><span class="icon-eye"></span><?php echo JText::_( $code_btn_lbls[$_posname] ); ?></span>
-					<span class="nowrap_box" style="display:none; float:left; clear:both; margin:2px 0px 0px 0px;">
+						onclick="toggle_code_inputbox(this);"><span class="icon-eye"></span><?php echo JText::_( $code_btn_lbls[$_posname] ); ?></div>
+					<div class="nowrap_box" style="display:none; float:left; clear:both; margin:2px 0px 0px 0px;">
 						<div class="alert alert-warning" style="clear:both; margin:2px 0px 2px 0px;"><?php echo JText::_( 'FLEXI_COPY_CODE' ); ?></div>
 						<div class="alert alert-info" style="clear:both; margin:2px 0px 2px 0px;">
 							<?php echo $code_btn_tips[$_posname]; ?>
 						</div>
-					</span>
+					</div>
 					<textarea style="float:left; clear:both; display:none; width:100%;" rows="24" form="code_insertion_form"><?php echo htmlspecialchars($code_btn_rawcode[$_posname]); ?></textarea>
-				</span>
+				</div>
 				<?php endforeach; ?>
-     </div>           
-<?php echo JHtml::_('bootstrap.endTab');?> 
-<!--/ TAB 4-->
-
-<!-- / ENDTAB -->
-<?php echo JHtml::_('bootstrap.endTabSet');?>
+				
+			</div>
+			
+		</div>
+			
+	</div>
+	
+	
 	<input type="hidden" name="option" value="com_flexicontent" />
 	<input type="hidden" name="controller" value="templates" />
 	<input type="hidden" name="rows" id="rows" value="" />
@@ -815,10 +870,18 @@ echo JHtml::_('bootstrap.startTabSet', 'ID-Tabs-Group', $options, array('useCook
 	<input type="hidden" name="type" value="<?php echo $this->type; ?>" />
 	<input type="hidden" name="folder" value="<?php echo $this->folder; ?>" />
 	<input type="hidden" name="task" value="" />
-	<?php echo JHTML::_( 'form.token' ); ?>
+	<?php echo JHtml::_( 'form.token' ); ?>
 </form>
 
 <form id="layout_file_editor_form" name="layout_file_editor_form" action="index.php?option=com_flexicontent&task=templates.loadlayoutfile&format=raw" method="POST"></form>
 <form id="code_insertion_form" name="code_insertion_form" action="#" method="POST"></form>
+<!--[if IE 8]>
+<script>
+	alert('Internet Explorer 8 is not supported by this view. Please use a more modern browser');
+
+	// Disable HTML5fallback, it will cause problems due form="..." attribute used to place elements outside of form TAG
+	jQuery.fn.h5f = function(options){}
+</script>
+<![endif]-->
 
 </div>

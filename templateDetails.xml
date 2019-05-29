@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE install PUBLIC "-//Joomla! 2.5//DTD template 1.0//EN" "http://www.joomla.org/xml/dtd/2.5/template-install.dtd">
-<extension version="1" type="template" client="administrator" method="upgrade">
-	<name>flexi3</name>
-	<version>2.0</version>
-	<creationDate>29/06/2015</creationDate>
+<!DOCTYPE install PUBLIC "-//Joomla! 2.5//DTD template 1.0//EN" "https://www.joomla.org/xml/dtd/2.5/template-install.dtd">
+<extension version="3.1" type="template" client="administrator" method="upgrade">
+	<name>iamrobert3</name>
+	<version>1.2</version>
+	<creationDate>3/20/2019</creationDate>
 	<author>Robert Stark</author>
 	<authorEmail>hello@iamrobert.com</authorEmail>
-	<copyright>Copyright (C) 2015 iamrobert. </copyright>
-	<description>TPL_ISIS_XML_DESCRIPTION</description>
+	<copyright>Copyright (C) 2019 iamrobert.com. All rights reserved.</copyright>
+	<description>TPL_IAMR_XML_DESCRIPTION</description>
 	<files>
 		<filename>component.php</filename>
 		<filename>cpanel.php</filename>
@@ -23,7 +23,8 @@
 		<folder>img</folder>
 		<folder>js</folder>
 		<folder>language</folder>
-	<folder>less</folder>
+      <folder>fonts</folder>
+	   <folder>less</folder>
 	</files>
 	<positions>
 		<position>menu</position>
@@ -40,32 +41,32 @@
 		<position>debug</position>
 	</positions>
 	<languages folder="language">
-		<language tag="en-GB">en-GB/en-GB.tpl_flexi3.ini</language>
-		<language tag="en-GB">en-GB/en-GB.tpl_flexi3.sys.ini</language>
+		<language tag="en-GB">en-GB/en-GB.iamrobert3.ini</language>
+		<language tag="en-GB">en-GB/en-GB.iamrobert3.sys.ini</language>
 	</languages>
-	<config>
+<config>
 		<fields name="params">
 			<fieldset name="advanced">
 
-				<field name="templateColor" class="" type="color" default="#10223E"
+				<field name="templateColor" class="" type="color" default="#383a41"
 				validate="color"
-				label="TPL_ISIS_COLOR_LABEL"
-				description="TPL_ISIS_COLOR_DESC" />
+				label="TPL_IAMR_COLOR_LABEL"
+				description="TPL_IAMR_COLOR_DESC" />
 
-				<field name="headerColor" class="" type="color" default="#1A3867"
+				<field name="headerColor" class="" type="color" default="#f9f9f9"
 				validate="color"
-				label="TPL_ISIS_COLOR_HEADER_LABEL"
-				description="TPL_ISIS_COLOR_HEADER_DESC" />
+				label="TPL_IAMR_COLOR_HEADER_LABEL"
+				description="TPL_IAMR_COLOR_HEADER_DESC" />
 
 				<field name="sidebarColor" class="" type="color" default="#0088CC"
 				validate="color"
-				label="TPL_ISIS_COLOR_SIDEBAR_LABEL"
-				description="TPL_ISIS_COLOR_SIDEBAR_DESC" />
+				label="TPL_IAMR_COLOR_SIDEBAR_LABEL"
+				description="TPL_IAMR_COLOR_SIDEBAR_DESC" />
 
 				<field name="linkColor" class="" type="color" default="#0088CC"
 				validate="color"
-				label="TPL_ISIS_COLOR_LINK_LABEL"
-				description="TPL_ISIS_COLOR_LINK_DESC" />
+				label="TPL_IAMR_COLOR_LINK_LABEL"
+				description="TPL_IAMR_COLOR_LINK_DESC" />
 
 <field name="hoverColor" class="" type="color" default="#005580"
 				validate="color"
@@ -78,18 +79,18 @@
 				description="FLEXIcontent Color" />
 				
 				<field name="logoFile" class="" type="media" default=""
-				label="TPL_ISIS_LOGO_LABEL"
-				description="TPL_ISIS_LOGO_DESC" />
+				label="TPL_IAMR_LOGO_LABEL"
+				description="TPL_IAMR_LOGO_DESC" />
 
 				<field name="loginLogoFile" class="" type="media" default=""
-				label="TPL_ISIS_LOGIN_LOGO_LABEL"
-				description="TPL_ISIS_LOGIN_LOGO_DESC" />
+				label="TPL_IAMR_LOGIN_LOGO_LABEL"
+				description="TPL_IAMR_LOGIN_LOGO_DESC" />
 
 				<field name="admin_menus" type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
-				label="TPL_ISIS_FIELD_ADMIN_MENUS_LABEL"
-				description="TPL_ISIS_FIELD_ADMIN_MENUS_DESC"
+				label="TPL_IAMR_FIELD_ADMIN_MENUS_LABEL"
+				description="TPL_IAMR_FIELD_ADMIN_MENUS_DESC"
 				filter="integer">
 				<option
 					value="1">JYES</option>
@@ -100,8 +101,8 @@
 				<field name="displayHeader" type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
-				label="TPL_ISIS_HEADER_LABEL"
-				description="TPL_ISIS_HEADER_DESC"
+				label="TPL_IAMR_HEADER_LABEL"
+				description="TPL_IAMR_HEADER_DESC"
 				filter="integer">
 				<option
 					value="1">JYES</option>
@@ -111,20 +112,20 @@
 
 				<field name="statusFixed" type="list"
 				default="1"
-				label="TPL_ISIS_STATUS_LABEL"
-				description="TPL_ISIS_STATUS_DESC"
+				label="TPL_IAMR_STATUS_LABEL"
+				description="TPL_IAMR_STATUS_DESC"
 				filter="integer">
 				<option
-					value="1">TPL_ISIS_STATUS_BOTTOM</option>
+					value="1">TPL_IAMR_STATUS_BOTTOM</option>
 				<option
-					value="0">TPL_ISIS_STATUS_TOP</option>
+					value="0">TPL_IAMR_STATUS_TOP</option>
 				</field>
 
 				<field name="stickyToolbar" type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
-				label="TPL_ISIS_STICKY_LABEL"
-				description="TPL_ISIS_STICKY_DESC"
+				label="TPL_IAMR_STICKY_LABEL"
+				description="TPL_IAMR_STICKY_DESC"
 				filter="integer">
 				<option
 					value="1">JYES</option>
@@ -186,6 +187,31 @@
 					value="0">JNO</option>
 				</field>
 				
+				<field name="flexiGlobalEdit" type="radio"
+				class="btn-group btn-group-yesno"
+				default="1"
+				label="Display Template Editor"
+				description="Show Global Template Editor"
+				filter="integer">
+				<option
+					value="1">JYES</option>
+				<option
+					value="0">JNO</option>
+				</field>
+				
+				
+				<field name="flexiComp" type="radio"
+				class="btn-group btn-group-yesno"
+				default="1"
+				label="Display Joomla Compatibility Mode"
+				description="Show Joomla Compatibility Mode"
+				filter="integer">
+				<option
+					value="1">JYES</option>
+				<option
+					value="0">JNO</option>
+				</field>
+				
 				<field name="flexiLang" type="radio"
 				class="btn-group btn-group-yesno"
 				default="1"
@@ -198,7 +224,56 @@
 					value="0">JNO</option>
 				</field>
 				
-				<field name="flexiOrder" type="radio"
+				<field name="flexiVotes" type="radio"
+				class="btn-group btn-group-yesno"
+				default="0"
+				label="Display Votes"
+				description="Show FLEXIcontent Votes in Item View"
+				filter="integer">
+				<option
+					value="1">JYES</option>
+				<option
+					value="0">JNO</option>
+				</field>
+				
+				<field name="flexiRatings" type="radio"
+				class="btn-group btn-group-yesno"
+				default="0"
+				label="Display Ratings"
+				description="Show FLEXIcontent Ratings"
+				filter="integer">
+				<option
+					value="1">JYES</option>
+				<option
+					value="0">JNO</option>
+				</field>
+		
+            <field name="flexiHits" type="radio"
+				class="btn-group btn-group-yesno"
+				default="0"
+				label="Display Hits"
+				description="Show FLEXIcontent Hits"
+				filter="integer">
+				<option
+					value="1">JYES</option>
+				<option
+					value="0">JNO</option>
+				</field>
+				
+					
+								<field name="flexiMoreButton" type="radio"
+				class="btn-group btn-group-yesno"
+				default="0"
+				label="Display More Button"
+				description="Show FLEXIcontent More Button in Item View"
+				filter="integer">
+				<option
+					value="1">JYES</option>
+				<option
+					value="0">JNO</option>
+				</field>
+					
+<!--				<field name="flexiOrder" type="radio"
 				class="btn-group btn-group-yesno"
 				default="0"
 				label="Display Order"
@@ -208,9 +283,9 @@
 					value="1">JYES</option>
 				<option
 					value="0">JNO</option>
-				</field>
+				</field>-->
 				
-				<field name="flexiID" type="radio"
+<!--				<field name="flexiID" type="radio"
 				class="btn-group btn-group-yesno"
 				default="0"
 				label="Display ID"
@@ -220,7 +295,7 @@
 					value="1">JYES</option>
 				<option
 					value="0">JNO</option>
-				</field>
+				</field>-->
 				
 				
 				<field name="keywords" type="radio"
