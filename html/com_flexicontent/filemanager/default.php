@@ -683,14 +683,7 @@ if ($js)
 			<?php if (!$this->folder_mode) : ?>
 
 				<div class="fc-filter-head-box nowrap_box pull-right">
-					<div class="limit nowrap_box">
-						<?php
-						$pagination_footer = $this->pagination->getListFooter();
-						if (strpos($pagination_footer, '"limit"') === false) echo $this->pagination->getLimitBox();
-						?>
-					</div>
-
-					<span class="fc_item_total_data nowrap_box fc-mssg-inline fc-info fc-nobgimage hidden-phone hidden-tablet">
+               <span class="fc_item_total_data nowrap_box fc-mssg-inline fc-info fc-nobgimage hidden-phone hidden-tablet">
 						<?php echo @$this->resultsCounter ? $this->resultsCounter : $this->pagination->getResultsCounter(); // custom Results Counter ?>
 					</span>
 
@@ -699,6 +692,15 @@ if ($js)
 						<?php echo $getPagesCounter; ?>
 					</span>
 					<?php endif; ?>
+               
+               <div class="limit nowrap_box">
+						<?php
+						$pagination_footer = $this->pagination->getListFooter();
+						if (strpos($pagination_footer, '"limit"') === false) echo $this->pagination->getLimitBox();
+						?>
+					</div>
+
+					
 				</div>
 
 			<?php endif; ?>

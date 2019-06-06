@@ -848,7 +848,7 @@ $items_task = FLEXI_J16GE ? 'task=items.' : 'controller=items&amp;task=';
       	</div>  <!-- j-main-container -->
 </div>
 
-      <div class="row-fluid">
+      <div class="row-fluid mt-20">
    <div class="span6 wid100">
 
       <?php

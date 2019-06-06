@@ -277,7 +277,7 @@ if ($this->params->get('flexiTags') == 0) {
 //HIDE AUTHOR FROM TABLE
 if ($this->params->get('flexiAuthor') == 0) {
  $this->addStyleDeclaration(' 
-.h_author, #columnchoose_adminListTableFCitems_5_label {
+.h_author, #columnchoose_adminListTableFCitems_5_label, .col_authors {
 	display: none !important;
 }');    
 }
@@ -299,8 +299,7 @@ padding: 0;
 //HIDE LANGUAGE
 if ($this->params->get('flexiLang') == 0) {
  $this->addStyleDeclaration(' 
-.col_lang, .h_lang, .col_assoc, .com_flexicontent.view-items .columnchoose_adminListTableFCcategories_4_label, .com_flexicontent.view-items #columnchoose_adminListTableFCitems_4
-.com_flexicontent.view-category #tabset_cat_props_desc_tab > div > div.span4.col-4.full_width_980.off-white > div > div:nth-child(4) {
+.col_lang, .h_lang, .col_assoc, .com_flexicontent.view-items #columnchoose_adminListTableFCitems_6_label, .com_flexicontent.view-category #tabset_cat_props_desc_tab > div > div.span4.col-4.full_width_980.off-white > div > div:nth-child(4) {
 	display: none !important;
 }
 ');    
@@ -327,7 +326,7 @@ if ($this->params->get('flexiVotes') == 0) {
 //Hide Hits
 if ($this->params->get('flexiHits') == 0) {
  $this->addStyleDeclaration(' 
-.col_hits, .com_flexicontent.view-items #columnchoose_adminListTableFCitems_18_label, .com_flexicontent.view-items #columnchoose_adminListTableFCitems_18,
+.col_hits, .com_flexicontent.view-items #columnchoose_adminListTableFCitems_15_label, .com_flexicontent.view-items #columnchoose_adminListTableFCitems_18,
 .com_flexicontent.view-item #fc_versions > tbody > tr:nth-child(3) {
 	display: none !important;
 }
@@ -337,7 +336,7 @@ if ($this->params->get('flexiHits') == 0) {
 //Hide more button in item View
 if ($this->params->get('flexiMoreButton') == 0) {
  $this->addStyleDeclaration(' 
-.view-item #toolbar-action_btns_group, #toolbar-collaborate {
+.view-item #toolbar-action_btns_group, #toolbar-action_btns_group {
 	display: none !important;
 }
 ');    

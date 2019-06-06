@@ -15,7 +15,9 @@ use Joomla\String\StringHelper;
 JHtml::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_flexicontent/helpers/html');
 
 global $globalcats;
-$app      = JFactory::getApplication();
+$app = JFactory::getApplication();
+//echo "<pre>"; print_r($app); echo "</pre>"; die();
+
 $jinput   = $app->input;
 $config   = JFactory::getConfig();
 $user     = JFactory::getUser();
@@ -31,6 +33,8 @@ $items_task = 'task=items.';
 $cats_task  = 'task=category.';
 $_sh404sef  = defined('SH404SEF_IS_RUNNING') && $config->get('sef');
 
+$template = $app->getTemplate(true);
+//print_r($template->params);
 
 
 /**
@@ -253,6 +257,7 @@ function delAllFilters()
 	delFilter('startdate');
 	delFilter('enddate');
 	delFilter('filter_lang');
+   
 	delFilter('filter_tag');
 	delFilter('filter_access');
 	delFilter('filter_meta');
@@ -458,24 +463,54 @@ jQuery(document).ready(function(){
 
 				<div id="fc-filters-box" <?php if (!$this->count_filters || !$tools_state->filters_box) echo 'style="display:none;"'; ?> class="fcman-abs" onclick="var event = arguments[0] || window.event; event.stopPropagation();">
 					<?php
-					echo $this->lists['filter_fileid'];
-					echo $this->lists['filter_author'];
-               echo $this->lists['filter_state'];
-				//	echo $this->lists['filter_tag'];
-					echo $this->lists['filter_type'];
-					echo $this->lists['filter_lang'];
+               
 
-					echo $this->lists['filter_access'];
-					echo $this->lists['filter_meta'];
 
+               echo '<div class="ico-filter-fileid">'.$this->lists['filter_fileid'].'</div>';
+               
+               echo '<div class="ico-filter-state">'.$this->lists['filter_state'].'</div>';
+               
+
+               
+               
 					if (!$this->reOrderingActive)
 					{
-						echo $this->lists['filter_cats'];
+						echo '<div class="ico-filter-cats">'.$this->lists['filter_cats'].'</div>';
 					}
-					echo $this->lists['filter_subcats'];
+					
+               echo '<div class="ico-filter-subcats">'.$this->lists['filter_subcats'].'</div>';
+               
+               echo '<div class="ico-filter-catsinstate">'.$this->lists['filter_catsinstate'].'</div>';
+               
+               if($template->params->get('flexiLang') == 1) {
+					echo '<div class="ico-filter-lang">'.$this->lists['filter_lang'].'</div>';
+               }
+               
+               
+              echo '<div class="ico-filter-access">'.$this->lists['filter_access'].'</div>';
+              if($template->params->get('flexiAuthor') == 1) { 
+               
+					echo '<div class="ico-filter-author">'.$this->lists['filter_author'].'</div>';
+                 }
+               
+				   
+               if($template->params->get('flexiTags') == 1) {
+               echo '<div class="ico-filter-tag">'.$this->lists['filter_tag'].'</div>';
+               }
+               
+					echo '<div class="ico-filter-type">'.$this->lists['filter_type'].'</div>';
+               
+					if($template->params->get('featuredItems') == 1) {
+					echo '<div class="ico-filter-featured">'.$this->lists['filter_featured'].'</div>';
+                }
+               
+					echo '<div class="ico-filter-meta">'.$this->lists['filter_meta'].'</div>';
 
-					echo $this->lists['filter_featured'];
-					echo $this->lists['filter_catsinstate'];
+
+               
+               
+
+               
 					echo $this->lists['filter_id'];
 					echo $this->lists['filter_date'];
 
@@ -519,12 +554,7 @@ jQuery(document).ready(function(){
 		</div>
 
 		<div class="fc-filter-head-box nowrap_box">
-			<div class="limit nowrap_box">
-				<?php
-				$pagination_footer = $this->pagination->getListFooter();
-				if (strpos($pagination_footer, '"limit"') === false) echo $this->pagination->getLimitBox();
-				?>
-			</div>
+
 
 			<span class="fc_item_total_data nowrap_box fc-mssg-inline fc-info fc-nobgimage hidden-phone hidden-tablet">
 				<?php echo @$this->resultsCounter ? $this->resultsCounter : $this->pagination->getResultsCounter(); // custom Results Counter ?>
@@ -535,6 +565,13 @@ jQuery(document).ready(function(){
 				<?php echo $getPagesCounter; ?>
 			</span>
 			<?php endif; ?>
+         
+         			<div class="limit nowrap_box">
+				<?php
+				$pagination_footer = $this->pagination->getListFooter();
+				if (strpos($pagination_footer, '"limit"') === false) echo $this->pagination->getLimitBox();
+				?>
+			</div>
 		</div>
 	</div>
 

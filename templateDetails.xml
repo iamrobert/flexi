@@ -261,11 +261,11 @@
 				</field>
 				
 					
-								<field name="flexiMoreButton" type="radio"
+				<field name="flexiMoreButton" type="radio"
 				class="btn-group btn-group-yesno"
 				default="0"
 				label="Display More Button"
-				description="Show FLEXIcontent More Button in Item View"
+				description="Show FLEXIcontent More DropDown Button in Item View"
 				filter="integer">
 				<option
 					value="1">JYES</option>

@@ -1090,7 +1090,66 @@ td.col_edit_layout {
 .flexicontent #fc-filters-box.fcman-abs {
 	min-width: 359px;
 	max-width: 100%;
+/*breakup letters */
+   .ico-filter-state, .ico-filter-catsinstate, .ico-filter-lang, .ico-filter-type {
+      margin-bottom: 15px;
+   }
+ 
+   .add-on {
+      position: relative;
+      &:after {
+         	font-family: 'IcoMoon';
+	font-style: normal;
+	speak: none;
+	padding-left: 7px;
+	vertical-align: middle;
+	line-height: 1;
+	display: inline-block;
+	width: auto;
+	height: auto;
+	font-size: 12px;
+      }
+   }
+
+      .ico-filter-state .add-on:after, .ico-filter-catsinstate .add-on:after {
+         content: "\47";
+   }     
+   
+   .ico-filter-cats .add-on:after {
+        content: "\2d";
+   }   
+   
+   .ico-filter-subcats .add-on:after {
+        content: "\e244";
+   }   
+   
+   .ico-filter-access .add-on:after {
+        content: "\5f";
+   }   
+   
+   .ico-filter-author .add-on:after {
+        	content: "\22";
+   }
+   
+   .ico-filter-type .add-on:after {
+        		content: "\e020";
+   }   
+   
+   .ico-filter-lang .add-on:after {
+        			content: "\25";
+   }
+   .ico-filter-featured .add-on:after {
+   content: "\42";
+   }
+   
+   .ico-filter-tag .add-on:after {
+   content: "\e264";
+   }   
+
 }
+
+
+
 .flexicontent #fc-filters-box.fcman-abs,
 .flexicontent #mainChooseColBox.fcman-abs {
 	left: unset;
