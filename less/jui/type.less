@@ -45,6 +45,7 @@ a.text-info:hover,
 a.text-info:focus    { color: darken(@infoText, 10%); }
 
 .text-success        { color: @successText; }
+.ruler.text-success { color: @successText !important; } 
 a.text-success:hover,
 a.text-success:focus { color: darken(@successText, 10%); }
 
@@ -230,6 +231,9 @@ blockquote {
   }
 }
 
+.bold {
+   font-weight: bold !important;
+}
 // Quotes
 q:before,
 q:after,

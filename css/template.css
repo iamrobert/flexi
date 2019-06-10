@@ -968,6 +968,7 @@ a.text-error:hover, a.text-error:focus { color:#e43726; }
 .text-info { color:#4AA3DF; }
 a.text-info:hover, a.text-info:focus { color:#258cd1; }
 .text-success { color:#19B698; }
+.ruler.text-success { color:#19B698 !important; }
 a.text-success:hover, a.text-success:focus { color:#138973; }
 .text-left { text-align:left; }
 .text-right { text-align:right; }
@@ -1087,6 +1088,7 @@ blockquote.pull-right {
 blockquote.pull-right p, blockquote.pull-right small { text-align:right; }
 blockquote.pull-right small:before { content:''; }
 blockquote.pull-right small:after { content:'\00A0 \2014'; }
+.bold { font-weight:bold !important; }
 q:before, q:after, blockquote:before, blockquote:after { content:""; }
 address {
   display:block;
@@ -12125,6 +12127,7 @@ body .popover {
   max-width:500px !important;
   min-width:400px !important;
 }
+.task-translate .controls .btn-group.btn-group-yesno { width:100%; }
 @media (max-width: 979px) {
   #flexicontent .span4.full_width_980 {
     width:100% !important;
@@ -12980,6 +12983,32 @@ a .icon-edit:before { color:#A3B1B2; }
 }
 #summarychrs.warning { color:#EA6153; }
 #jform_metadesc.error { border-color:#EA6153; }
+.block-flat, .block-wizard, .view-mail #adminForm .span9, .view-mail #adminForm .span3, .akeeba-cpanel.span6, #akeebabackup-cpanel .span8 {
+  margin-bottom:40px;
+  padding:20px;
+  background:#FFF;
+  position:relative;
+  border-radius:3px;
+  border-left:1px solid #efefef;
+  border-right:1px solid #efefef;
+  border-bottom:1px solid #e2e2e2;
+  box-shadow:0 1px 0 0 rgba(0,0,0,0.04);
+  transition:padding 500ms;
+  -moz-transition:padding 500ms;
+  -webkit-transition:padding 500ms;
+}
+@media screen and (max-width: 1024px) {
+  .block-flat, .block-wizard, .view-mail #adminForm .span9, .view-mail #adminForm .span3, .akeeba-cpanel.span6, #akeebabackup-cpanel .span8 {
+    margin-bottom:20px;
+    padding:15px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .block-flat {
+    padding-left:10px;
+    padding-right:10px;
+  }
+}
 .w100 {
   width:100%;
   height:auto;
