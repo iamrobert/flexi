@@ -334,13 +334,13 @@ if ($this->params->get('flexiHits') == 0) {
 }
 
 //Hide more button in item View
-if ($this->params->get('flexiMoreButton') == 0) {
- $this->addStyleDeclaration(' 
-.view-item #toolbar-action_btns_group, #toolbar-action_btns_group {
-	display: none !important;
-}
-');    
-}
+//if ($this->params->get('flexiMoreButton') == 0) {
+// $this->addStyleDeclaration(' 
+//.view-item #toolbar-action_btns_group, #toolbar-action_btns_group {
+//	display: none !important;
+//}
+//');    
+//}
 
 //Hide keywords
 if ($this->params->get('keywords') == 0) {
