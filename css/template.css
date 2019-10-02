@@ -1175,11 +1175,9 @@ label {
 }
 select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
   display:inline-block;
-  height:21px;
   padding:4px 6px;
   margin-bottom:10.5px;
   font-size:14px;
-  line-height:21px;
   color:#8C9899;
   -webkit-border-radius:0px;
   -moz-border-radius:0px;
@@ -2452,6 +2450,16 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
   border-color:#4AA3DF;
   background:#4AA3DF;
 }
+.alert.alert-info.fcsep_level3 {
+  padding:20px 35px 20px 65px;
+  background-color:#fff;
+  border-color:#4AA3DF;
+  width:calc(100% - 100px);
+  max-width:650px;
+  color:#4AA3DF;
+}
+.alert.alert-info.fcsep_level3 h4 { color:#4AA3DF; }
+.alert.alert-info.fcsep_level3 small { color:#5f6368; }
 .alert.alert-joomlaupdate span:before {
   transform:rotate(45deg);
   display:block;
@@ -10005,6 +10013,7 @@ div span.fc_icon_disabled.fc_icon_na {
 *:not(:hover) > .fc-icon-red:before { color:#F16E3F !important; }
 *:not(:hover) > .fc-icon-green:before { color:#19B698 !important; }
 *:not(:hover) > .fc-icon-gray:before { color:#C5CBCE !important; }
+.badge-success { color:#fff; }
 input.fc-inherited-value + label {
   font-weight:bold !important;
   text-decoration:underline !important;
@@ -12152,6 +12161,7 @@ body .popover {
 }
 .icon-delete:before { color:#F16E3F; }
 .icon-copy:before { color:#19B698; }
+.btn-success .icon-copy:before { color:#fff; }
 @media (min-width: 768px) {
   .adminlist td.col_status { width:80px; }
 }
@@ -12704,8 +12714,8 @@ div[class*="span"].shrink {
 @media (min-width: 1250px) {
   .navbar .span2.aniColorBkg { min-width:260px; }
 }
-.amm .subhead { margin-top:0 !important; }
-.amm .subhead.subhead-fixed { margin-top:14px !important; }
+.subhead { margin-top:0 !important; }
+.subhead.subhead-fixed { margin-top:14px !important; }
 #fc-filters-header, .js-stools, .form-inline.form-inline-header {
   margin-bottom:40px;
   padding:20px;
@@ -13009,6 +13019,31 @@ a .icon-edit:before { color:#A3B1B2; }
     padding-right:10px;
   }
 }
+.CodeMirror-line { padding-left:40px !important; }
+.js-stools-container-bar { display:flex; }
+.js-stools .btn-wrapper {
+  display:inline-flex;
+  align-content:stretch;
+}
+.js-stools .btn-wrapper input { height:100%; }
+.fc-filter-head-box .btn-group.input-append {
+  display:inline-flex;
+  align-content:stretch;
+}
+.fc-filter-head-box .btn-group.input-append input.inputbox { height:31px; }
+.fc-filter-head-box .btn-group.input-append [class^="icon-"], .fc-filter-head-box .btn-group.input-append [class*=" icon-"] { line-height:1; }
+.fc-filter-head-box .btn-group.input-append > .select2-container .select2-choice { padding:0px 32px 0px 8px !important; }
+.btn-toolbar { display:flex; }
+.btn-toolbar .btn-wrapper .buttons.btn-group {
+  display:flex;
+  align-content:stretch;
+}
+.flexicontent #fc-managers-header .fc-filter-head-box .input-append #fc_filters_box_btn {
+  display:inline-flex;
+  align-items:center;
+}
+.form-search input, .form-search textarea, .form-search select, .form-search .help-inline, .form-search .uneditable-input, .form-search .input-prepend, .form-search .input-append, .form-inline input, .form-inline textarea, .form-inline select, .form-inline .help-inline, .form-inline .uneditable-input, .form-inline .input-prepend, .form-inline .input-append, .form-horizontal input, .form-horizontal textarea, .form-horizontal select, .form-horizontal .help-inline, .form-horizontal .uneditable-input, .form-horizontal .input-prepend, .form-horizontal .input-append { display:inline-flex; }
+.select2-container .select2-choice { padding:5px 32px 5px 8px !important; }
 .w100 {
   width:100%;
   height:auto;

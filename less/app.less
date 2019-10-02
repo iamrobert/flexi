@@ -281,7 +281,7 @@ div[class*="span"].shrink { -webkit-box-flex: 0; -ms-flex: 0 0 auto; flex: 0 0 a
       min-width: 260px;
    }
 }
-.amm .subhead {
+.subhead {
 	margin-top: 0 !important;
    &.subhead-fixed {
     margin-top: 14px !important;  
@@ -779,3 +779,69 @@ table.adminlist.fcmanlist#adminListTableFCfilemanager_default {
   }
 }
 
+/* + CODEMIRROR PROBLEMS
+	======================================================================*/	
+
+.CodeMirror-line {
+  padding-left: 40px !important;
+}
+
+.js-stools-container-bar {
+  display: flex;
+}
+.js-stools .btn-wrapper {
+  display: inline-flex;
+  	align-content: stretch;
+  
+  input {
+    height: 100%;
+  }
+}
+
+.fc-filter-head-box {
+  
+  .btn-group.input-append {
+    display: inline-flex;
+  	align-content: stretch;
+    input.inputbox {
+      height: 31px;
+    }
+    
+    [class^="icon-"], [class*=" icon-"] {
+      line-height: 1;
+    }
+    
+    > .select2-container .select2-choice {
+  padding: 0px 32px 0px 8px !important;
+}
+  }
+  
+  
+
+  
+}
+
+
+.btn-toolbar {
+   display: flex;
+  .btn-wrapper {
+    .buttons.btn-group {
+      display: flex;
+      align-content: stretch;
+    }
+  }
+}
+
+.flexicontent #fc-managers-header .fc-filter-head-box .input-append #fc_filters_box_btn {
+  display: inline-flex;
+  align-items: center;
+}
+
+.form-search input, .form-search textarea, .form-search select, .form-search .help-inline, .form-search .uneditable-input, .form-search .input-prepend, .form-search .input-append, .form-inline input, .form-inline textarea, .form-inline select, .form-inline .help-inline, .form-inline .uneditable-input, .form-inline .input-prepend, .form-inline .input-append, .form-horizontal input, .form-horizontal textarea, .form-horizontal select, .form-horizontal .help-inline, .form-horizontal .uneditable-input, .form-horizontal .input-prepend, .form-horizontal .input-append {
+  display: inline-flex;
+}
+
+
+.select2-container .select2-choice {
+  padding: 5px 32px 5px 8px !important;
+}

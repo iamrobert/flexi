@@ -249,7 +249,7 @@ if ($this->params->get('flexiColor'))
 {
 $this->addStyleDeclaration('
    .aniColorBkg {
-		background: ' . $this->params->get('flexiColor') . ';
+		background: ' . $this->params->get('flexiColor') . ' !important;
 	}');
    
 $this->addStyleDeclaration('
@@ -352,6 +352,13 @@ if ($this->params->get('keywords') == 0) {
 }
 
 ?>
+
+<?php if ($this->params->get('loadCss')) : ?>
+<style type="text/css">
+<?php echo $this->params->get('loadCss');?>
+</style>
+<?php endif; ?>
+
 <!DOCTYPE html>
 <html lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
 <head>
