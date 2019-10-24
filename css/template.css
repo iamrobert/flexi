@@ -9262,7 +9262,12 @@ div.empty_image {
   float:left;
 }
 .fcimg_preview_box .fcimg_preview_msg:empty { display:none; }
-div.fcimg_value_props { display:inline-block; }
+div.fcimg_value_props {
+  display:inline-block;
+  padding:4px;
+}
+div.fcimg_value_props .fc-form-tbl.fcinner.fccompact { border-bottom:none; }
+div.fcimg_value_props .fc-form-tbl.fcinner.fccompact tr { border-bottom:none; }
 .fc-field-props-box {
   background:#fafafa;
   padding:8px;

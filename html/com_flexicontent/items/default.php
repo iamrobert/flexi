@@ -612,7 +612,7 @@ jQuery(document).ready(function(){
 
 		<div class="clear"></div>
 
-		<div id="fcorder_notes_box" class="hidden-phone <?php echo $msg_class; ?>" style="<?php echo $msg_style; ?> line-height: 28px; max-width: unset;">
+		<div id="fcorder_notes_box" class="hidden-phone <?php echo $msg_class; ?>" style="<?php echo $msg_style; ?> display: flex;	max-width: unset;	padding: 5px 0;">
 			<?php echo $order_msg;?>
 			<div id="order_type_selector" class="fc-iblock">
 				<?php echo $this->lists['filter_order_type']; ?>
