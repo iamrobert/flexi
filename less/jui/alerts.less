@@ -132,10 +132,10 @@
   border-color:@red;
   background:@red;
 }
-.alert-info:before, .alert.alert-info:before, .fc-info:before, .fc-note:before { background:@blue; }
-.alert-info:after, .alert.alert-info:after, .fc-info:after, .fc-note:after { content:"\e221"; }
+.alert-info:before, .alert.alert-info:before, .fc-info:before, .fc-note:before, .alert-error.alert-joomlaupdate:before { background:@blue; }
+.alert-info:after, .alert.alert-info:after, .fc-info:after, .fc-note:after, .alert-error.alert-joomlaupdate:after { content:"\e221"; }
 .alert-info.fcsep_level3, .alert.alert-info.fcsep_level3, .fc-info.fcsep_level3, .fc-note.fcsep_level3 { border-bottom:2px solid @blue; }
-.alert-info .alert-message:before, .alert.alert-info .alert-message:before, .fc-info .alert-message:before, .fc-note .alert-message:before {
+.alert-info .alert-message:before, .alert.alert-info .alert-message:before, .fc-info .alert-message:before, .fc-note .alert-message:before, .alert-error.alert-joomlaupdate:before {
   border-color:@blue;
   background:@blue;
 }
@@ -155,6 +155,7 @@
 }
 
 .alert.alert-joomlaupdate {
+    border-color:@blue;
    span {
       &:before {
   transform:rotate(45deg);
@@ -169,8 +170,8 @@
   top:50%;
   left:38px;
   margin-top:-3px;
-  border-color:@red;
-  background:@red;
+  border-color:@blue;
+  background:@blue;
 }
    }
    &:after {
